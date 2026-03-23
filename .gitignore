@@ -1,0 +1,36 @@
+# Rust
+Rust/target/
+**/*.rs.bk
+
+# Lean
+Lean/.lake/
+Lean/lake-packages/
+Lean/build/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# Haskell
+.stack-work/
+*.hi
+*.o
+dist-newstyle/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Secrets (never commit)
+.env
+*.pem
+*.key
+credentials.*
