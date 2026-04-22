@@ -4,10 +4,9 @@
 > Compositional Thermodynamic Accounting for Multi-Agent Constitutional Systems
 > with Decentralized Coalgebraic Time Synchronization
 
-[![Lean](https://img.shields.io/badge/Lean_4-Mathlib-blue)](Lean/)
-[![Rust](https://img.shields.io/badge/Rust-Tokio%20P2P-orange)](Rust/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![CI](https://github.com/tytolabs/umst-ucrs/actions/workflows/ci.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/ci.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18940933.svg)](https://doi.org/10.5281/zenodo.18940933)
+[![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/ci.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
 **Changelog:** [`CHANGELOG.md`](CHANGELOG.md).
 
