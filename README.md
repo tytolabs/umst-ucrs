@@ -32,12 +32,15 @@ This repo formalizes and implements that idea:
 
 | Metric | Value |
 |--------|-------|
-| Lean theorems | *inherits 515 from [umst-formal-double-slit][ds]; new theorems TBD* |
+| Lean (inherits [FCP-DS][ds]) | **537** `theorem` + **34** `lemma` in **59** lake roots (**571** line-start decls); **581** incl. all `Lean/*.lean` — upstream `scripts/lean_declaration_stats.py` |
+| Lean (meso [FCP-I][mf]) | **221** `theorem` + **17** `lemma` in **45** roots — [umst-formal][mf] (gates, Landauer bridge, economics track) |
 | Rust daemon | P2P clock sync with Landauer metering |
 | Credit system | Thermodynamic economy — accuracy = credit |
-| Axioms (new) | 0 planned (builds on existing 6) |
+| Axioms | **This repo:** 0 new Lean axioms planned. **FCP-DS:** 1 documented project `axiom` (`physicalSecondLaw`); see [PROOF-STATUS][ds-proof]. |
 
 [ds]: https://github.com/tytolabs/umst-formal-double-slit
+[ds-proof]: https://github.com/tytolabs/umst-formal-double-slit/blob/main/PROOF-STATUS.md
+[mf]: https://github.com/tytolabs/umst-formal
 
 ---
 
@@ -50,7 +53,8 @@ FCP-III (Functorial Mediation)      ─── multi-agent hierarchy (theory)
 FCP-IV  (LandauerMark)              ─── macro→micro energy bridge + RAPL
 FCP-V   (Culture as Scaling Layer)  ─── collective colimit
 FCP-DS  (Thermodynamic Cost)        ─── quantum measurement Landauer cost
-                                         515 theorems, 0 sorry
+                                         537 th + 34 lem (59 roots), 0 sorry,
+                                         1 documented project axiom
     │
     ▼
 FCP-VI  (THIS REPO)                 ─── multi-agent Landauer accounting
