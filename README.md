@@ -5,7 +5,7 @@
 > with Decentralized Coalgebraic Time Synchronization
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18940933.svg)](https://doi.org/10.5281/zenodo.18940933)
-[![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/ci.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/ci.yml)
+[![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
 **Changelog:** [`CHANGELOG.md`](CHANGELOG.md).

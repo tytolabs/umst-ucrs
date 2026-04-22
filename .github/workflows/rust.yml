@@ -1,5 +1,5 @@
 # Rust crate under Rust/ — isolated checkout (no MaOS mega-workspace).
-name: CI
+name: Rust
 
 on:
   push:
