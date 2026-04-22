@@ -107,11 +107,7 @@ pub struct SyncEnergyRecord {
 }
 
 impl SyncEnergyRecord {
-    pub fn new(
-        bits_resolved: f64,
-        temperature_k: f64,
-        measured_j: Option<f64>,
-    ) -> Self {
+    pub fn new(bits_resolved: f64, temperature_k: f64, measured_j: Option<f64>) -> Self {
         let landauer_floor_j = crate::landauer::landauer_cost(bits_resolved, temperature_k);
         let overhead_ratio = measured_j.map(|m| m / landauer_floor_j);
 
@@ -143,9 +139,9 @@ mod tests {
     #[test]
     fn sync_record_second_law() {
         let record = SyncEnergyRecord::new(
-            10.0,           // 10 bits
-            300.0,          // room temp
-            Some(1e-15),    // 1 femtojoule (way above Landauer floor)
+            10.0,        // 10 bits
+            300.0,       // room temp
+            Some(1e-15), // 1 femtojoule (way above Landauer floor)
         );
         assert!(record.second_law_satisfied().unwrap());
         assert!(record.overhead_ratio.unwrap() > 1.0);

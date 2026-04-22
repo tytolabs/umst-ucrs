@@ -16,10 +16,10 @@ use libp2p::{identity, noise, tcp, yamux, Multiaddr, SwarmBuilder, Transport};
 use tokio::time::interval;
 use tracing::{info, warn};
 
+use umst_ucrs::clock::LocalClock;
 use umst_ucrs::credit::CreditLedger;
 use umst_ucrs::wire::{apply_inbound_clock_tick, sign_tick, ClockTick};
 use umst_ucrs::{agent_tick, AgentConfig};
-use umst_ucrs::clock::LocalClock;
 
 const TOPIC: &str = "umst-ucrs/v1/clocksync";
 

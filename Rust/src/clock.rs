@@ -7,8 +7,8 @@
 //! Drift accumulates entropy (phase uncertainty), which has a measurable
 //! Landauer cost to resolve via sync.
 
-use std::time::{Duration, Instant};
 use crate::landauer;
+use std::time::{Duration, Instant};
 
 /// A local clock with drift model.
 #[derive(Debug, Clone)]
@@ -99,8 +99,7 @@ mod tests {
         clock.phase_uncertainty_sec = 10e-9; // 10 ns
         let bits = clock.phase_entropy_bits();
         // log2(10ns / 1ns) = log2(10) ≈ 3.32 bits
-        assert!((bits - 3.32).abs() < 0.1,
-            "Expected ~3.32 bits, got {bits}");
+        assert!((bits - 3.32).abs() < 0.1, "Expected ~3.32 bits, got {bits}");
     }
 
     #[test]
@@ -113,8 +112,10 @@ mod tests {
         let e300 = clock_300.desync_energy_joules();
         let e600 = clock_600.desync_energy_joules();
 
-        assert!((e600 / e300 - 2.0).abs() < 0.01,
-            "Desync energy should scale linearly with T");
+        assert!(
+            (e600 / e300 - 2.0).abs() < 0.01,
+            "Desync energy should scale linearly with T"
+        );
     }
 
     #[test]

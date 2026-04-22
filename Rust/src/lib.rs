@@ -44,9 +44,9 @@ impl Default for AgentConfig {
     fn default() -> Self {
         Self {
             peer_id: 1,
-            drift_ppb: 10.0,       // typical quartz
-            temperature_k: 300.0,  // room temperature
-            budget_bits: 20.0,     // 20 bits per sync window
+            drift_ppb: 10.0,      // typical quartz
+            temperature_k: 300.0, // room temperature
+            budget_bits: 20.0,    // 20 bits per sync window
             sync_interval_sec: 60.0,
         }
     }

@@ -49,10 +49,7 @@ pub enum GateVerdict {
 /// 3. Total sync cost is monotonically increasing (irreversibility)
 ///
 /// Mirrors `gateCheck` from Gate.lean (sound + complete).
-pub fn gate_check(
-    state: &ClockThermState,
-    bits_to_resolve: f64,
-) -> GateVerdict {
+pub fn gate_check(state: &ClockThermState, bits_to_resolve: f64) -> GateVerdict {
     let sync_cost = landauer::landauer_cost(bits_to_resolve, state.temperature_k);
 
     // Admissibility condition 1: cost within budget
@@ -80,15 +77,12 @@ pub fn gate_check(
 /// def makeGateArrow (propose) : KleisliArrow :=
 ///   fun s => if gateCheck s (propose s) then some (propose s) else none
 /// ```
-pub fn gated_sync(
-    state: &ClockThermState,
-    bits_resolved: f64,
-) -> Option<ClockThermState> {
+pub fn gated_sync(state: &ClockThermState, bits_resolved: f64) -> Option<ClockThermState> {
     match gate_check(state, bits_resolved) {
         GateVerdict::Admit => {
             let cost = landauer::landauer_cost(bits_resolved, state.temperature_k);
             Some(ClockThermState {
-                desync_energy_j: 0.0, // sync resets desync to zero
+                desync_energy_j: 0.0,     // sync resets desync to zero
                 budget_j: state.budget_j, // budget unchanged
                 temperature_k: state.temperature_k,
                 total_sync_cost_j: state.total_sync_cost_j + cost, // monotone increasing
@@ -142,7 +136,9 @@ mod tests {
             ..s1
         };
         let s2 = gated_sync(&s1_drifted, 3.0).unwrap();
-        assert!(s2.total_sync_cost_j > s1.total_sync_cost_j,
-            "Total sync cost must be monotonically increasing");
+        assert!(
+            s2.total_sync_cost_j > s1.total_sync_cost_j,
+            "Total sync cost must be monotonically increasing"
+        );
     }
 }

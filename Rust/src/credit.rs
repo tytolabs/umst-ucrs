@@ -14,9 +14,9 @@
 //!   A lying peer causes recipients' drift to increase → their credit
 //!   drops → the network naturally isolates them.
 
+use crate::landauer;
 use std::collections::HashMap;
 use std::time::Instant;
-use crate::landauer;
 
 /// Unique identifier for a peer in the P2P network.
 pub type PeerId = u64;
@@ -85,7 +85,8 @@ impl CreditLedger {
 
     /// Register a new peer.
     pub fn add_peer(&mut self, peer_id: PeerId, drift_ppb: f64) {
-        self.peers.insert(peer_id, PeerCredit::new(peer_id, drift_ppb));
+        self.peers
+            .insert(peer_id, PeerCredit::new(peer_id, drift_ppb));
     }
 
     /// Select the optimal sync peer (highest credit = lowest expected cost).
@@ -97,10 +98,12 @@ impl CreditLedger {
     /// corrections historically, so H(our_phase | peer) is minimized,
     /// hence Landauer cost k_B T ln(2) · H(our_phase | peer) is minimized.
     pub fn best_peer(&self) -> Option<SyncDecision> {
-        self.peers.values()
+        self.peers
+            .values()
             .filter(|p| p.accuracy_score > 0.1) // exclude degraded peers
             .max_by(|a, b| {
-                a.credit_bits.partial_cmp(&b.credit_bits)
+                a.credit_bits
+                    .partial_cmp(&b.credit_bits)
                     .unwrap_or(std::cmp::Ordering::Equal)
             })
             .map(|p| {
@@ -127,12 +130,7 @@ impl CreditLedger {
     ///
     /// If the sync made our phase worse (Byzantine peer), their accuracy
     /// score drops — and with it, their effective credit for future selection.
-    pub fn record_sync(
-        &mut self,
-        peer_id: PeerId,
-        bits_resolved: f64,
-        sync_improved_phase: bool,
-    ) {
+    pub fn record_sync(&mut self, peer_id: PeerId, bits_resolved: f64, sync_improved_phase: bool) {
         if let Some(peer) = self.peers.get_mut(&peer_id) {
             peer.sync_count += 1;
             peer.last_sync = Some(Instant::now());
@@ -146,7 +144,7 @@ impl CreditLedger {
             } else {
                 // Sync made things worse → Byzantine signal
                 peer.credit_bits -= bits_resolved * 2.0; // penalty > reward
-                // Accuracy degrades
+                                                         // Accuracy degrades
                 peer.accuracy_score *= 0.9;
             }
         }
@@ -154,7 +152,8 @@ impl CreditLedger {
 
     /// Total Landauer cost of all sync operations (joules).
     pub fn total_network_cost_joules(&self) -> f64 {
-        self.peers.values()
+        self.peers
+            .values()
             .map(|p| landauer::landauer_cost(p.bits_received, self.temperature_k))
             .sum()
     }
@@ -166,7 +165,8 @@ impl CreditLedger {
 
     /// Identify potentially Byzantine peers (accuracy below threshold).
     pub fn suspect_peers(&self, threshold: f64) -> Vec<PeerId> {
-        self.peers.values()
+        self.peers
+            .values()
             .filter(|p| p.accuracy_score < threshold && p.sync_count > 5)
             .map(|p| p.peer_id)
             .collect()
@@ -205,15 +205,17 @@ mod tests {
         ledger.record_sync(1, 3.0, false);
         let credit_after_bad = ledger.peers[&1].credit_bits;
 
-        assert!(credit_after_bad < credit_after_good,
-            "Credit should decrease after bad sync: {credit_after_bad} < {credit_after_good}");
+        assert!(
+            credit_after_bad < credit_after_good,
+            "Credit should decrease after bad sync: {credit_after_bad} < {credit_after_good}"
+        );
     }
 
     #[test]
     fn byzantine_detection() {
         let mut ledger = CreditLedger::new(0, 300.0);
-        ledger.add_peer(1, 5.0);  // honest
-        ledger.add_peer(2, 5.0);  // byzantine
+        ledger.add_peer(1, 5.0); // honest
+        ledger.add_peer(2, 5.0); // byzantine
 
         // Honest peer: all good syncs
         for _ in 0..10 {

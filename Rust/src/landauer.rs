@@ -61,10 +61,7 @@ pub fn desync_energy(phase_entropy_bits: f64, temperature_kelvin: f64) -> f64 {
 /// Formally: this is the multi-agent analogue of the Cost-Coherence Identity.
 /// When I(A:B) > 0, joint erasure is cheaper than independent erasure.
 #[inline]
-pub fn coordination_cost(
-    mutual_info_bits: f64,
-    temperature_kelvin: f64,
-) -> f64 {
+pub fn coordination_cost(mutual_info_bits: f64, temperature_kelvin: f64) -> f64 {
     landauer_cost(mutual_info_bits, temperature_kelvin)
 }
 
@@ -78,8 +75,10 @@ mod tests {
     fn landauer_bit_energy_at_300k() {
         let e = landauer_bit_energy(T_ROOM);
         // k_B · 300 · ln(2) ≈ 2.87 × 10⁻²¹ J
-        assert!((e - 2.872e-21).abs() < 1e-23,
-            "Landauer bit energy at 300K: {e}");
+        assert!(
+            (e - 2.872e-21).abs() < 1e-23,
+            "Landauer bit energy at 300K: {e}"
+        );
     }
 
     #[test]
@@ -105,8 +104,7 @@ mod tests {
     fn mass_equivalent_at_300k() {
         let m = mass_equivalent_per_bit(T_ROOM);
         // ≈ 3.19 × 10⁻³⁸ kg (matches LandauerEinsteinBridge.lean)
-        assert!((m - 3.19e-38).abs() < 1e-39,
-            "Mass equivalent at 300K: {m}");
+        assert!((m - 3.19e-38).abs() < 1e-39, "Mass equivalent at 300K: {m}");
     }
 
     #[test]

@@ -5,10 +5,10 @@
 //! `accuracy_score`, `sig` (hex-ready byte array serialized as JSON array of u8 in tests; over
 //! the wire the daemon uses raw `serde_json` of the struct with sig as `[u8;32]`).
 
+use crate::clock::LocalClock;
 use crate::credit::{CreditLedger, PeerId};
 use crate::gate::{self, ClockThermState, GateVerdict};
 use crate::landauer;
-use crate::clock::LocalClock;
 use crate::AgentConfig;
 
 /// One gossip-published clock observation from a remote agent.
@@ -100,8 +100,8 @@ pub fn apply_inbound_clock_tick(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::credit::CreditLedger;
     use crate::clock::LocalClock;
+    use crate::credit::CreditLedger;
 
     #[test]
     fn clock_tick_json_roundtrip() {
