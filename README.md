@@ -8,6 +8,8 @@
 [![Rust](https://img.shields.io/badge/Rust-Tokio%20P2P-orange)](Rust/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+**Changelog:** [`CHANGELOG.md`](CHANGELOG.md).
+
 ---
 
 ## The Core Idea
