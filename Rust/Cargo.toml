@@ -10,9 +10,29 @@ description = "P2P thermodynamic clock synchronization daemon with Landauer-opti
 license = "MIT"
 repository = "https://github.com/tytolabs/umst-ucrs"
 
+[lib]
+name = "umst_ucrs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "umst-ucrs"
+path = "src/main.rs"
+
+[[bin]]
+name = "umst-ucrs-p2p"
+path = "src/bin/p2p.rs"
+required-features = ["p2p"]
+
+[features]
+# Default keeps compile-time small so downstream consumers (e.g. `egoff`) don't pull libp2p.
+default = []
+# Enable libp2p-backed P2P swarm (daemon only).
+p2p = ["dep:libp2p", "dep:futures"]
+
 [dependencies]
 tokio = { version = "1", features = ["full"] }
-libp2p = { version = "0.54", features = ["tcp", "noise", "yamux", "mdns", "gossipsub", "tokio"] }
+futures = { version = "0.3", optional = true }
+libp2p = { version = "0.54", features = ["tcp", "noise", "yamux", "mdns", "gossipsub", "tokio", "macros"], optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tracing = "0.1"

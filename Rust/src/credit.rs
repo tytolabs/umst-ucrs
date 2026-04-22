@@ -147,7 +147,7 @@ impl CreditLedger {
                 // Sync made things worse → Byzantine signal
                 peer.credit_bits -= bits_resolved * 2.0; // penalty > reward
                 // Accuracy degrades
-                peer.accuracy_score = 0.9 * peer.accuracy_score;
+                peer.accuracy_score *= 0.9;
             }
         }
     }

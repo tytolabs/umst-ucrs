@@ -4,7 +4,7 @@
 //! DUMSTO Admissibility Gate for clock synchronization.
 //!
 //! Mirrors the Lean-verified gate from `umst-formal/Lean/Gate.lean`:
-//! ```
+//! ```text
 //! structure Admissible (old new : ThermodynamicState) : Prop where
 //!   massDensity   : |new.density - old.density| ≤ δMass
 //!   clausiusDuhem : new.freeEnergy ≤ old.freeEnergy
@@ -76,7 +76,7 @@ pub fn gate_check(
 /// Apply the gate: if admitted, return the updated state; otherwise None.
 ///
 /// Mirrors `makeGateArrow` from Constitutional.lean:
-/// ```
+/// ```text
 /// def makeGateArrow (propose) : KleisliArrow :=
 ///   fun s => if gateCheck s (propose s) then some (propose s) else none
 /// ```

@@ -84,7 +84,6 @@ impl LocalClock {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::thread;
 
     #[test]
     fn fresh_clock_zero_entropy() {
