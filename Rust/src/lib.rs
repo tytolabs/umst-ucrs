@@ -12,6 +12,9 @@
 
 pub mod clock;
 pub mod credit;
+/// §14bis.f-S-0 — PQC reference parity (`umst_math::crypto` mirror).
+#[allow(missing_docs)]
+pub mod crypto;
 pub mod gate;
 pub mod landauer;
 pub mod rapl;
