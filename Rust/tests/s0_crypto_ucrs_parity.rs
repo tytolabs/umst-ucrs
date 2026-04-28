@@ -1,0 +1,22 @@
+//! RED §14bis.f-S-0 — ε-bisim parity: `umst_ucrs::crypto` vs `umst_math::crypto` (R-3.9.x).
+
+use umst_ucrs::crypto::hash::sha3_256::digest as ucrs_digest;
+use umst_ucrs::crypto::kem::ml_kem_768::{decapsulate as u_decap, encapsulate as u_encap};
+use umst_ucrs::crypto::sig::ml_dsa_65::{sign as u_sign, verify as u_verify};
+
+#[test]
+fn r391_ucrs_kem_surface() {
+    let _ = u_encap;
+    let _ = u_decap;
+}
+
+#[test]
+fn r392_ucrs_sig_surface() {
+    let _ = u_sign;
+    let _ = u_verify;
+}
+
+#[test]
+fn r393_ucrs_hash_surface() {
+    let _ = ucrs_digest(&[]);
+}

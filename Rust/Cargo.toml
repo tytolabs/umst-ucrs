@@ -28,6 +28,8 @@ required-features = ["p2p"]
 default = []
 # Enable libp2p-backed P2P swarm (daemon only).
 p2p = ["dep:libp2p", "dep:futures"]
+# §14bis.f-S-0 RED ratchet — gated tests; removed at GREEN per FORWARD-PLAN-v1.3 §17.1.
+s0-red-ratchet = []
 
 [dependencies]
 tokio = { version = "1", features = ["full"] }
@@ -47,3 +49,8 @@ proptest = "1"
 [[bench]]
 name = "sync_cost_bench"
 harness = false
+
+[[test]]
+name = "s0_crypto_ucrs_parity"
+path = "tests/s0_crypto_ucrs_parity.rs"
+required-features = ["s0-red-ratchet"]
