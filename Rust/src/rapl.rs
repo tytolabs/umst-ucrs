@@ -10,7 +10,6 @@
 //! RAPL is available on Intel (Sandy Bridge+) and AMD (Zen+) CPUs.
 //! On macOS, we fall back to a powermetrics-based estimate.
 
-use std::fs;
 use std::io;
 use thiserror::Error;
 
@@ -57,6 +56,7 @@ impl EnergyReading {
 pub fn read_package_energy() -> Result<EnergyReading, RaplError> {
     #[cfg(target_os = "linux")]
     {
+        use std::fs;
         let path = "/sys/class/powercap/intel-rapl:0/energy_uj";
         let content = fs::read_to_string(path)?;
         let microjoules: u64 = content.trim().parse()?;

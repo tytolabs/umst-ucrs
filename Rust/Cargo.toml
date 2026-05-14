@@ -48,8 +48,8 @@ prometheus = "0.13"
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
 proptest = "1"
-# §14bis.f-S-0 — ε-bisim parity tests vs `umst-math` engineering crate (sibling checkout).
-umst-math = { path = "../../tytolabs-egoff/umst-math" }
+# §14bis.f-S-0 — ε-bisim parity tests vs `umst-math` (MaOS: `../egoff/umst-math`; CI clones egoff to `${workspace}/../egoff`).
+umst-math = { path = "../../egoff/umst-math" }
 
 [[bench]]
 name = "sync_cost_bench"

@@ -20,6 +20,18 @@ jobs:
         working-directory: Rust
     steps:
       - uses: actions/checkout@v4
+      # Dev-dependency `umst-math` is a path to `../../egoff/umst-math` from `Rust/` (private `tytolabs/egoff`).
+      - name: Clone egoff for umst-math path dependency
+        working-directory: ${{ github.workspace }}/..
+        env:
+          TOKEN: ${{ secrets.EGOFF_READ_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -d egoff/.git ]; then
+            echo "egoff checkout already present"
+          else
+            git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/tytolabs/egoff.git" egoff
+          fi
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
