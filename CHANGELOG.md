@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Documentation (2026-05-30)
+
+- **FCP-DS / FCP-I headline counts** synced to sibling `lean_declaration_stats.py`: double-slit **540+34** / **574** roots-only (**584** all-Lean); meso **226+17** / **243** in **47** roots.
+
 ### Changed (2026-04-22)
 
 - **`Rust/src/**`** — `rustfmt` so `cargo fmt -- --check` passes in clean checkouts (CI prep).
