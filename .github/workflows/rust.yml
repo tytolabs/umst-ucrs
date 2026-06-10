@@ -20,29 +20,28 @@ jobs:
         working-directory: Rust
     steps:
       - uses: actions/checkout@v4
-      - name: Read pinned egoff ref
-        id: egoff_pin
+      - name: Read pinned umst-manifold ref
+        id: manifold_pin
         run: |
           set -euo pipefail
-          sha=$(python3 -c "import tomllib; print(tomllib.load(open('.umst-pins.toml','rb'))['egoff']['sha'])")
+          sha=$(python3 -c "import tomllib; print(tomllib.load(open('.umst-pins.toml','rb'))['umst-manifold']['sha'])")
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
-      # Dev-dependency `umst-math` is a path to `../../egoff/umst-math` from `Rust/` (private `tytolabs/egoff`).
-      - name: Clone egoff for umst-math path dependency (pinned)
+      # Dev-dependency `umst-math` is a path to `../../umst-manifold/umst-math` from `Rust/`.
+      - name: Clone umst-manifold for umst-math path dependency (pinned, public)
         working-directory: ${{ github.workspace }}/..
         env:
-          TOKEN: ${{ secrets.EGOFF_READ_TOKEN || secrets.GITHUB_TOKEN }}
-          EGOFF_SHA: ${{ steps.egoff_pin.outputs.sha }}
+          MANIFOLD_SHA: ${{ steps.manifold_pin.outputs.sha }}
         run: |
           set -euo pipefail
-          if [ -d egoff/.git ]; then
-            git -C egoff fetch --depth 1 origin "$EGOFF_SHA"
-            git -C egoff checkout "$EGOFF_SHA"
+          if [ -d umst-manifold/.git ]; then
+            git -C umst-manifold fetch --depth 1 origin "$MANIFOLD_SHA"
+            git -C umst-manifold checkout "$MANIFOLD_SHA"
           else
-            git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/tytolabs/egoff.git" egoff
-            git -C egoff fetch --depth 1 origin "$EGOFF_SHA"
-            git -C egoff checkout "$EGOFF_SHA"
+            git clone --depth 1 https://github.com/tytolabs/umst-manifold.git umst-manifold
+            git -C umst-manifold fetch --depth 1 origin "$MANIFOLD_SHA"
+            git -C umst-manifold checkout "$MANIFOLD_SHA"
           fi
-          git -C egoff merge-base --is-ancestor "$EGOFF_SHA" HEAD
+          git -C umst-manifold merge-base --is-ancestor "$MANIFOLD_SHA" HEAD
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
