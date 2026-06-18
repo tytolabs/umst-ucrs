@@ -5,7 +5,7 @@
 //!
 //! Thin wrapper around the `umst_ucrs` library. The core logic (clock, gate, credit
 //! ledger, Landauer cost, telemetry) lives in `lib.rs` so it can be consumed by
-//! downstream crates such as `egoff`.
+//! downstream crates embedding the library.
 
 use tracing::info;
 

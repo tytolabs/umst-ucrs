@@ -1,313 +1,194 @@
-# UMST-UCRS: Peer-to-Peer Thermodynamic Clock Synchronization
+# UMST-UCRS
 
-> **Towards Unified Material-State Tensors VI:**
-> Compositional Thermodynamic Accounting for Multi-Agent Constitutional Systems
-> with Decentralized Coalgebraic Time Synchronization
+**Universal Calendar Resolution Spine** — frugality-first constitutional time for multi-agent systems.
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18940933.svg)](https://doi.org/10.5281/zenodo.18940933)
 [![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
-**Changelog:** [`CHANGELOG.md`](CHANGELOG.md).
+**Changelog:** [`CHANGELOG.md`](CHANGELOG.md) · **Credit system:** [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) · **Formal foundations:** [`FOUNDATION.md`](FOUNDATION.md)
 
 ---
 
-## The Core Idea
+## Independent repository
 
-Every clock synchronization message between peers is a **measurement**.
-Every measurement has a **Landauer cost**: at least `k_B T ln(2)` joules per bit
-of phase uncertainty resolved. In a decentralized network, the total
-synchronization cost is bounded by the **sum of pairwise quantum mutual
-informations** — and minimized when agents preferentially sync with
-high-accuracy peers.
+**`tytolabs/umst-ucrs` is the system of record for UCRS** — not a chapter appendix of another paper repo.
 
-This repo formalizes and implements that idea:
+| This repo owns | Other repos own |
+|----------------|-----------------|
+| Thermodynamic P2P clock sync | Material gates → [`umst-manifold`](https://github.com/tytolabs/umst-manifold) |
+| Credit ledger + DUMSTO sync gate | Cartridge physics → [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) |
+| `UcrsObservedAt` observation stamps | Lean proof catalogs → [`umst-formal`](https://github.com/tytolabs/umst-formal), [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) |
+| Rust library (`umst_ucrs`) consumed by agents | Public site → [`studiotyto-website`](https://github.com/tytolabs/studiotyto-website) |
 
-| Layer | Tool | What it proves / measures |
-|-------|------|--------------------------|
-| **Formal proofs** | Lean 4 + Mathlib | Tensor Landauer theorem, coordination cost identity, credit optimality |
-| **Working system** | Rust (Tokio, libp2p) | Real P2P clock daemon with RAPL energy telemetry |
-| **Property tests** | Haskell QuickCheck | Thermodynamic invariant fuzzing |
-| **Simulations** | Python (NumPy) | Network topology sweeps, drift Monte Carlo |
+Cartridges bind UCRS via an optional **`ucrs-provenance`** feature: durable logs (memory rows, gate rejects, promotion records) carry explicit **`stamp_tier`** observation stamps — thermodynamic time, not wall clock alone.
 
-## Quick Stats
-
-| Metric | Value |
-|--------|-------|
-| Lean (inherits [FCP-DS][ds]) | **540** `theorem` + **34** `lemma` in **59** lake roots (**574** line-start decls); **584** incl. all `Lean/*.lean` — upstream `scripts/lean_declaration_stats.py` |
-| Lean (meso [FCP-I][mf]) | **237** `theorem` + **24** `lemma` in **51** roots — [umst-formal][mf] (gates, Landauer bridge, economics track) |
-| Rust daemon | P2P clock sync with Landauer metering |
-| Credit system | Thermodynamic economy — accuracy = credit |
-| Axioms | **This repo:** 0 new Lean axioms planned. **FCP-DS:** 1 documented project `axiom` (`physicalSecondLaw`); see [PROOF-STATUS][ds-proof]. |
-
-[ds]: https://github.com/tytolabs/umst-formal-double-slit
-[ds-proof]: https://github.com/tytolabs/umst-formal-double-slit/blob/main/PROOF-STATUS.md
-[mf]: https://github.com/tytolabs/umst-formal
+> **Scope box — UCRS is NOT material memory**  
+> UCRS provides **constitutional time**, P2P sync economics, and `UcrsObservedAt` stamps on durable logs. It does **not** store mix recipes, hydration outcomes, calibration quality, or agent contribution content. Material knowledge lives in [`umst-concrete-cartridge` `contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json) research memory — see [`docs/AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
 
 ---
 
-## Relationship to Prior Work
+## What is UCRS?
 
-```
-FCP-I   (Physics-Gated AI)          ─── single agent, single gate
-FCP-II  (Epistemic Sensing)         ─── single agent, MI-guided measurement
-FCP-III (Functorial Mediation)      ─── multi-agent hierarchy (theory)
-FCP-IV  (LandauerMark)              ─── macro→micro energy bridge + RAPL
-FCP-V   (Culture as Scaling Layer)  ─── collective colimit
-FCP-DS  (Thermodynamic Cost)        ─── quantum measurement Landauer cost
-                                         540 th + 34 lem (59 roots), 0 sorry,
-                                         1 documented project axiom
-    │
-    ▼
-FCP-VI  (THIS REPO)                 ─── multi-agent Landauer accounting
-                                         P2P clock sync as measurement protocol
-                                         Rust daemon with real energy telemetry
+**UCRS** = **U**niversal **C**alendar **R**esolution **S**pine.
+
+UCRS is the **frugality-first constitutional time layer** on top of the UMST/DUMSTO framework. It gives every AI system (and any human system that wants it) a shared, physics-grounded **now**, while ensuring they never waste more energy than necessary to stay in sync with reality.
+
+### Simple reminder
+
+> UCRS is a shared, intelligent clock that keeps systems honest about time — they only spend energy when it actually improves their understanding of **now**.
+
+### Core idea in plain terms
+
+- **Atomic clocks** give the most precise physical tick of a second.
+- **UCRS** sits above them and does something atomic clocks cannot: it continuously measures how much **temporal noise** or **drift** exists between different calendars, computers, and AI agents.
+- It then forces every agent to pay the **minimum thermodynamic cost** (Landauer cost) to correct that drift.
+- If the cost is too high, the **DUMSTO gate** rejects the wasteful path.
+
+Every sync message is a **measurement**. Every measurement has a Landauer floor: at least `k_B T ln(2)` joules per bit of phase uncertainty resolved.
+
+### Key technical properties
+
+| Property | Role |
+|----------|------|
+| **Final coalgebra** | Rigorous model of an ongoing, self-consistent sync process (`ClockCoalgebra.lean`, planned) |
+| **Desync energy** `D(t)` | Thermodynamic cost paid because clocks have drifted; bounded by the DUMSTO gate |
+| **Offline spine** | Local oscillator + pre-computed spine of known calendar structures for long offline operation |
+| **P2P mesh** | Agents gossip timing only when the exchange **reduces** total desync energy (gate-enforced frugality) |
+| **Thermodynamic credit** | Accuracy is accounted; high-drift peers pay more; Byzantine behavior collapses credit |
+| **Epoch boundaries** | Unix 2038, GPS rollover → safe, zero-cost typed reindexing instead of crashes |
+| **Observation stamps** | `UcrsObservedAt`: `phase_entropy_bits`, `ucrs_seq`, `credit_head_bits`, `stamp_tier` on durable logs |
+
+### Where UCRS sits in the constitutional stack
+
+```text
+Time layer          → UCRS (frugality-first shared “now”)
+Material layer      → UMST + DUMSTO gate
+Geometry layer      → SDF / FREP (MaOS)
+Gravity extension   → Volumetric potential gradient (manifold roadmap)
+Multi-agent mesh    → Thermodynamic credit system + P2P gossip
 ```
 
-**This repo does NOT fork or duplicate umst-formal-double-slit.**
-It imports the Lean Mathlib dependency chain and references proven results
-(tensor product, partial trace, mutual information, Galois connection)
-as foundations for new theorems about multi-agent composition.
+Everything in this stack is designed so agents pay only the **real physical cost of knowing and acting** — nothing more.
+
+### Multi-agent coordination
+
+- **No free consensus** — every shared reference frame costs energy; credit makes that cost explicit and routes sync toward accurate peers.
+- **Byzantine resistance** — lying about phase increases recipients' drift; credit collapses; the network isolates bad actors without a separate BFT protocol.
+- **Frugality-first** — sync only when `desyncEnergy` exceeds threshold; eager sync wastes energy; lazy sync accumulates drift; the gate finds the balance.
 
 ---
 
-## Architecture
+## What this repo implements
 
-### The Thermodynamic Credit System
+| Layer | Status | Location |
+|-------|--------|----------|
+| **Rust library** | Working | `Rust/src/` — clock, gate, credit, Landauer, RAPL hooks |
+| **P2P daemon** | In progress | `Rust/src/` — libp2p sync path |
+| **Lean proofs** | Planned | `Lean/` — tensor Landauer, coordination cost, credit optimality |
+| **Simulations** | Foundation | `Python/sim/` |
+| **Property tests** | Planned | `Haskell/Test/` |
 
-```
-  Agent A (low drift)              Agent B (high drift)
-  ┌─────────────────┐              ┌─────────────────┐
-  │ phase: 0.001 rad│  sync msg    │ phase: 0.847 rad│
-  │ credit: 94      │─────────────>│ credit: 12      │
-  │ drift: 2 ppb    │              │ drift: 150 ppb  │
-  └─────────────────┘              └─────────────────┘
-         │                                  │
-         ▼                                  ▼
-  Landauer cost:                    Landauer cost:
-  k_B T ln(2) · H(B|A)             k_B T ln(2) · H(A|B)
-  = 0.003 aJ (cheap)               = 0.28 aJ (expensive)
-         │                                  │
-         └────── DUMSTO gate ───────────────┘
-                      │
-              Net credit transfer:
-              B pays A proportional to
-              information asymmetry I(A→B)
+```bash
+cd Rust && cargo test && cargo build --release
+cd Python && python -m pytest tests/
+./scripts/run_benchmarks.sh   # when configured
 ```
 
-**Key properties (to be formally proved):**
-1. Total network sync cost = `k_B T ln(2) · ∑_{edges} I(A:B)`
-2. Credit-optimal topology minimizes total Landauer expenditure
-3. Byzantine peers (lying about phase) are detectable: their credit drops
-4. Epoch boundaries (Y2038, GPS rollover) are zero-cost reindexing
+### P2P daemon (sketch)
 
-### P2P Daemon Architecture (Rust)
-
-```
+```text
 ┌──────────────────────────────────────────────────┐
 │                 umst-ucrs daemon                  │
-│                                                   │
-│  ┌───────────┐  ┌───────────┐  ┌──────────────┐ │
-│  │ Local     │  │ P2P Sync  │  │ RAPL Energy  │ │
-│  │ Oscillator│  │ (libp2p)  │  │ Telemetry    │ │
-│  │ Module    │  │           │  │              │ │
-│  └─────┬─────┘  └─────┬─────┘  └──────┬───────┘ │
-│        │              │               │          │
-│        ▼              ▼               ▼          │
-│  ┌─────────────────────────────────────────────┐ │
-│  │         DUMSTO Admissibility Gate            │ │
-│  │  desyncEnergy(c, T) ≤ budget?               │ │
-│  │  yes → apply correction, pay Landauer cost  │ │
-│  │  no  → free-run, accumulate drift           │ │
-│  └─────────────────────────────────────────────┘ │
-│        │              │               │          │
-│        ▼              ▼               ▼          │
-│  ┌─────────────────────────────────────────────┐ │
-│  │         Credit Ledger                        │ │
-│  │  Per-peer accuracy score + cost accounting   │ │
-│  └─────────────────────────────────────────────┘ │
+│  Local oscillator → P2P sync → RAPL telemetry     │
+│         ↓              ↓              ↓            │
+│         DUMSTO gate (desyncEnergy ≤ budget?)       │
+│         Credit ledger (per-peer accuracy)          │
 └──────────────────────────────────────────────────┘
 ```
 
+See [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) for the credit protocol and optimality sketch.
+
 ---
 
-## Repository Layout
+## Relationship to UMST formal work
 
+UCRS **imports** thermodynamic and gate results from sibling formal repos; it does **not** fork or duplicate them.
+
+```text
+umst-formal          ── gates, Landauer bridge, Kleisli composition
+umst-formal-double-slit ── quantum mutual information, tensor Landauer identities
+        │
+        ▼
+   umst-ucrs (THIS REPO) ── multi-agent Landauer accounting, P2P clock as measurement
 ```
+
+Details: [`FOUNDATION.md`](FOUNDATION.md).
+
+---
+
+## Architecture — thermodynamic credit (summary)
+
+```text
+  Agent A (low drift)              Agent B (high drift)
+  phase: 0.001 rad  ──sync──►      phase: 0.847 rad
+  credit: 94                       credit: 12
+         │                                  │
+         └────── DUMSTO gate ───────────────┘
+              Landauer cost ∝ H(phase | peer)
+              Net credit transfer ∝ information asymmetry
+```
+
+**Properties (target theorems):**
+
+1. Total network sync cost = `k_B T ln(2) · ∑_{edges} I(A:B)`
+2. Greedy credit routing minimizes total Landauer spend at target accuracy
+3. Byzantine peers are detectable via credit collapse
+4. Epoch patches are admissible at zero thermodynamic cost
+
+---
+
+## Repository layout
+
+```text
 umst-ucrs/
-├── Lean/                          # Formal proofs (Lean 4 + Mathlib)
-│   ├── lakefile.lean              # Build config (imports Mathlib)
-│   ├── TensorLandauer.lean        # Tensor product cost decomposition
-│   ├── CoordinationCost.lean      # Mutual info discount theorem
-│   ├── ClockCoalgebra.lean        # Final coalgebra on Kleisli monad
-│   ├── CreditOptimality.lean      # Credit system minimizes total cost
-│   ├── EpochPatch.lean            # Zero-cost epoch reindexing
-│   └── DesyncEnergy.lean          # Desync as Landauer-bounded quantity
-│
-├── Rust/                          # Working P2P daemon
-│   ├── Cargo.toml
-│   ├── src/
-│   │   ├── main.rs                # Daemon entry point
-│   │   ├── clock.rs               # Local oscillator + drift model
-│   │   ├── p2p.rs                 # libp2p sync protocol
-│   │   ├── gate.rs                # DUMSTO admissibility check
-│   │   ├── credit.rs              # Thermodynamic credit ledger
-│   │   ├── rapl.rs                # Intel RAPL energy measurement
-│   │   ├── landauer.rs            # Landauer cost computation
-│   │   └── telemetry.rs           # Metrics export (Prometheus)
-│   ├── benches/
-│   │   └── sync_cost_bench.rs     # Measure real sync energy
-│   └── tests/
-│       ├── integration_test.rs    # Multi-peer network test
-│       └── credit_test.rs         # Credit convergence test
-│
-├── Haskell/                       # Property-based testing
-│   └── Test/
-│       └── CreditProperties.hs    # QuickCheck: credit invariants
-│
-├── Python/                        # Simulations & analysis
-│   ├── sim/
-│   │   ├── network_topology.py    # Sweep star/mesh/ring topologies
-│   │   ├── drift_monte_carlo.py   # 10k-run drift accumulation
-│   │   └── credit_convergence.py  # Credit equilibrium simulation
-│   └── tests/
-│       └── test_landauer_floor.py # Validate Rust against theory
-│
-├── Docs/
-│   ├── Preprint/                  # FCP-VI LaTeX paper
-│   ├── Media/                     # Figures, diagrams
-│   └── DESIGN.md                  # Architecture decisions
-│
-├── scripts/
-│   ├── run_benchmarks.sh          # Full benchmark suite
-│   └── generate_figures.py        # Paper figure generation
-│
-├── .github/workflows/
-│   ├── lean.yml                   # Lean 4 CI (lake build)
-│   ├── rust.yml                   # Rust CI (cargo test + clippy)
-│   └── python.yml                 # Python CI (pytest)
-│
-├── LICENSE                        # MIT
-├── FOUNDATION.md                  # Relationship to prior FCP work
-├── CREDIT-SYSTEM.md               # Thermodynamic credit deep-dive
-└── README.md                      # This file
-```
-
----
-
-## The Credit System — Ensuring Least Thermodynamic Cost
-
-The credit system is not just accounting — it provably minimizes total
-network synchronization cost. Here's why:
-
-### Definition
-
-Each agent `i` maintains a **credit score** `C_i`:
-
-```
-C_i = accuracy_i / cost_i
-    = (1 / drift_i) / (k_B T ln(2) · H(phase_i))
-```
-
-### Protocol
-
-1. Agent B wants to sync. It queries the peer with highest `C` in range.
-2. The sync message resolves `H(phase_B | peer)` bits of uncertainty.
-3. Agent B's energy cost: `E_sync = k_B T ln(2) · H(phase_B | peer)`.
-4. Credit transfer: `ΔC = E_sync / (k_B T ln(2))` from B to peer.
-5. DUMSTO gate checks: `E_sync ≤ budget_B`. If not, B free-runs.
-
-### Optimality Theorem (to be proved in Lean)
-
-**Claim:** The greedy credit protocol (always sync with highest-credit
-peer in range) minimizes total network Landauer expenditure among all
-sync protocols that achieve target accuracy `ε`.
-
-**Proof sketch:** Highest-credit peer has lowest conditional entropy
-`H(phase_B | peer)`, hence lowest Landauer cost per sync. Greedy
-selection on a submodular function (mutual information) achieves
-`(1 - 1/e)` approximation to optimal; exact optimality follows from
-the matroid structure of spanning sync trees.
-
-### Why This Matters for Multi-Agent AI
-
-- **No free consensus:** Every shared reference frame costs energy.
-  The credit system makes this cost explicit and minimizes it.
-- **Byzantine detection:** A lying peer's corrections increase
-  recipients' drift → their credit collapses → network isolates them.
-  No explicit Byzantine protocol needed — thermodynamics does the work.
-- **Frugality-first:** Agents sync only when `desyncEnergy > threshold`,
-  minimizing total cost. Eager sync wastes energy; lazy sync accumulates
-  drift. The DUMSTO gate finds the optimal balance.
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- [Lean 4](https://leanprover.github.io/lean4/doc/setup.html) + Mathlib
-- [Rust](https://rustup.rs/) (stable, 1.75+)
-- Python 3.10+ with NumPy, matplotlib
-- (Optional) Haskell Stack for QuickCheck tests
-
-### Build & Test
-
-```bash
-# Lean proofs
-cd Lean && lake build
-
-# Rust daemon
-cd Rust && cargo test
-cargo build --release
-
-# Python simulations
-cd Python && python -m pytest tests/
-
-# Full benchmark
-./scripts/run_benchmarks.sh
-```
-
-### Run the P2P Daemon
-
-```bash
-# Start 3 local peers for testing
-cargo run -- --peer-id 1 --port 9001 --bootstrap localhost:9002,localhost:9003
-cargo run -- --peer-id 2 --port 9002 --bootstrap localhost:9001,localhost:9003
-cargo run -- --peer-id 3 --port 9003 --bootstrap localhost:9001,localhost:9002
+├── Rust/              # umst_ucrs library + daemon (primary deliverable)
+├── Lean/              # Formal proofs (planned)
+├── Python/sim/        # Topology + drift simulations
+├── Haskell/Test/      # QuickCheck properties (planned)
+├── Docs/              # Design notes, media
+├── FOUNDATION.md
+├── CREDIT-SYSTEM.md
+└── README.md
 ```
 
 ---
 
 ## Citation
 
-If you use this work, please cite:
+If you use UCRS or this implementation, please cite the repository:
 
 ```bibtex
-@techreport{shyamsundar2026ucrs,
-  title   = {Towards Unified Material-State Tensors {VI}:
-             Compositional Thermodynamic Accounting for Multi-Agent
-             Constitutional Systems with Decentralized Coalgebraic
-             Time Synchronization},
+@software{umst_ucrs2026,
+  title   = {{UMST-UCRS}: Universal Calendar Resolution Spine},
   author  = {Shyamsundar, Santhosh and Shenbagamoorthy, Santosh Prabhu},
   year    = {2026},
-  institution = {Studio TYTO},
-  note    = {Preprint. Source: \url{https://github.com/tytolabs/umst-ucrs}}
+  publisher = {Studio TYTO},
+  url     = {https://github.com/tytolabs/umst-ucrs},
+  license = {MIT}
 }
 ```
 
-### Related FCP Papers
+### Related UMST repositories
 
-| # | Title | DOI |
-|---|-------|-----|
-| FCP-I | Towards UMST: Physics-Gated AI | [10.5281/zenodo.18768547](https://doi.org/10.5281/zenodo.18768547) |
-| FCP-II | Towards UMST: Epistemic Sensing | [10.5281/zenodo.18894710](https://doi.org/10.5281/zenodo.18894710) |
-| FCP-DS | The Thermodynamic Cost of Knowing | [10.5281/zenodo.19159660](https://doi.org/10.5281/zenodo.19159660) |
-| Dashboard | UMST Research Dashboard v3.2 | [10.5281/zenodo.18940933](https://doi.org/10.5281/zenodo.18940933) |
+| Repo | Focus |
+|------|--------|
+| [`umst-manifold`](https://github.com/tytolabs/umst-manifold) | Thermodynamic gate host |
+| [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) | Concrete agent + MCP surface |
+| [`umst-formal`](https://github.com/tytolabs/umst-formal) | Meso-scale formal proofs |
+| [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) | Quantum-scale Landauer bridge |
 
 ---
 
 ## License
 
-MIT License. Copyright (c) 2026 Santhosh Shyamsundar,
-Santosh Prabhu Shenbagamoorthy — Studio TYTO.
+MIT License. Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO.

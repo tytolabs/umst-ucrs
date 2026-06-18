@@ -24,7 +24,7 @@ path = "src/bin/p2p.rs"
 required-features = ["p2p"]
 
 [features]
-# Default keeps compile-time small so downstream consumers (e.g. `egoff`) don't pull libp2p.
+# Default keeps compile-time small so downstream consumers don't pull libp2p.
 default = []
 # Enable libp2p-backed P2P swarm (daemon only).
 p2p = ["dep:libp2p", "dep:futures"]
@@ -48,7 +48,7 @@ prometheus = "0.13"
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
 proptest = "1"
-# §14bis.f-S-0 — ε-bisim parity tests vs `umst-math` (SSOT: `umst-manifold/umst-math`).
+# S-0 — ε-bisim parity tests vs `umst-math` (SSOT: `umst-manifold/umst-math`).
 umst-math = { path = "../../umst-manifold/umst-math" }
 
 [[bench]]

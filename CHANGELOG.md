@@ -2,6 +2,8 @@
 
 All notable changes to **UMST-UCRS** (`tytolabs/umst-ucrs`) are documented here.
 
+**Identity:** Independent public repo — Universal Calendar Resolution Spine (UCRS). Not coupled to FCP-VI/Zenodo as repo identity; see [`README.md`](README.md) and [`FOUNDATION.md`](FOUNDATION.md).
+
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]

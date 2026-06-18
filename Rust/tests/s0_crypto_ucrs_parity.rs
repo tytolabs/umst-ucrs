@@ -1,4 +1,4 @@
-//! GREEN §14bis.f-S-0 — ε-bisim parity: `umst_ucrs::crypto` vs `umst_math::crypto` (R-3.9.x).
+//! S-0 — ε-bisim parity: `umst_ucrs::crypto` vs `umst_math::crypto` (R-3.9.x).
 
 use umst_math::crypto::hash::sha3_256::digest as math_digest;
 use umst_ucrs::crypto::hash::sha3_256::digest as ucrs_digest;

@@ -1,5 +1,11 @@
 # Foundation: Relationship to Prior FCP Work
 
+> **Independent repo:** `umst-ucrs` is the **Universal Calendar Resolution Spine** — public on GitHub (`tytolabs/umst-ucrs`). FCP-VI/Zenodo are not this repo's identity; they remain referenced only as inherited formal lineage below.
+
+> **Lean honesty:** The `Lean/` tree in this repo is **planned/inherited**, not yet UCRS-native at full catalog depth. Rust clock/gate/credit paths are CI-tested; theorem names below cite sibling formal repos until ported here.
+
+> **Material boundary:** UCRS stamps time on cartridge logs — it does **not** replace [`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json) research memory in `umst-concrete-cartridge`.
+
 This document records which results from prior FCP papers and repos
 are **used as foundations** by UMST-UCRS, and which are **extended**
 with new theorems and implementations.

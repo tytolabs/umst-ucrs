@@ -3,7 +3,7 @@
 
 //! UMST-UCRS library crate.
 //!
-//! Re-exports the public modules so downstream crates (e.g. `egoff`) can consume the
+//! Re-exports the public modules so downstream crates can consume the
 //! thermodynamic clock, gate, credit-ledger, Landauer-cost, RAPL-telemetry, and Prometheus
 //! bridge APIs without depending on the daemon binary.
 //!
@@ -12,14 +12,16 @@
 
 pub mod clock;
 pub mod credit;
-/// §14bis.f-S-0 — PQC reference parity (`umst_math::crypto` mirror).
+/// S-0 crypto parity — PQC reference (`umst_math::crypto` mirror).
 #[allow(missing_docs)]
 pub mod crypto;
 pub mod gate;
 pub mod landauer;
+/// Immutable observation stamps for durable agent logs (`UcrsObservedAt`, `TemporalWitness`).
+pub mod observation;
 pub mod rapl;
 pub mod telemetry;
-/// Gossip wire format + signature glue (no libp2p — safe for default `egoff` builds).
+/// Gossip wire format + signature glue (no libp2p — safe for default library-only builds).
 pub mod wire;
 
 use tracing::{info, warn};
@@ -59,7 +61,7 @@ impl Default for AgentConfig {
 ///
 /// In production this runs inside a Tokio async loop with libp2p. Here we expose the core
 /// logic as a synchronous function for unit testing, deterministic simulation, and for
-/// downstream consumers (e.g. `egoff`) that want to drive the ledger without spinning the
+/// downstream consumers that want to drive the ledger without spinning the
 /// full P2P stack.
 pub fn agent_tick(
     clock: &mut LocalClock,
