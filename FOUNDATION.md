@@ -64,7 +64,7 @@ with new theorems and implementations.
 |-----------|-------------|-----------|
 | `clock.rs` | Local oscillator with drift model | Clock state structure |
 | `p2p.rs` | libp2p sync protocol | Sync message as measurement |
-| `gate.rs` | DUMSTO admissibility check | gateCheck (Lean-verified predicate) |
+| `gate.rs` | Thermodynamic admissibility check (clock specialization) | `gateCheck` (Lean-verified predicate) |
 | `credit.rs` | Credit ledger + transfer protocol | Credit optimality theorem |
 | `rapl.rs` | Intel RAPL energy telemetry | Real Landauer cost measurement |
 | `landauer.rs` | Theoretical cost computation | Compare RAPL actual vs. Landauer floor |

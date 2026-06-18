@@ -326,7 +326,7 @@ jobs:
 
 - [x] Abstract
 - [x] Introduction (contribution bullets)
-- [x] Background (DUMSTO, Landauer, QMI)
+- [x] Background (thermodynamic gate, Landauer, QMI)
 - [x] Tensor Landauer Accounting (Theorems 1-3)
 - [x] Clock Synchronization as Measurement Channel
 - [x] Thermodynamic Credit System (Theorem 4 + Byzantine)

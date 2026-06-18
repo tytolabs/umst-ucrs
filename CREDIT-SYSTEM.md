@@ -68,7 +68,7 @@ PEER_SYNC(agent_i, agent_j):
   1. i sends timestamp t_i, drift estimate δ_i, credit C_i
   2. j computes conditional entropy:
      H_cond = H(phase_j | t_i, δ_i)   // how much i's message helps j
-  3. j checks DUMSTO gate:
+  3. j checks thermodynamic gate (`gate_check`):
      IF k_B T ln(2) · H_cond > budget_j THEN
        REJECT (too expensive; free-run instead)
      ELSE
@@ -235,6 +235,6 @@ This gives real, measurable data for the paper — not just proofs.
 | Info ↔ Energy duality | `landauer_galois_connection` | `EpistemicGalois.lean` |
 | Measurement increases entropy | `whichPath_increases_entropy` | `DataProcessingInequality.lean` |
 | Mutual info of joint state | `quantumMutualInfo` | `QuantumMutualInfo.lean` |
-| DUMSTO gate | `Admissible`, `gateCheck` | `Gate.lean` |
+| Thermodynamic gate | `Admissible`, `gateCheck` | `Gate.lean` |
 | Kleisli composition | `kleisliCompose`, `WellTypedN` | `Constitutional.lean` |
 | PMIC | `principle_of_maximal_information_collapse` | `LandauerBound.lean` |

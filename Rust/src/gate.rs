@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
 
-//! DUMSTO Admissibility Gate for clock synchronization.
+//! Thermodynamic admissibility gate for clock synchronization.
 //!
 //! Mirrors the Lean-verified gate from `umst-formal/Lean/Gate.lean`:
 //! ```text
@@ -13,12 +13,13 @@
 //! ```
 //!
 //! For clock synchronization, the gate checks that the energy cost of
-//! a sync operation does not exceed the agent's budget. This is the
-//! DUMSTO-bounded coalgebra step from `ClockCoalgebra.lean`.
+//! a sync operation does not exceed the agent's budget. Same predicate
+//! family as [`umst-manifold`](https://github.com/tytolabs/umst-manifold)
+//! `ThermodynamicGate` / `gateCheck`, applied to `ClockThermState`.
 
 use crate::landauer;
 
-/// Clock-specific thermodynamic state for the DUMSTO gate.
+/// Clock-specific thermodynamic state for the admissibility gate.
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct ClockThermState {
     /// Accumulated desync energy (joules) — monotonically increasing until sync.
@@ -41,7 +42,7 @@ pub enum GateVerdict {
     Reject,
 }
 
-/// Check DUMSTO admissibility for a proposed sync.
+/// Check thermodynamic admissibility for a proposed sync.
 ///
 /// The gate admits the sync iff:
 /// 1. The Landauer cost of the sync ≤ remaining budget

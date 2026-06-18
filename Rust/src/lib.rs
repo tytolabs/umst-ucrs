@@ -77,7 +77,7 @@ pub fn agent_tick(
         return None;
     }
 
-    // 2. Construct thermodynamic state for DUMSTO gate
+    // 2. Construct thermodynamic state for gate check
     let therm_state = ClockThermState {
         desync_energy_j: clock.desync_energy_joules(),
         budget_j: landauer::landauer_cost(config.budget_bits, config.temperature_k),
@@ -94,7 +94,7 @@ pub fn agent_tick(
         }
     };
 
-    // 4. Check DUMSTO gate
+    // 4. Check thermodynamic gate
     match gate::gate_check(&therm_state, decision.bits_to_resolve) {
         gate::GateVerdict::Reject => {
             info!(

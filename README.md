@@ -16,7 +16,7 @@
 | This repo owns | Other repos own |
 |----------------|-----------------|
 | Thermodynamic P2P clock sync | Material gates → [`umst-manifold`](https://github.com/tytolabs/umst-manifold) |
-| Credit ledger + DUMSTO sync gate | Cartridge physics → [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) |
+| Credit ledger + thermodynamic sync gate | Cartridge physics → [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) |
 | `UcrsObservedAt` observation stamps | Lean proof catalogs → [`umst-formal`](https://github.com/tytolabs/umst-formal), [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) |
 | Rust library (`umst_ucrs`) consumed by agents | Public site → [`studiotyto-website`](https://github.com/tytolabs/studiotyto-website) |
 
@@ -31,7 +31,7 @@ Cartridges bind UCRS via an optional **`ucrs-provenance`** feature: durable logs
 
 **UCRS** = **U**niversal **C**alendar **R**esolution **S**pine.
 
-UCRS is the **frugality-first constitutional time layer** on top of the UMST/DUMSTO framework. It gives every AI system (and any human system that wants it) a shared, physics-grounded **now**, while ensuring they never waste more energy than necessary to stay in sync with reality.
+UCRS is the **frugality-first constitutional time layer** on top of the UMST stack. It gives every AI system (and any human system that wants it) a shared, physics-grounded **now**, while ensuring they never waste more energy than necessary to stay in sync with reality. Clock sync admissibility uses the same **thermodynamic gate** predicate as [`umst-manifold`](https://github.com/tytolabs/umst-manifold) (`gateCheck` in [`umst-formal`](https://github.com/tytolabs/umst-formal) `Gate.lean`), specialized here to desync-energy budgets.
 
 ### Simple reminder
 
@@ -42,7 +42,7 @@ UCRS is the **frugality-first constitutional time layer** on top of the UMST/DUM
 - **Atomic clocks** give the most precise physical tick of a second.
 - **UCRS** sits above them and does something atomic clocks cannot: it continuously measures how much **temporal noise** or **drift** exists between different calendars, computers, and AI agents.
 - It then forces every agent to pay the **minimum thermodynamic cost** (Landauer cost) to correct that drift.
-- If the cost is too high, the **DUMSTO gate** rejects the wasteful path.
+- If the cost is too high, the **thermodynamic gate** rejects the wasteful path.
 
 Every sync message is a **measurement**. Every measurement has a Landauer floor: at least `k_B T ln(2)` joules per bit of phase uncertainty resolved.
 
@@ -51,7 +51,7 @@ Every sync message is a **measurement**. Every measurement has a Landauer floor:
 | Property | Role |
 |----------|------|
 | **Final coalgebra** | Rigorous model of an ongoing, self-consistent sync process (`ClockCoalgebra.lean`, planned) |
-| **Desync energy** `D(t)` | Thermodynamic cost paid because clocks have drifted; bounded by the DUMSTO gate |
+| **Desync energy** `D(t)` | Thermodynamic cost paid because clocks have drifted; bounded by the thermodynamic gate |
 | **Offline spine** | Local oscillator + pre-computed spine of known calendar structures for long offline operation |
 | **P2P mesh** | Agents gossip timing only when the exchange **reduces** total desync energy (gate-enforced frugality) |
 | **Thermodynamic credit** | Accuracy is accounted; high-drift peers pay more; Byzantine behavior collapses credit |
@@ -62,7 +62,7 @@ Every sync message is a **measurement**. Every measurement has a Landauer floor:
 
 ```text
 Time layer          → UCRS (frugality-first shared “now”)
-Material layer      → UMST + DUMSTO gate
+Material layer      → UMST manifold (thermodynamic gate)
 Geometry layer      → SDF / FREP (MaOS)
 Gravity extension   → Volumetric potential gradient (manifold roadmap)
 Multi-agent mesh    → Thermodynamic credit system + P2P gossip
@@ -101,7 +101,7 @@ cd Python && python -m pytest tests/
 │                 umst-ucrs daemon                  │
 │  Local oscillator → P2P sync → RAPL telemetry     │
 │         ↓              ↓              ↓            │
-│         DUMSTO gate (desyncEnergy ≤ budget?)       │
+│         thermodynamic gate (desyncEnergy ≤ budget?) │
 │         Credit ledger (per-peer accuracy)          │
 └──────────────────────────────────────────────────┘
 ```
@@ -133,7 +133,7 @@ Details: [`FOUNDATION.md`](FOUNDATION.md).
   phase: 0.001 rad  ──sync──►      phase: 0.847 rad
   credit: 94                       credit: 12
          │                                  │
-         └────── DUMSTO gate ───────────────┘
+         └────── thermodynamic gate ─────────┘
               Landauer cost ∝ H(phase | peer)
               Net credit transfer ∝ information asymmetry
 ```
