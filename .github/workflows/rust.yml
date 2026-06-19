@@ -52,4 +52,10 @@ jobs:
       - name: clippy
         run: cargo clippy -- -D warnings
       - name: tests
+        env:
+          RUSTFLAGS: --cfg ucrs_skip_powermetrics
         run: cargo test
+      - name: tests (p2p feature)
+        env:
+          RUSTFLAGS: --cfg ucrs_skip_powermetrics
+        run: cargo test --features p2p

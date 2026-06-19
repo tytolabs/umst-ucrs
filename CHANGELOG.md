@@ -8,7 +8,23 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Documentation (2026-05-30)
+## [1.0.0] - 2026-06-19
+
+### Added
+
+- **P2P runtime** (`p2p` feature): libp2p noise/yamux/mDNS/GossipSub daemon (`umst-ucrs-p2p`) with gate-guarded outbound sync.
+- **Observability**: Prometheus HTTP `:9090/metrics`, `ucrs_sync_overhead_ratio` histogram, Grafana dashboard (`Docs/grafana-ucrs-dashboard.json`).
+- **RAPL**: Linux sysfs path; macOS `powermetrics` fallback (`#[cfg(ucrs_skip_powermetrics)]` on CI).
+- **Proof mirrors**: Haskell QuickCheck (5 properties), Lean L1–L8 scaffold (`Lean/Ucrs/`), shared `fixtures/wire_v2_observed_at.json`.
+- **Ship**: Multi-stage `Dockerfile`, `scripts/umst-ucrs.service` systemd unit.
+
+### Changed
+
+- `TemporalWitness` + `observed_at.v2` integer wire parity with `umst-concrete-cartridge`.
+- Byzantine detections export `ucrs_byzantine_detections_total`.
+
+[1.0.0]: https://github.com/tytolabs/umst-ucrs/compare/v0.1.0...v1.0.0
+
 
 - **FCP-DS / FCP-I headline counts** synced to sibling `lean_declaration_stats.py`: double-slit **540+34** / **574** roots-only (**584** all-Lean); meso **226+17** / **243** in **47** roots.
 

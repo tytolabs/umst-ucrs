@@ -3,20 +3,11 @@ name: Lean
 on:
   push:
     branches: [main, master]
-    paths:
-      - 'Lean/**'
-      - 'PROOF-STATUS.md'
-      - '.github/workflows/lean.yml'
   pull_request:
     branches: [main, master]
-    paths:
-      - 'Lean/**'
-      - 'PROOF-STATUS.md'
-      - '.github/workflows/lean.yml'
 
 jobs:
   lean:
-    name: Lake build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,5 +17,4 @@ jobs:
       - uses: leanprover/lean-action@v1
         with:
           lake-package-directory: Lean
-      - name: Build TensorLandauer
-        run: lake build
+      - run: lake build

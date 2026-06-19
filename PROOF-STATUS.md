@@ -1,32 +1,25 @@
-# UCRS proof status (generated template)
+# UCRS proof status (generated)
 
 **Repo:** [`umst-ucrs`](https://github.com/tytolabs/umst-ucrs)  
 **Updated:** 2026-06-19  
-**Lean toolchain:** Mathlib4 v4.16.0 (see `Lean/lakefile.lean`)
+**Lean toolchain:** Mathlib4 v4.14.0 (see `Lean/lakefile.lean`)
 
 ## Summary
 
 | Track | Location | Status | `sorry` count |
 |-------|----------|--------|---------------|
-| Tensor Landauer | `Lean/TensorLandauer.lean` | Scaffold — axioms only | 0 |
-| Credit optimality | `Lean/` (planned) | Not started | — |
-| Clock coalgebra | `Lean/` (planned) | Not started | — |
-| Haskell QuickCheck | `Haskell/test/Spec.hs` | 5 property stubs | — |
+| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | Proved | 0 |
+| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | Proved | 0 |
+| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | Axiom stub | 0 |
+| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | Proved | 0 |
+| L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | Theorem stubs | 1 each |
+| Legacy scaffold | `Lean/TensorLandauer.lean` | Axioms | 0 |
+| Haskell QuickCheck | `Haskell/test/Spec.hs` | 5 properties | — |
 | Rust unit tests | `Rust/src/`, `Rust/tests/` | Active | — |
 
-## Lean axioms (explicit until proved)
+## Manifold catalog (Track F)
 
-| Axiom | File | Intent |
-|-------|------|--------|
-| `landauer_nonneg` | `TensorLandauer.lean` | Second-law floor at T > 0 |
-| `tensor_landauer_add` | `TensorLandauer.lean` | QMI / tensor product bridge |
-| `credit_greedy_optimal` | `TensorLandauer.lean` | Greedy peer selection = min Landauer |
-
-## Cross-repo citations (no Lake dependency)
-
-- `umst-formal` — `Gate.lean` `gateCheck`
-- `umst-formal-double-slit` — tensor Landauer identities
-- `umst-manifold` — `ThermodynamicGate` runtime host
+UCRS Lean roots are listed in [`umst-manifold/artifacts/ucrs-catalog.json`](https://github.com/tytolabs/umst-manifold/blob/main/artifacts/ucrs-catalog.json) as a tertiary fiber preview pending unified merge.
 
 ## CI
 
@@ -39,7 +32,7 @@
 ## Regenerate
 
 ```bash
-# After Lean build:
-cd Lean && lake build && lake env lean --version
-# Update this file's sorry/axiom table manually until auto-export lands.
+cd Lean && lake build
+cd ../Haskell && cabal test all
+cd ../Rust && cargo test
 ```

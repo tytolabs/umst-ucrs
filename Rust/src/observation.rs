@@ -4,7 +4,7 @@
 //! Immutable observation stamps for durable logs (`UcrsObservedAt`).
 //!
 //! Wire shape aligns with [`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/schemas/contribution.v1.json)
-//! `observed_at` and [`outputs/ucrs-logging-policy.md`](../../outputs/ucrs-logging-policy.md).
+//! `observed_at` and [`Docs/LOGGING_POLICY.md`](../../Docs/LOGGING_POLICY.md).
 
 use crate::clock::LocalClock;
 use crate::credit::CreditLedger;
@@ -55,7 +55,60 @@ pub struct UcrsObservedAt {
     pub wall_ms: Option<u64>,
 }
 
+/// Integer-only `observed_at.v2` wire (matches cartridge `ObservedAtV2`).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ObservedAtV2Wire {
+    pub schema_version: String,
+    pub stamp_tier: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ucrs_seq: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phase_entropy_bits_q: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phase_entropy_bits_scale: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credit_head_bits_q: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credit_head_bits_scale: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wall_ms: Option<u64>,
+}
+
 impl UcrsObservedAt {
+    /// Wire v2 JSON shape (`observed_at.v2` integer fields — cartridge parity).
+    #[must_use]
+    pub fn to_v2_wire(&self) -> ObservedAtV2Wire {
+        ObservedAtV2Wire {
+            schema_version: "observed_at.v2".into(),
+            stamp_tier: self.stamp_tier.as_wire_str().into(),
+            ucrs_seq: self.ucrs_seq,
+            phase_entropy_bits_q: self.phase_entropy_bits_q,
+            phase_entropy_bits_scale: self.phase_entropy_bits_scale,
+            credit_head_bits_q: self.credit_head_bits_q,
+            credit_head_bits_scale: self.credit_head_bits_scale,
+            wall_ms: self.wall_ms,
+        }
+    }
+
+    /// Parse v2 wire JSON (shared fixture roundtrip with cartridge `wire_v2.rs`).
+    pub fn from_v2_wire(w: &ObservedAtV2Wire) -> Self {
+        let stamp_tier = match w.stamp_tier.as_str() {
+            "UcrsTier2" => StampTier::UcrsTier2,
+            "WallOnly" => StampTier::WallOnly,
+            "Absent" => StampTier::Absent,
+            _ => StampTier::Synthetic,
+        };
+        Self {
+            stamp_tier,
+            ucrs_seq: w.ucrs_seq,
+            phase_entropy_bits_q: w.phase_entropy_bits_q,
+            phase_entropy_bits_scale: w.phase_entropy_bits_scale,
+            credit_head_bits_q: w.credit_head_bits_q,
+            credit_head_bits_scale: w.credit_head_bits_scale,
+            wall_ms: w.wall_ms,
+        }
+    }
+
     /// Wall-clock-only fallback when UCRS agent loop is unavailable.
     #[must_use]
     pub fn wall_only() -> Self {

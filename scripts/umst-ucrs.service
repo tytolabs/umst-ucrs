@@ -6,16 +6,13 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=umst-ucrs
-Group=umst-ucrs
-ExecStart=/usr/local/bin/umst-ucrs --peer-id 1 --port 4001 --budget-bits 20 --tick-secs 60
+User=umst
+Group=umst
+ExecStart=/usr/local/bin/umst-ucrs --peer-id 1 --port 4001 --budget-bits 20 --metrics-addr 0.0.0.0:9090
 Environment=UMST_UCRS_METRICS=1
 Restart=on-failure
 RestartSec=5
 LimitNOFILE=65536
-
-# Optional P2P bootstrap (space-separated multiaddrs):
-# Environment=UMST_UCRS_BOOTSTRAP=/ip4/127.0.0.1/tcp/4002
 
 [Install]
 WantedBy=multi-user.target

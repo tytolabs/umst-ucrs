@@ -5,7 +5,7 @@ module Umst.Ucrs.Credit
   , recordSync
   ) where
 
-import Data.Ord (comparing)
+import Data.Ord (GT, comparing)
 
 data PeerCredit = PeerCredit
   { peerId :: Int

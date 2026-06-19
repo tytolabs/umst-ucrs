@@ -11,6 +11,8 @@ Lean/build/
 __pycache__/
 *.pyc
 .pytest_cache/
+.venv/
+Python/.venv/
 *.egg-info/
 
 # Haskell
