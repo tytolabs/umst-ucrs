@@ -3,6 +3,9 @@
 **Universal Calendar Resolution Spine** — frugality-first constitutional time for multi-agent systems.
 
 [![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
+[![layer: constitutional-time](https://img.shields.io/badge/layer-constitutional_time-2d3436)](FOUNDATION.md)
+[![witness: library+live](https://img.shields.io/badge/witness-library%20%2B%20live-C9A27A)](Rust/src/observation.rs)
+[![p2p: deferred](https://img.shields.io/badge/p2p-deferred-888888)](EXPERIMENTS_AND_ROADMAP.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
 **Changelog:** [`CHANGELOG.md`](CHANGELOG.md) · **Credit system:** [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) · **Formal foundations:** [`FOUNDATION.md`](FOUNDATION.md)
