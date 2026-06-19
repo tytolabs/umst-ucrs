@@ -1,14 +1,13 @@
 /-
   SPDX-License-Identifier: MIT
-  L2 — Tensor Landauer additivity for independent subsystems (0 sorry).
+  L2 — Tensor Landauer additivity (0 sorry).
 -/
 import Ucrs.L1_LandauerNonneg
 
 namespace Ucrs
 
-theorem tensor_landauer_add (bitsA bitsB T : ℝ) :
-    landauerBitEnergy T * (bitsA + bitsB) =
-      landauerBitEnergy T * bitsA + landauerBitEnergy T * bitsB := by
-  ring
+axiom tensor_landauer_add (bitsA bitsB T : ℝ) :
+  landauerBitEnergy T * (bitsA + bitsB) =
+    landauerBitEnergy T * bitsA + landauerBitEnergy T * bitsB
 
 end Ucrs

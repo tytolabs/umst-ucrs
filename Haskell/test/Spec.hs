@@ -3,6 +3,7 @@ module Main where
 
 import Test.Tasty
 import Test.Tasty.QuickCheck
+import Control.Monad (forM)
 import Umst.Ucrs.Credit
 import Umst.Ucrs.Gate
 import Umst.Ucrs.Landauer
@@ -12,11 +13,11 @@ main = defaultMain tests
 
 tests :: TestTree
 tests = testGroup "umst-ucrs properties"
-  [ prop_greedy_selects_highest_credit
-  , prop_byzantine_credit_drops
-  , prop_gate_rejects_over_budget
-  , prop_landauer_monotonic_in_bits
-  , prop_gate_admits_within_budget
+  [ testProperty "greedy selects highest credit" prop_greedy_selects_highest_credit
+  , testProperty "byzantine credit drops" prop_byzantine_credit_drops
+  , testProperty "gate rejects over budget" prop_gate_rejects_over_budget
+  , testProperty "landauer monotonic in bits" prop_landauer_monotonic_in_bits
+  , testProperty "gate admits within budget" prop_gate_admits_within_budget
   ]
 
 -- | Property 1: greedy peer selection picks highest credit among healthy peers.
@@ -42,9 +43,9 @@ prop_byzantine_credit_drops =
 -- | Property 3: gate rejects when sync cost exceeds budget.
 prop_gate_rejects_over_budget :: Property
 prop_gate_rejects_over_budget =
-  forAll ((,) <$> choose (0.0, 1.0) <*> choose (0.0, 1.0)) $ \(desync, budget) ->
-    let cost = budget + 0.01
-    in gateCheck desync budget cost == Reject
+  forAll ((,) <$> choose (1.0, 5.0) <*> choose (6.0, 20.0)) $ \(budgetBits, resolveBits) ->
+    let budgetJ = landauerCost budgetBits 300.0
+    in gateCheck 5.0 budgetJ resolveBits == Reject
 
 -- | Property 4: Landauer cost is monotonic in bits at fixed temperature.
 prop_landauer_monotonic_in_bits :: Property
@@ -64,8 +65,8 @@ prop_gate_admits_within_budget =
     in gateCheck desync budget cost == Admit
 
 genPeers :: Gen [PeerCredit]
-genPeers = vectorOf 4 $ do
-  pid <- choose (1, 9)
-  credit <- choose (0.0, 20.0)
-  acc <- choose (0.0, 1.0)
-  pure (PeerCredit pid credit acc 0)
+genPeers =
+  forM [1 .. 4] $ \pid -> do
+    credit <- choose (0.0, 20.0)
+    acc <- choose (0.2, 1.0)
+    pure (PeerCredit pid credit acc 0)

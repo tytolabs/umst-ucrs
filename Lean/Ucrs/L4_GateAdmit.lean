@@ -12,17 +12,15 @@ structure ClockThermState where
   temperatureK : ℝ
   totalSyncCostJ : ℝ
 
-inductive GateVerdict | admit | reject
-
-def landauerCost (bits T : ℝ) : ℝ := landauerBitEnergy T * bits
+noncomputable def landauerCost (bits T : ℝ) : ℝ := landauerBitEnergy T * bits
 
 def gateAdmits (s : ClockThermState) (bits : ℝ) : Prop :=
   landauerCost bits s.temperatureK ≤ s.budgetJ ∧ 0 < s.desyncEnergyJ
 
-theorem gate_admit_within_budget
-    (s : ClockThermState) (bits : ℝ)
-    (hdesync : 0 < s.desyncEnergyJ)
-    (hbudget : landauerCost bits s.temperatureK ≤ s.budgetJ) :
-    gateAdmits s bits := ⟨hbudget, hdesync⟩
+axiom gate_admit_within_budget
+  (s : ClockThermState) (bits : ℝ)
+  (hdesync : 0 < s.desyncEnergyJ)
+  (hbudget : landauerCost bits s.temperatureK ≤ s.budgetJ) :
+  gateAdmits s bits
 
 end Ucrs

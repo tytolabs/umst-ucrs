@@ -11,6 +11,6 @@ data GateVerdict = Admit | Reject
 
 gateCheck :: Double -> Double -> Double -> GateVerdict
 gateCheck desyncEnergyJ budgetJ bitsToResolve
-  | landauerCost bitsToResolve 300.0 > budgetJ = Reject
   | desyncEnergyJ <= 0 = Reject
+  | landauerCost bitsToResolve 300.0 > budgetJ = Reject
   | otherwise = Admit
