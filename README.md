@@ -3,9 +3,6 @@
 **Universal Calendar Resolution Spine** — frugality-first constitutional time for multi-agent systems.
 
 [![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
-[![layer: constitutional-time](https://img.shields.io/badge/layer-constitutional_time-2d3436)](FOUNDATION.md)
-[![witness: library+live](https://img.shields.io/badge/witness-library%20%2B%20live-C9A27A)](Rust/src/observation.rs)
-[![p2p: stub](https://img.shields.io/badge/p2p-stub%20(feature)-888888)](Rust/src/p2p.rs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
 **Changelog:** [`CHANGELOG.md`](CHANGELOG.md) · **Credit system:** [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) · **Formal foundations:** [`FOUNDATION.md`](FOUNDATION.md)
@@ -100,7 +97,7 @@ let stamp = witness.stamp(); // UcrsTier2: ucrs_seq, phase_entropy_bits_q, credi
 | `UMST_UCRS_WITNESS=live` | Real `TemporalWitness::stamp()` on cartridge ingest → `UcrsTier2` |
 | `UMST_UCRS_WITNESS=synthetic` | Deterministic monotonic stamps for CI (default) |
 
-Policy: [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md) · Tier-1 HLC sidecar (never overwrite `ucrs_seq`): [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md) · Operator env: [`umst-concrete-cartridge` `AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
+Policy: [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md) · HLC sidecar (never overwrite `ucrs_seq`): [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md) · Operator env: [`umst-concrete-cartridge` `AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
 
 ### Gravity ↔ UCRS (scope 0.4)
 
