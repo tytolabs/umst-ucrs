@@ -10,6 +10,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [1.0.0] - 2026-06-19
 
+> **Release note:** CHANGELOG entry prepared for 1.0.0. **Do not create a git tag** without explicit maintainer approval.
+
 ### Added
 
 - **P2P runtime** (`p2p` feature): libp2p noise/yamux/mDNS/GossipSub daemon (`umst-ucrs-p2p`) with gate-guarded outbound sync.
