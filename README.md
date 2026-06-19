@@ -83,27 +83,34 @@ Everything in this stack is designed so agents pay only the **real physical cost
 
 ## MCP session clock
 
-Cartridges with `ucrs-provenance` bind durable logs to thermodynamic time via `UcrsObservedAt`.
+Cartridge MCP agents should bind durable accepts to **thermodynamic time**, not wall clock alone. The recommended session clock is [`TemporalWitness`](Rust/src/observation.rs) via [`witness_for_agent`](Rust/src/lib.rs).
+
+```rust
+use umst_ucrs::{witness_for_agent, AgentConfig};
+
+let config = AgentConfig::default();
+let mut witness = witness_for_agent(&config);
+let stamp = witness.stamp(); // UcrsTier2: ucrs_seq, phase_entropy_bits_q, credit_head_bits_q
+```
 
 | API / env | Role |
 |-----------|------|
-| [`witness_for_agent`](Rust/src/lib.rs) | `AgentConfig` → `TemporalWitness` for MCP session stamps |
-| [`TemporalWitness::stamp`](Rust/src/observation.rs) | Live Tier-2 stamp from clock + credit ledger |
-| `UMST_UCRS_WITNESS=live` | Real `TemporalWitness::stamp()` on cartridge ingest |
-| `UMST_UCRS_WITNESS=synthetic` | Deterministic monotonic stamps for CI |
+| `witness_for_agent(&AgentConfig)` | Construct a live witness from peer id, drift, temperature |
+| `TemporalWitness::stamp()` | Advance uncertainty + emit monotonic `UcrsObservedAt` |
+| `UMST_UCRS_WITNESS=live` | Real `TemporalWitness::stamp()` on cartridge ingest → `UcrsTier2` |
+| `UMST_UCRS_WITNESS=synthetic` | Deterministic monotonic stamps for CI (default) |
 
-Policy: [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md) · Operator env: [`umst-concrete-cartridge` `AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
+Policy: [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md) · Tier-1 HLC sidecar (never overwrite `ucrs_seq`): [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md) · Operator env: [`umst-concrete-cartridge` `AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
 
 ### Gravity ↔ UCRS (scope 0.4)
 
 | Layer | Owner | Role |
 |-------|-------|------|
 | Constitutional time | **UCRS** | `ucrs_seq`, phase entropy, credit head on durable logs |
+| Material gate | [`umst-manifold`](https://github.com/tytolabs/umst-manifold) | Thermodynamic admissibility (`gateCheck`) |
 | Volumetric gravity | **Manifold** (roadmap) | Potential-gradient geometry — not a substitute for UCRS ordering |
 
 UCRS is the **time layer**; gravity is a **geometry extension**. They compose; UCRS is not a fifth thermodynamic gate conjunct.
-
-Tier-1 HLC sidecar (never overwrites `ucrs_seq`): [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md).
 
 ---
 
@@ -150,51 +157,6 @@ The library crate intentionally keeps `default = []` features so downstream cons
 ```
 
 See [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) for the credit protocol and optimality sketch.
-
----
-
-## MCP session clock
-
-Cartridge MCP agents should bind durable accepts to **thermodynamic time**, not wall clock alone. The recommended session clock is [`TemporalWitness`](Rust/src/observation.rs) via the ergonomic entry point [`witness_for_agent`](Rust/src/lib.rs).
-
-```rust
-use umst_ucrs::{witness_for_agent, AgentConfig};
-
-let config = AgentConfig::default();
-let mut witness = witness_for_agent(&config);
-let stamp = witness.stamp(); // UcrsTier2: ucrs_seq, phase_entropy_bits_q, credit_head_bits_q
-```
-
-| API | Role |
-|-----|------|
-| `witness_for_agent(&AgentConfig)` | Construct a live witness from peer id, drift, temperature |
-| `TemporalWitness::stamp()` | Advance uncertainty + emit monotonic `UcrsObservedAt` |
-| `TemporalWitness::from_agent` | Same as `witness_for_agent` (explicit constructor) |
-
-**Environment:** `UMST_UCRS_WITNESS=live|synthetic` (default **synthetic** for CI).
-
-| Value | Behavior |
-|-------|----------|
-| `synthetic` (default) | Deterministic `stamp_tier: Synthetic` — isolated from production merge |
-| `live` | `TemporalWitness::stamp()` → `stamp_tier: UcrsTier2` on every accept |
-
-Concrete cartridge: enable `ucrs-provenance` and set `UMST_UCRS_WITNESS=live` so `ProvenanceClock` holds a live witness. See [`umst-concrete-cartridge/docs/AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
-
-Logging policy (canonical): [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md). Tier-1 HLC sidecar (never overwrite `ucrs_seq`): [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md).
-
----
-
-## Gravity ↔ UCRS (time layer vs manifold gravity)
-
-UCRS and the manifold **gravity extension** solve different problems and must not be conflated:
-
-| Layer | Repo | What it owns |
-|-------|------|--------------|
-| **Constitutional time** | **umst-ucrs** (this repo) | `ucrs_seq`, phase entropy, credit head — observation stamps on agent/memory logs |
-| **Material gate** | [`umst-manifold`](https://github.com/tytolabs/umst-manifold) | Thermodynamic admissibility (`gateCheck`) on mix/state transitions |
-| **Gravity extension** | [`umst-manifold`](https://github.com/tytolabs/umst-manifold) (roadmap) | Volumetric potential gradient on geometry — not a clock |
-
-UCRS **stamps** manifold and cartridge durable logs; it does **not** implement gravitational potentials or replace material gates. The gravity extension is a **geometry-layer** roadmap item in the manifold — orthogonal to frugality-first shared **now**.
 
 ---
 
