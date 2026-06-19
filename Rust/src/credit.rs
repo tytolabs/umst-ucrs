@@ -146,6 +146,9 @@ impl CreditLedger {
                 peer.credit_bits -= bits_resolved * 2.0; // penalty > reward
                                                          // Accuracy degrades
                 peer.accuracy_score *= 0.9;
+                if peer.sync_count > 5 && peer.accuracy_score < 0.5 {
+                    crate::telemetry::record_byzantine_detection();
+                }
             }
         }
     }

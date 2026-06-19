@@ -1,0 +1,34 @@
+cabal-version: 2.4
+name:          umst-ucrs-properties
+version:       0.1.0.0
+synopsis:      QuickCheck property stubs mirroring umst-ucrs credit/gate invariants
+description:   Property tests for UCRS thermodynamic credit and gate predicates.
+license:       MIT
+author:        Santhosh Shyamsundar
+maintainer:    santhosh@studiotyto.com
+
+common lang
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+library
+  import:           lang
+  hs-source-dirs:   src
+  exposed-modules:
+    Umst.Ucrs.Credit
+    Umst.Ucrs.Gate
+    Umst.Ucrs.Landauer
+  build-depends:
+    base >= 4.14 && < 5
+
+test-suite umst-ucrs-properties
+  import:           lang
+  type:             exitcode-stdio-1.0
+  main-is:          Spec.hs
+  hs-source-dirs:   test
+  build-depends:
+    base,
+    umst-ucrs-properties,
+    QuickCheck >= 2.14,
+    tasty >= 1.4,
+    tasty-quickcheck >= 0.10

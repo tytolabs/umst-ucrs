@@ -19,6 +19,8 @@ pub mod gate;
 pub mod landauer;
 /// Immutable observation stamps for durable agent logs (`UcrsObservedAt`, `TemporalWitness`).
 pub mod observation;
+/// P2P gossip types + gate-guarded sync hook (no libp2p in default builds).
+pub mod p2p;
 pub mod rapl;
 pub mod telemetry;
 /// Gossip wire format + signature glue (no libp2p — safe for default library-only builds).
@@ -132,6 +134,8 @@ pub fn agent_tick(
         "Synced with peer {}: resolved {:.2} bits, Landauer floor {:.2e} J",
         decision.peer_id, record.bits_resolved, record.landauer_floor_j
     );
+
+    telemetry::record_sync_event(&record);
 
     Some(record)
 }

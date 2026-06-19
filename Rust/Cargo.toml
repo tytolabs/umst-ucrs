@@ -28,8 +28,13 @@ required-features = ["p2p"]
 default = []
 # Enable libp2p-backed P2P swarm (daemon only).
 p2p = ["dep:libp2p", "dep:futures"]
+# Expose Prometheus HTTP scrape endpoint (`:9090/metrics`).
+prometheus = []
+# Daemon profile: metrics server + async agent loop (implies prometheus).
+daemon = ["prometheus"]
 
 [dependencies]
+clap = { version = "4", features = ["derive"] }
 pqcrypto-dilithium = "0.5.0"
 pqcrypto-kyber = "0.8.1"
 pqcrypto-sphincsplus = "0.7.2"
@@ -58,3 +63,6 @@ harness = false
 [[test]]
 name = "s0_crypto_ucrs_parity"
 path = "tests/s0_crypto_ucrs_parity.rs"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(ucrs_skip_powermetrics)'] }

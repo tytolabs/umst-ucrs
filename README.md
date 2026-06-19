@@ -5,7 +5,7 @@
 [![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
 [![layer: constitutional-time](https://img.shields.io/badge/layer-constitutional_time-2d3436)](FOUNDATION.md)
 [![witness: library+live](https://img.shields.io/badge/witness-library%20%2B%20live-C9A27A)](Rust/src/observation.rs)
-[![p2p: deferred](https://img.shields.io/badge/p2p-deferred-888888)](EXPERIMENTS_AND_ROADMAP.md)
+[![p2p: stub](https://img.shields.io/badge/p2p-stub%20(feature)-888888)](Rust/src/p2p.rs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
 **Changelog:** [`CHANGELOG.md`](CHANGELOG.md) · **Credit system:** [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) · **Formal foundations:** [`FOUNDATION.md`](FOUNDATION.md)
@@ -81,21 +81,61 @@ Everything in this stack is designed so agents pay only the **real physical cost
 
 ---
 
+## MCP session clock
+
+Cartridges with `ucrs-provenance` bind durable logs to thermodynamic time via `UcrsObservedAt`.
+
+| API / env | Role |
+|-----------|------|
+| [`witness_for_agent`](Rust/src/lib.rs) | `AgentConfig` → `TemporalWitness` for MCP session stamps |
+| [`TemporalWitness::stamp`](Rust/src/observation.rs) | Live Tier-2 stamp from clock + credit ledger |
+| `UMST_UCRS_WITNESS=live` | Real `TemporalWitness::stamp()` on cartridge ingest |
+| `UMST_UCRS_WITNESS=synthetic` | Deterministic monotonic stamps for CI |
+
+Policy: [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md) · Operator env: [`umst-concrete-cartridge` `AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
+
+### Gravity ↔ UCRS (scope 0.4)
+
+| Layer | Owner | Role |
+|-------|-------|------|
+| Constitutional time | **UCRS** | `ucrs_seq`, phase entropy, credit head on durable logs |
+| Volumetric gravity | **Manifold** (roadmap) | Potential-gradient geometry — not a substitute for UCRS ordering |
+
+UCRS is the **time layer**; gravity is a **geometry extension**. They compose; UCRS is not a fifth thermodynamic gate conjunct.
+
+Tier-1 HLC sidecar (never overwrites `ucrs_seq`): [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md).
+
+---
+
 ## What this repo implements
 
 | Layer | Status | Location |
 |-------|--------|----------|
 | **Rust library** | Working | `Rust/src/` — clock, gate, credit, Landauer, RAPL hooks |
-| **P2P daemon** | In progress | `Rust/src/` — libp2p sync path |
-| **Lean proofs** | Planned | `Lean/` — tensor Landauer, coordination cost, credit optimality |
+| **P2P daemon** | In progress | `Rust/src/p2p.rs`, `Rust/src/bin/p2p.rs` — libp2p sync path |
+| **Lean proofs** | Scaffold | `Lean/` — tensor Landauer axioms (`PROOF-STATUS.md`) |
 | **Simulations** | Foundation | `Python/sim/` |
-| **Property tests** | Planned | `Haskell/Test/` |
+| **Property tests** | Scaffold | `Haskell/test/Spec.hs` — 5 QuickCheck stubs |
 
 ```bash
 cd Rust && cargo test && cargo build --release
 cd Python && python -m pytest tests/
 ./scripts/run_benchmarks.sh   # when configured
 ```
+
+### crates.io publish (dry-run)
+
+Validate the crate manifest and packaging before publishing:
+
+```bash
+cd Rust
+cargo publish --dry-run
+# Full daemon artifact:
+cargo build --release --features daemon
+```
+
+The library crate intentionally keeps `default = []` features so downstream consumers (e.g. `umst-concrete-cartridge` `ucrs-provenance`) do not pull libp2p. Enable `p2p` only for mesh daemons.
+
 
 ### P2P daemon (sketch)
 
@@ -110,6 +150,51 @@ cd Python && python -m pytest tests/
 ```
 
 See [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) for the credit protocol and optimality sketch.
+
+---
+
+## MCP session clock
+
+Cartridge MCP agents should bind durable accepts to **thermodynamic time**, not wall clock alone. The recommended session clock is [`TemporalWitness`](Rust/src/observation.rs) via the ergonomic entry point [`witness_for_agent`](Rust/src/lib.rs).
+
+```rust
+use umst_ucrs::{witness_for_agent, AgentConfig};
+
+let config = AgentConfig::default();
+let mut witness = witness_for_agent(&config);
+let stamp = witness.stamp(); // UcrsTier2: ucrs_seq, phase_entropy_bits_q, credit_head_bits_q
+```
+
+| API | Role |
+|-----|------|
+| `witness_for_agent(&AgentConfig)` | Construct a live witness from peer id, drift, temperature |
+| `TemporalWitness::stamp()` | Advance uncertainty + emit monotonic `UcrsObservedAt` |
+| `TemporalWitness::from_agent` | Same as `witness_for_agent` (explicit constructor) |
+
+**Environment:** `UMST_UCRS_WITNESS=live|synthetic` (default **synthetic** for CI).
+
+| Value | Behavior |
+|-------|----------|
+| `synthetic` (default) | Deterministic `stamp_tier: Synthetic` — isolated from production merge |
+| `live` | `TemporalWitness::stamp()` → `stamp_tier: UcrsTier2` on every accept |
+
+Concrete cartridge: enable `ucrs-provenance` and set `UMST_UCRS_WITNESS=live` so `ProvenanceClock` holds a live witness. See [`umst-concrete-cartridge/docs/AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md).
+
+Logging policy (canonical): [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md). Tier-1 HLC sidecar (never overwrite `ucrs_seq`): [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md).
+
+---
+
+## Gravity ↔ UCRS (time layer vs manifold gravity)
+
+UCRS and the manifold **gravity extension** solve different problems and must not be conflated:
+
+| Layer | Repo | What it owns |
+|-------|------|--------------|
+| **Constitutional time** | **umst-ucrs** (this repo) | `ucrs_seq`, phase entropy, credit head — observation stamps on agent/memory logs |
+| **Material gate** | [`umst-manifold`](https://github.com/tytolabs/umst-manifold) | Thermodynamic admissibility (`gateCheck`) on mix/state transitions |
+| **Gravity extension** | [`umst-manifold`](https://github.com/tytolabs/umst-manifold) (roadmap) | Volumetric potential gradient on geometry — not a clock |
+
+UCRS **stamps** manifold and cartridge durable logs; it does **not** implement gravitational potentials or replace material gates. The gravity extension is a **geometry-layer** roadmap item in the manifold — orthogonal to frugality-first shared **now**.
 
 ---
 
@@ -155,10 +240,13 @@ Details: [`FOUNDATION.md`](FOUNDATION.md).
 ```text
 umst-ucrs/
 ├── Rust/              # umst_ucrs library + daemon (primary deliverable)
-├── Lean/              # Formal proofs (planned)
+├── Lean/              # Formal proofs (scaffold)
 ├── Python/sim/        # Topology + drift simulations
-├── Haskell/Test/      # QuickCheck properties (planned)
+├── Haskell/           # QuickCheck properties
+├── scripts/           # systemd unit, benchmarks
+├── Dockerfile         # Multi-stage daemon image
 ├── Docs/              # Design notes, media
+├── PROOF-STATUS.md
 ├── FOUNDATION.md
 ├── CREDIT-SYSTEM.md
 └── README.md

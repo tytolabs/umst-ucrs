@@ -113,3 +113,74 @@ pub fn update_gauges(phase_entropy: f64, desync_energy: f64, peer_count: usize, 
     PEER_COUNT.set(peer_count as f64);
     TOTAL_CREDIT.set(total_credit);
 }
+
+/// Increment the Byzantine detection counter (called from credit ledger).
+pub fn record_byzantine_detection() {
+    BYZANTINE_DETECTIONS.inc();
+}
+
+/// Render all registered metrics as Prometheus text exposition.
+pub fn gather_text() -> String {
+    // Ensure lazy-registered metrics appear in exposition even before first event.
+    let _ = (
+        &*SYNC_EVENTS_TOTAL,
+        &*BITS_RESOLVED_TOTAL,
+        &*BYZANTINE_DETECTIONS,
+        &*DESYNC_ENERGY_JOULES,
+        &*PHASE_ENTROPY_BITS,
+        &*PEER_COUNT,
+        &*TOTAL_CREDIT,
+        &*SYNC_COST_RATIO,
+        &*SYNC_BITS_HISTOGRAM,
+    );
+    use prometheus::Encoder;
+    let encoder = prometheus::TextEncoder::new();
+    let metric_families = prometheus::gather();
+    let mut buffer = Vec::new();
+    encoder
+        .encode(&metric_families, &mut buffer)
+        .expect("prometheus encode");
+    String::from_utf8(buffer).expect("utf8 metrics")
+}
+
+/// Minimal HTTP/1.1 Prometheus scrape server on `addr` (e.g. `0.0.0.0:9090`).
+///
+/// Serves `GET /metrics` with `text/plain; version=0.0.4` body.
+pub async fn serve_metrics(addr: &str) -> std::io::Result<()> {
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+    use tokio::net::TcpListener;
+
+    let listener = TcpListener::bind(addr).await?;
+    tracing::info!(%addr, "prometheus metrics listening");
+
+    loop {
+        let (mut stream, _) = listener.accept().await?;
+        tokio::spawn(async move {
+            let mut buf = [0u8; 1024];
+            let n = stream.read(&mut buf).await.unwrap_or(0);
+            let req = String::from_utf8_lossy(&buf[..n]);
+            let (status, body) = if req.starts_with("GET /metrics") || req.starts_with("GET / ") {
+                ("200 OK", gather_text())
+            } else {
+                ("404 Not Found", String::new())
+            };
+            let response = format!(
+                "HTTP/1.1 {status}\r\nContent-Type: text/plain; version=0.0.4; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                body.len()
+            );
+            let _ = stream.write_all(response.as_bytes()).await;
+        });
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn gather_text_contains_sync_counter() {
+        let _ = &*SYNC_EVENTS_TOTAL;
+        let text = gather_text();
+        assert!(text.contains("ucrs_sync_events_total"));
+    }
+}

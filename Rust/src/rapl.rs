@@ -7,8 +7,17 @@
 //! This gives us ground truth for comparing actual sync energy
 //! against the Landauer theoretical floor.
 //!
+//! ## Platform paths
+//!
+//! | OS | Source | Path / command |
+//! |----|--------|----------------|
+//! | **Linux (Intel)** | sysfs energy counter | `/sys/class/powercap/intel-rapl:0/energy_uj` |
+//! | **Linux (AMD)** | sysfs energy counter | `/sys/class/hwmon/hwmon*/energy*_input` (platform-specific) |
+//! | **macOS** | powermetrics (root) | `sudo powermetrics --samplers cpu_power -i 1 -n 1` — not wired in CI; returns [`RaplError::NotAvailable`] |
+//! | **Other** | external meter | Monsoon, INA219, or mocked readings in tests |
+//!
 //! RAPL is available on Intel (Sandy Bridge+) and AMD (Zen+) CPUs.
-//! On macOS, we fall back to a powermetrics-based estimate.
+//! On macOS, direct RAPL sysfs is unavailable; use powermetrics or an external meter.
 
 use std::io;
 use thiserror::Error;
@@ -63,13 +72,43 @@ pub fn read_package_energy() -> Result<EnergyReading, RaplError> {
         Ok(EnergyReading { microjoules })
     }
 
-    #[cfg(not(target_os = "linux"))]
+    #[cfg(all(target_os = "macos", not(ucrs_skip_powermetrics)))]
     {
-        // On macOS/Windows, RAPL is not directly accessible.
-        // Return NotAvailable — the caller should use a mock or
-        // external power meter (e.g., Monsoon, INA219).
+        read_powermetrics_energy()
+    }
+
+    #[cfg(all(
+        not(target_os = "linux"),
+        any(not(target_os = "macos"), ucrs_skip_powermetrics)
+    ))]
+    {
         Err(RaplError::NotAvailable)
     }
+}
+
+/// macOS fallback: parse cumulative package energy from `powermetrics` (requires root).
+#[cfg(all(target_os = "macos", not(ucrs_skip_powermetrics)))]
+fn read_powermetrics_energy() -> Result<EnergyReading, RaplError> {
+    use std::process::Command;
+    let output = Command::new("powermetrics")
+        .args(["--samplers", "cpu_power", "-i", "1", "-n", "1"])
+        .output()
+        .map_err(RaplError::Io)?;
+    if !output.status.success() {
+        return Err(RaplError::NotAvailable);
+    }
+    let text = String::from_utf8_lossy(&output.stdout);
+    for line in text.lines() {
+        if let Some(rest) = line.strip_prefix("CPU Power: ") {
+            if let Some(mj) = rest.split_whitespace().next() {
+                if let Ok(millijoules) = mj.parse::<f64>() {
+                    let microjoules = (millijoules * 1_000.0).round() as u64;
+                    return Ok(EnergyReading { microjoules });
+                }
+            }
+        }
+    }
+    Err(RaplError::NotAvailable)
 }
 
 /// Measure the energy cost of a closure.
@@ -122,6 +161,15 @@ impl SyncEnergyRecord {
     /// Check the Second Law: measured energy must exceed Landauer floor.
     pub fn second_law_satisfied(&self) -> Option<bool> {
         self.measured_j.map(|m| m >= self.landauer_floor_j)
+    }
+}
+
+/// Export `sync_overhead_ratio` to Prometheus (`ucrs_sync_overhead_ratio` histogram).
+///
+/// Called after each sync event when RAPL measurement is available (or simulated).
+pub fn export_sync_overhead(record: &SyncEnergyRecord) {
+    if let Some(ratio) = record.overhead_ratio {
+        crate::telemetry::SYNC_COST_RATIO.observe(ratio);
     }
 }
 
