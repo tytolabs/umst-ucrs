@@ -8,6 +8,7 @@
 
 use crate::clock::LocalClock;
 use crate::credit::CreditLedger;
+use crate::AgentConfig;
 use serde::{Deserialize, Serialize};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -104,6 +105,16 @@ impl TemporalWitness {
         }
     }
 
+    /// Construct witness from agent configuration (total function on `AgentConfig`).
+    #[must_use]
+    pub fn from_agent(config: &AgentConfig) -> Self {
+        Self {
+            clock: LocalClock::new(config.drift_ppb, config.temperature_k),
+            ledger: CreditLedger::new(config.peer_id, config.temperature_k),
+            seq: 0,
+        }
+    }
+
     /// Advance local clock uncertainty and emit a Tier-2 stamp.
     pub fn stamp(&mut self) -> UcrsObservedAt {
         self.clock.update_uncertainty();
@@ -135,4 +146,36 @@ pub fn wall_epoch_ms() -> u64 {
         .duration_since(UNIX_EPOCH)
         .map(|d| d.as_millis() as u64)
         .unwrap_or(0)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn stamp_monotonic_seq() {
+        let mut w = TemporalWitness::new(1);
+        let a = w.stamp();
+        let b = w.stamp();
+        assert!(b.ucrs_seq.unwrap() > a.ucrs_seq.unwrap());
+    }
+
+    #[test]
+    fn stamp_phase_nonzero_when_drift_forced() {
+        let mut w = TemporalWitness::new(1);
+        w.clock.phase_uncertainty_sec = 1e-6;
+        w.clock.last_sync = std::time::Instant::now() - Duration::from_secs(100);
+        let s = w.stamp();
+        assert!(s.phase_entropy_bits_q.unwrap_or(0) > 0);
+    }
+
+    #[test]
+    fn from_agent_stamps_tier2() {
+        let config = AgentConfig::default();
+        let mut w = TemporalWitness::from_agent(&config);
+        let s = w.stamp();
+        assert_eq!(s.stamp_tier, StampTier::UcrsTier2);
+        assert_eq!(s.ucrs_seq, Some(1));
+    }
 }

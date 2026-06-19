@@ -63,6 +63,12 @@ impl Default for AgentConfig {
 /// logic as a synchronous function for unit testing, deterministic simulation, and for
 /// downstream consumers that want to drive the ledger without spinning the
 /// full P2P stack.
+/// Total function: build a live observation witness from agent configuration.
+#[must_use]
+pub fn witness_for_agent(config: &AgentConfig) -> observation::TemporalWitness {
+    observation::TemporalWitness::from_agent(config)
+}
+
 pub fn agent_tick(
     clock: &mut LocalClock,
     ledger: &mut CreditLedger,
