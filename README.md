@@ -1,5 +1,8 @@
 # UMST-UCRS
 
+> _This architecture is built upon the life's work of numerous scientists who formalized the mathematics of thermodynamics without ever seeing it touch physical reality. Our only contribution is humility—connecting their unbroken chain of truth to the machine._
+
+
 **Universal Calendar Resolution Spine** — frugality-first constitutional time for multi-agent systems.
 
 [![Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
