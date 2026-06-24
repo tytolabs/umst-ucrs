@@ -3354,6 +3354,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb"
 
 [[package]]
+name = "umst-layout-codegen"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+]
+
+[[package]]
 name = "umst-math"
 version = "0.1.0"
 dependencies = [
@@ -3363,8 +3372,11 @@ dependencies = [
  "pqcrypto-kyber",
  "pqcrypto-sphincsplus",
  "pqcrypto-traits",
+ "serde_json",
+ "sha2",
  "sha3",
  "thiserror 1.0.69",
+ "umst-layout-codegen",
 ]
 
 [[package]]

@@ -12,8 +12,6 @@
 [![CI — Python](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
-**Changelog:** [`CHANGELOG.md`](CHANGELOG.md) · **Credit system:** [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) · **Formal foundations:** [`FOUNDATION.md`](FOUNDATION.md)
-
 ---
 
 ## Independent repository
@@ -243,6 +241,12 @@ If you use UCRS or this implementation, please cite the repository:
 | [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) | Concrete agent + MCP surface |
 | [`umst-formal`](https://github.com/tytolabs/umst-formal) | Meso-scale formal proofs |
 | [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) | Quantum-scale Landauer bridge |
+
+---
+
+## Release & documentation
+
+**Changelog:** [`CHANGELOG.md`](CHANGELOG.md) · **Credit system:** [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) · **Formal foundations:** [`FOUNDATION.md`](FOUNDATION.md)
 
 ---
 
