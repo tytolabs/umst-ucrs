@@ -1,6 +1,6 @@
 # UMST-UCRS
 
-> _This architecture is built upon the life's work of numerous scientists who formalized the mathematics of thermodynamics without ever seeing it touch physical reality. Our only contribution is humility—connecting their unbroken chain of truth to the machine._
+> _This ecosystem is dedicated to the thousands of unnamed contributors who wrote formal proofs, maintained open-source compilers, and built mathematical libraries for years — often without evidence that any of it would be used beyond pure theory. They chose to make their work free, because they understood that knowledge about physical reality cannot be owned. Whatever this system achieves is yours._
 
 
 **Universal Calendar Resolution Spine** — frugality-first constitutional time for multi-agent systems.
