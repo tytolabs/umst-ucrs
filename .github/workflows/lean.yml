@@ -14,6 +14,14 @@ jobs:
         working-directory: Lean
     steps:
       - uses: actions/checkout@v4
+      - name: Clone umst-formal (Lake path dep)
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          dest="${GITHUB_WORKSPACE}/../umst-formal"
+          if [ ! -d "$dest/.git" ]; then
+            git clone --depth 1 https://github.com/tytolabs/umst-formal.git "$dest"
+          fi
       - uses: leanprover/lean-action@v1
         with:
           lake-package-directory: Lean

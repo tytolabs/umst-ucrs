@@ -1,21 +1,25 @@
 # UCRS proof status (generated)
 
 **Repo:** [`umst-ucrs`](https://github.com/tytolabs/umst-ucrs)  
-**Updated:** 2026-06-19  
+**Updated:** 2026-06-27  
 **Lean toolchain:** Mathlib4 v4.14.0 (see `Lean/lakefile.lean`)
 
 ## Summary
 
 | Track | Location | Status | `sorry` count |
 |-------|----------|--------|---------------|
-| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | Proved | 0 |
-| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | Proved | 0 |
-| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | Axiom stub | 0 |
-| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | Proved | 0 |
-| L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | Theorem stubs | 1 each |
+| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | **Proved** (from `umst-formal` `LandauerEinsteinBridge`) | 0 |
+| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | **Proved** (`ring`) | 0 |
+| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | **Partial theorem** (Landauer bound; full greedy pending) | 0 |
+| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | **Axiom** | 0 |
+| L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | **Sorry stub** (`theorem … : True := by sorry`) | 1 each |
 | Legacy scaffold | `Lean/TensorLandauer.lean` | Axioms | 0 |
 | Haskell QuickCheck | `Haskell/test/Spec.hs` | 5 properties | — |
 | Rust unit tests | `Rust/src/`, `Rust/tests/` | Active | — |
+
+## Formal import status (U4)
+
+UCRS Lean `lakefile.lean` requires **`umst-formal`** (`LandauerEinsteinBridge`) + Mathlib4 v4.14.0.
 
 ## Manifold catalog (Track F)
 
