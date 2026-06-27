@@ -74,6 +74,26 @@ pub struct ObservedAtV2Wire {
     pub wall_ms: Option<u64>,
 }
 
+/// Minimum contributor credit (bits) required for inbox promote / promotion (U2 witness gate).
+pub const MIN_PROMOTION_CREDIT_BITS: f64 = 1.0;
+
+/// Decode fixed-point credit head from contribution `observed_at` wire fields.
+#[must_use]
+pub fn credit_head_bits_from_wire(q: Option<i64>, scale: Option<i64>) -> Option<f64> {
+    let q = q?;
+    let scale = scale?;
+    if scale <= 0 {
+        return None;
+    }
+    Some(q as f64 / scale as f64)
+}
+
+/// Credit admits promotion when head ≥ `min_bits` (Byzantine / low-trust quarantine otherwise).
+#[must_use]
+pub fn credit_admits_promotion(credit_bits: Option<f64>, min_bits: f64) -> bool {
+    credit_bits.is_some_and(|c| c.is_finite() && c >= min_bits)
+}
+
 impl UcrsObservedAt {
     /// Wire v2 JSON shape (`observed_at.v2` integer fields — cartridge parity).
     #[must_use]

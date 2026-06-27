@@ -3,21 +3,12 @@
 
 //! Thermodynamic admissibility gate for clock synchronization.
 //!
-//! Mirrors the Lean-verified gate from `umst-formal/Lean/Gate.lean`:
-//! ```text
-//! structure Admissible (old new : ThermodynamicState) : Prop where
-//!   massDensity   : |new.density - old.density| ≤ δMass
-//!   clausiusDuhem : new.freeEnergy ≤ old.freeEnergy
-//!   hydrationMono : old.hydration ≤ new.hydration
-//!   strengthMono  : old.strength ≤ new.strength
-//! ```
-//!
-//! For clock synchronization, the gate checks that the energy cost of
-//! a sync operation does not exceed the agent's budget. Same predicate
-//! family as [`umst-manifold`](https://github.com/tytolabs/umst-manifold)
-//! `ThermodynamicGate` / `gateCheck`, applied to `ClockThermState`.
+//! Binds the Clausius–Duhem conjunct via [`umst_math::clausius_duhem_admissible`] (SSOT —
+//! same predicate family as `gateCheck` in `umst-formal/Lean/Gate.lean` on ψ).
+//! Clock sync adds Landauer budget + desync-energy domain on [`ClockThermState`].
 
 use crate::landauer;
+use umst_math::clausius_duhem_admissible;
 
 /// Clock-specific thermodynamic state for the admissibility gate.
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -49,7 +40,7 @@ pub enum GateVerdict {
 /// 2. The correction reduces desync energy (Clausius-Duhem: free energy decreases)
 /// 3. Total sync cost is monotonically increasing (irreversibility)
 ///
-/// Mirrors `gateCheck` from Gate.lean (sound + complete).
+/// Binds CD via [`clausius_duhem_admissible`] on desync ψ (SSOT conjunct shared with formal `gateCheck`).
 pub fn gate_check(state: &ClockThermState, bits_to_resolve: f64) -> GateVerdict {
     let sync_cost = landauer::landauer_cost(bits_to_resolve, state.temperature_k);
 
@@ -58,13 +49,12 @@ pub fn gate_check(state: &ClockThermState, bits_to_resolve: f64) -> GateVerdict 
         return GateVerdict::Reject;
     }
 
-    // Admissibility condition 2: sync actually reduces desync energy
-    // (otherwise it's a wasteful no-op)
+    // Admissibility condition 2: Clausius–Duhem on desync energy (ψ_new ≤ ψ_old)
     let desync_after = landauer::desync_energy(
         bits_to_resolve.max(0.0), // can't resolve negative bits
         state.temperature_k,
     );
-    if desync_after > state.desync_energy_j {
+    if !clausius_duhem_admissible(state.desync_energy_j, desync_after) {
         return GateVerdict::Reject;
     }
 

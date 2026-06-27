@@ -1,0 +1,5 @@
+[
+  { "old_psi": 10.0, "new_psi": 5.0, "expect_admissible": true },
+  { "old_psi": 5.0, "new_psi": 10.0, "expect_admissible": false },
+  { "old_psi": 0.0, "new_psi": 0.0, "expect_admissible": true }
+]

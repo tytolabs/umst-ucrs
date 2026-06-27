@@ -81,7 +81,7 @@ UCRS owns **constitutional time, P2P sync economics, and observation stamps.** I
 | `UcrsObservedAt` observation stamps | Lean proof catalogs → [`umst-formal`](https://github.com/tytolabs/umst-formal), [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) |
 | Rust library (`umst_ucrs`) for agents | Public site → [`studiotyto-website`](https://github.com/tytolabs/studiotyto-website) |
 
-UCRS **mirrors** thermodynamic and gate vocabulary from the formal repos (Rust + comments; Lean track is Mathlib-only today — see `PROOF-STATUS.md` and L4 recon). It does not fork or duplicate mechanised proofs until the Lake import path lands.
+UCRS **specializes / re-states** thermodynamic and gate results from the formal repos via Rust (`umst-math` CD binding) and Lean (`umst-formal` Landauer import); full gate `gateCheck` parity is drift-tested, not comment-enforced.
 
 ---
 

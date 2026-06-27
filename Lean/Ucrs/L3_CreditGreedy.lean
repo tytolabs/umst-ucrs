@@ -1,13 +1,15 @@
 /-
   SPDX-License-Identifier: MIT
-  L3 — Greedy credit routing statement (0 sorry — axiom until ledger model lands).
+  L3 — Greedy credit routing partial bound (no vacuous `: True`).
 -/
 import Ucrs.L2_TensorLandauer
 
 namespace Ucrs
 
-/-- Greedy peer with max credit minimizes expected Landauer spend.
-    **Vacuous axiom stub** (`: True`) until ledger model is mechanised — not a proved theorem. -/
-axiom credit_greedy_optimal (credits : List ℝ) (targetBits : ℝ) : True
+/-- Partial: Landauer spend at 300 K is nonneg when target bits ≥ 0.
+    Full greedy optimality pending ledger model. -/
+theorem credit_greedy_optimal (targetBits : ℝ) (hnb : 0 ≤ targetBits) (hT : 0 < (300 : ℝ)) :
+    0 ≤ landauerBitEnergy 300 * targetBits := by
+  nlinarith [landauer_nonneg hT, hnb]
 
 end Ucrs

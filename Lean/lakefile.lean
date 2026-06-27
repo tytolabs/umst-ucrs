@@ -7,9 +7,12 @@ package «umst-ucrs» where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git" @ "v4.14.0"
 
+require «umst-formal» from "../.." / "umst-formal" / "Lean"
+
 /-!
-  UCRS-native Lean mirror — independent Mathlib pin (no Lake dep on double-slit).
-  L1–L4: 0 `sorry` (axioms or proved). L5–L8: theorem stubs with `sorry`.
+  UCRS Lean mirror — Mathlib + pinned `umst-formal` Landauer bridge (U4).
+  L1–L4: derive Landauer nonneg from formal; L3 partial bound (no `: True` axiom).
+  L5–L8: theorem stubs with `sorry`.
 -/
 
 lean_lib Ucrs where

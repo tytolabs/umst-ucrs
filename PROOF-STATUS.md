@@ -8,18 +8,18 @@
 
 | Track | Location | Status | `sorry` count |
 |-------|----------|--------|---------------|
-| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | **Axiom** (not Mathlib proof) | 0 |
-| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | **Axiom** | 0 |
-| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | **Vacuous axiom** (`: True`) | 0 |
+| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | **Proved** (from `umst-formal` `LandauerEinsteinBridge`) | 0 |
+| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | **Proved** (`ring`) | 0 |
+| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | **Partial theorem** (Landauer bound; full greedy pending) | 0 |
 | L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | **Axiom** | 0 |
 | L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | **Sorry stub** (`theorem … : True := by sorry`) | 1 each |
 | Legacy scaffold | `Lean/TensorLandauer.lean` | Axioms | 0 |
 | Haskell QuickCheck | `Haskell/test/Spec.hs` | 5 properties | — |
 | Rust unit tests | `Rust/src/`, `Rust/tests/` | Active | — |
 
-## Formal import status (L4 recon)
+## Formal import status (U4)
 
-UCRS Lean `lakefile.lean` requires **Mathlib4 only** — no `umst-formal` Lake dependency yet. `gateRepresentationAgnostic` / `soft-tracks-hard` are **test witness only** (`umst-manifold/tests/p4_rejection_witness.rs`), not mechanised here.
+UCRS Lean `lakefile.lean` requires **`umst-formal`** (`LandauerEinsteinBridge`) + Mathlib4 v4.14.0.
 
 ## Manifold catalog (Track F)
 
