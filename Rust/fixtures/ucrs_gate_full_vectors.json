@@ -1,0 +1,20 @@
+[
+  {
+    "old": { "density": 2400.0, "free_energy": -1.0e5, "hydration": 0.3, "strength": 20.0, "max_strength": 80.0 },
+    "new": { "density": 2400.0, "free_energy": -1.1e5, "hydration": 0.35, "strength": 22.0, "max_strength": 80.0 },
+    "dt": 1.0,
+    "expect_admissible": true
+  },
+  {
+    "old": { "density": 2400.0, "free_energy": -1.0e5, "hydration": 0.5, "strength": 20.0, "max_strength": 80.0 },
+    "new": { "density": 2400.0, "free_energy": -5.0e4, "hydration": 0.3, "strength": 18.0, "max_strength": 80.0 },
+    "dt": 1.0,
+    "expect_admissible": false
+  },
+  {
+    "old": { "density": 2400.0, "free_energy": -1.0e5, "hydration": 0.4, "strength": 25.0, "max_strength": 80.0 },
+    "new": { "density": 2400.0, "free_energy": -1.05e5, "hydration": 0.45, "strength": 24.0, "max_strength": 80.0 },
+    "dt": 1.0,
+    "expect_admissible": false
+  }
+]
