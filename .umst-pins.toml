@@ -7,6 +7,6 @@ pinned_at = "2026-06-10T00:00:00Z"
 repo = "https://github.com/tytolabs/egoff"
 
 [umst-manifold]
-sha = "45c65eefc94e1c10efc9278c3706a9a4d96df9dc"
-pinned_at = "2026-06-27T19:30:00Z"
+sha = "eb11f1e8a8203cf7f7d1ceb3ce1586070729f86c"
+pinned_at = "2026-06-27T20:15:00Z"
 repo = "https://github.com/tytolabs/umst-manifold"
