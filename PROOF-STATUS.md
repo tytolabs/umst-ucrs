@@ -1,21 +1,25 @@
 # UCRS proof status (generated)
 
 **Repo:** [`umst-ucrs`](https://github.com/tytolabs/umst-ucrs)  
-**Updated:** 2026-06-19  
+**Updated:** 2026-06-27  
 **Lean toolchain:** Mathlib4 v4.14.0 (see `Lean/lakefile.lean`)
 
 ## Summary
 
 | Track | Location | Status | `sorry` count |
 |-------|----------|--------|---------------|
-| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | Proved | 0 |
-| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | Proved | 0 |
-| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | Axiom stub | 0 |
-| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | Proved | 0 |
-| L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | Theorem stubs | 1 each |
+| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | **Axiom** (not Mathlib proof) | 0 |
+| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | **Axiom** | 0 |
+| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | **Vacuous axiom** (`: True`) | 0 |
+| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | **Axiom** | 0 |
+| L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | **Sorry stub** (`theorem … : True := by sorry`) | 1 each |
 | Legacy scaffold | `Lean/TensorLandauer.lean` | Axioms | 0 |
 | Haskell QuickCheck | `Haskell/test/Spec.hs` | 5 properties | — |
 | Rust unit tests | `Rust/src/`, `Rust/tests/` | Active | — |
+
+## Formal import status (L4 recon)
+
+UCRS Lean `lakefile.lean` requires **Mathlib4 only** — no `umst-formal` Lake dependency yet. `gateRepresentationAgnostic` / `soft-tracks-hard` are **test witness only** (`umst-manifold/tests/p4_rejection_witness.rs`), not mechanised here.
 
 ## Manifold catalog (Track F)
 
