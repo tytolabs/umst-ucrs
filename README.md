@@ -37,7 +37,7 @@ Clock-sync admissibility reuses the manifold's thermodynamic gate predicate (`ga
 | **Landauer floor** | Each bit of resolved phase uncertainty costs `≥ k_B T ln(2)` J — the irreducible price of a measurement. |
 | **Thermodynamic gate** | Sync fires only when it **reduces** total desync energy within budget; wasteful paths are rejected. |
 | **Thermodynamic credit** | Accuracy is accounted per peer; high-drift peers pay more; lying about phase collapses credit — Byzantine resistance with no separate BFT layer. |
-| **Observation stamps** | `UcrsObservedAt` — `phase_entropy_bits`, `ucrs_seq`, `credit_head_bits`, `stamp_tier` — written onto durable logs so accepts carry *thermodynamic* time, not wall clock alone. |
+| **Observation stamps** | `UcrsObservedAt` — `stamp_tier`, `ucrs_seq`, `phase_entropy_bits_q`, `credit_head_bits_q` — written onto durable logs so accepts carry *thermodynamic* time, not wall clock alone. |
 | **Offline spine** | A local oscillator plus a precomputed spine of calendar structures for long offline operation. |
 | **Epoch safety** | Unix 2038 / GPS rollover become zero-cost typed reindexing instead of crashes. |
 
