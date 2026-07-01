@@ -4,7 +4,7 @@
 //! Thermodynamic admissibility gate for clock synchronization.
 //!
 //! Binds the Clausius–Duhem conjunct via [`umst_math::clausius_duhem_admissible`] (SSOT —
-//! same predicate family as `gateCheck` in `umst-formal/Lean/Gate.lean` on ψ).
+//! same predicate family as `gateCheck` in `umst-formal/Lean/Compat/Gate.lean` on ψ).
 //! Clock sync adds Landauer budget + desync-energy domain on [`ClockThermState`].
 
 use crate::landauer;
