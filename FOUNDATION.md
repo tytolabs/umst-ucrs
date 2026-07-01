@@ -108,3 +108,17 @@ with new theorems and implementations.
 
 5. **Versioning**: Semantic versioning starting at 0.1.0. The first
    release (1.0.0) will coincide with paper submission.
+
+---
+
+## Cast spine extension (2026-07-02, Rust `master` @ `5f4136c`)
+
+Additive modules consumed by `umst-steerable-vault` lifecycle demos:
+
+| Module | Role |
+|--------|------|
+| `frame_spine.rs` | `Frame`, `Spine`, `Vertebra` — cast funicular as 2-vertebra degenerate case |
+| `design_sheaf.rs` | Spine as time-axis; `route_steerability` on `TnaMetricShape` |
+| `decision_tree.rs` | Agent steer branches (`MorphLoadOffset`, `ReSolveThrust`, `GateReject`) |
+
+Not site certification — bracket envelope + JSON witnesses only.
