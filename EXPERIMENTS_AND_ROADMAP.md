@@ -12,7 +12,7 @@
 
 ## 1. Remaining Lean Proofs
 
-All new theorems chain from existing FCP-DS infrastructure (**487** theorems + **30** lemmas in **53** roots, **527** line-start decls in all `Lean/*.lean`, **0** `sorry`, **1** documented project `axiom` — see upstream `PROOF-STATUS.md` and `scripts/lean_declaration_stats.py`).
+All new theorems chain from existing FCP-DS infrastructure (**486** theorems + **30** lemmas in **52** roots, **526** line-start decls in all `Lean/*.lean`, **0** `sorry`, **1** documented project `axiom` — see upstream `PROOF-STATUS.md` and `scripts/lean_declaration_stats.py`).
 No new axioms required.
 
 ### Priority 0 — Core Theorems (paper blockers)

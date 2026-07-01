@@ -74,7 +74,7 @@ with new theorems and implementations.
 
 ## What This Repo Does NOT Do
 
-1. **Does not re-prove** existing FCP-DS material (**487** theorems + **30** lemmas in **53** lake roots in [umst-formal-double-slit](https://github.com/tytolabs/umst-formal-double-slit); **517** roots-only; **527** line-start decls incl. all `Lean/*.lean` — counts from upstream `scripts/lean_declaration_stats.py`)
+1. **Does not re-prove** existing FCP-DS material (**486** theorems + **30** lemmas in **52** lake roots in [umst-formal-double-slit](https://github.com/tytolabs/umst-formal-double-slit); **516** roots-only; **526** line-start decls incl. all `Lean/*.lean` — counts from upstream `scripts/lean_declaration_stats.py`)
 2. **Does not fork** Mathlib or any upstream dependency
 3. **Does not introduce new axioms** — all new Lean theorems chain from existing infrastructure
 4. **Does not claim** blockchain or cryptocurrency features — the credit system is
