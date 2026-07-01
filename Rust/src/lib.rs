@@ -17,6 +17,8 @@ pub mod credit;
 pub mod crypto;
 /// Design sheaf facets — spine as time-axis (section / gluing / restriction / cohomology).
 pub mod design_sheaf;
+/// Cast spine decision tree — steerability branches for agent episodes.
+pub mod decision_tree;
 /// Frame / spine contract — cast funicular as degenerate 2-vertebra trajectory.
 pub mod frame_spine;
 pub mod gate;
@@ -32,9 +34,14 @@ pub mod wire;
 
 use tracing::{info, warn};
 
+pub use decision_tree::{
+    evaluate_steer_branch, SteerDecision, SteerDecisionTrace, SteerKnobs, SteerObjectiveLane,
+    TnaStrikeWitness,
+};
 pub use design_sheaf::{
-    spine_admissible_under_gluing, DesignSheafOverSpine, MaterialEvolutionFrontier,
-    SheafCohomologySeam, SheafGluingWitness, SheafRestriction, SheafSection,
+    route_steerability, spine_admissible_under_gluing, DesignSheafOverSpine,
+    MaterialEvolutionFrontier, SheafCohomologySeam, SheafGluingWitness, SheafRestriction,
+    SheafSection, SteerabilityBranch, SteerabilityDecision, TnaMetricShape,
 };
 pub use frame_spine::{
     Frame, MaterialState, OriginEvent, Spine, SpineTime, UnitVec3, Vertebra, VertebraGateVerdict,
