@@ -28,7 +28,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 [1.0.0]: https://github.com/tytolabs/umst-ucrs/compare/v0.1.0...v1.0.0
 
 
-- **FCP-DS / FCP-I headline counts** synced to sibling `lean_declaration_stats.py`: double-slit **540+34** / **574** roots-only (**584** all-Lean); meso **287+24** / **311** in **59** roots.
+- **FCP-DS / FCP-I headline counts** synced to sibling `lean_declaration_stats.py`: double-slit **540+34** / **574** roots-only (**584** all-Lean); meso **289+24** / **313** in **62** roots.
 
 ### Changed (2026-04-22)
 
