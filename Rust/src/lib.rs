@@ -15,14 +15,14 @@ pub mod credit;
 /// S-0 crypto parity — PQC reference (`umst_math::crypto` mirror).
 #[allow(missing_docs)]
 pub mod crypto;
+/// Design sheaf facets — spine as time-axis (section / gluing / restriction / cohomology).
+pub mod design_sheaf;
+/// Frame / spine contract — cast funicular as degenerate 2-vertebra trajectory.
+pub mod frame_spine;
 pub mod gate;
 pub mod landauer;
 /// Immutable observation stamps for durable agent logs (`UcrsObservedAt`, `TemporalWitness`).
 pub mod observation;
-/// Frame / spine contract — cast funicular as degenerate 2-vertebra trajectory.
-pub mod frame_spine;
-/// Design sheaf facets — spine as time-axis (section / gluing / restriction / cohomology).
-pub mod design_sheaf;
 /// P2P gossip types + gate-guarded sync hook (no libp2p in default builds).
 pub mod p2p;
 pub mod rapl;
@@ -33,8 +33,8 @@ pub mod wire;
 use tracing::{info, warn};
 
 pub use design_sheaf::{
-    DesignSheafOverSpine, MaterialEvolutionFrontier, SheafCohomologySeam, SheafGluingWitness,
-    SheafRestriction, SheafSection, spine_admissible_under_gluing,
+    spine_admissible_under_gluing, DesignSheafOverSpine, MaterialEvolutionFrontier,
+    SheafCohomologySeam, SheafGluingWitness, SheafRestriction, SheafSection,
 };
 pub use frame_spine::{
     Frame, MaterialState, OriginEvent, Spine, SpineTime, UnitVec3, Vertebra, VertebraGateVerdict,

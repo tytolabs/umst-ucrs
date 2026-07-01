@@ -125,7 +125,11 @@ impl DesignSheafOverSpine {
 
     #[must_use]
     pub fn from_spine(spine: &Spine) -> Self {
-        let sections: Vec<_> = spine.vertebrae.iter().map(SheafSection::from_vertebra).collect();
+        let sections: Vec<_> = spine
+            .vertebrae
+            .iter()
+            .map(SheafSection::from_vertebra)
+            .collect();
         let gluing = SheafGluingWitness {
             conservation_axiom: "d∘d=0".into(),
             sections_glue: spine_admissible_under_gluing(spine),
