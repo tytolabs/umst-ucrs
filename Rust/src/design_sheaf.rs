@@ -150,8 +150,7 @@ pub struct SteerabilityDecision {
 /// Route steerability from TNA metric shape (minimal decision tree).
 #[must_use]
 pub fn route_steerability(metric: &TnaMetricShape) -> SteerabilityDecision {
-    let branch = if metric.phase_gate.contains("fail")
-        || metric.phase_gate.contains("inadmissible")
+    let branch = if metric.phase_gate.contains("fail") || metric.phase_gate.contains("inadmissible")
     {
         SteerabilityBranch::RejectInadmissible
     } else if metric.thrust_bracket_width < 0.05 {
@@ -176,10 +175,7 @@ impl DesignSheafOverSpine {
     }
 
     #[must_use]
-    pub fn from_spine_with_metric(
-        spine: &Spine,
-        metric: Option<TnaMetricShape>,
-    ) -> Self {
+    pub fn from_spine_with_metric(spine: &Spine, metric: Option<TnaMetricShape>) -> Self {
         let sections: Vec<_> = spine
             .vertebrae
             .iter()
