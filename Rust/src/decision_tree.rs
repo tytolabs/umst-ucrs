@@ -49,30 +49,21 @@ pub struct TnaStrikeWitness {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum SteerDecision {
     /// Advance to next vertebra on the cast spine.
-    AdvanceVertebra {
-        label: String,
-        admissible: bool,
-    },
+    AdvanceVertebra { label: String, admissible: bool },
     /// Re-solve thrust network (thickness or load morph changed equilibrium).
     ReSolveThrust {
         reason: String,
         witness: TnaStrikeWitness,
     },
     /// Phase gate rejected — agent must back off steer edit.
-    GateReject {
-        verdict: String,
-        margin: f64,
-    },
+    GateReject { verdict: String, margin: f64 },
     /// Sweep thickness bracket (MinR funicular envelope exploration).
     SweepThicknessBracket {
         thickness_min_m: f64,
         thickness_max_m: f64,
     },
     /// Morph live-load centroid along span.
-    MorphLoadOffset {
-        from_frac: f64,
-        to_frac: f64,
-    },
+    MorphLoadOffset { from_frac: f64, to_frac: f64 },
 }
 
 /// Evaluate the cast-spine decision tree for one agent edit step.

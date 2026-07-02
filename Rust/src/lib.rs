@@ -15,10 +15,10 @@ pub mod credit;
 /// S-0 crypto parity — PQC reference (`umst_math::crypto` mirror).
 #[allow(missing_docs)]
 pub mod crypto;
-/// Design sheaf facets — spine as time-axis (section / gluing / restriction / cohomology).
-pub mod design_sheaf;
 /// Cast spine decision tree — steerability branches for agent episodes.
 pub mod decision_tree;
+/// Design sheaf facets — spine as time-axis (section / gluing / restriction / cohomology).
+pub mod design_sheaf;
 /// Frame / spine contract — cast funicular as degenerate 2-vertebra trajectory.
 pub mod frame_spine;
 pub mod gate;
