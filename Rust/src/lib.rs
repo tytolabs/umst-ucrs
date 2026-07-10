@@ -34,10 +34,7 @@ pub mod wire;
 
 use tracing::{info, warn};
 
-pub use decision_tree::{
-    evaluate_steer_branch, SteerDecision, SteerDecisionTrace, SteerKnobs, SteerObjectiveLane,
-    TnaStrikeWitness,
-};
+pub use decision_tree::{SteerDecision, SteerDecisionTrace, SteerKnobs, SteerPolicy};
 pub use design_sheaf::{
     route_steerability, spine_admissible_under_gluing, DecisionPolicy, DesignSheafOverSpine,
     MaterialEvolutionFrontier, SheafCohomologySeam, SheafGluingWitness, SheafRestriction,

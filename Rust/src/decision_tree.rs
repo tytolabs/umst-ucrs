@@ -1,63 +1,35 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
 
-//! Cast spine **decision tree** — steerability branches for paper/demo agents.
+//! Cast spine **decision tree** — generic steerability branches for agent episodes.
 //!
-//! Maps agent edits (thickness, load morph, objective lane, Block MinR/MaxR) to spine
-//! transitions referencing TNA metrics at `v_tna`. Not site certification — bracket envelope only.
+//! Consumer crates supply concrete witness and lane types; this module provides only the
+//! domain-neutral routing infrastructure.
 
 use serde::{Deserialize, Serialize};
 
-/// Agent-editable steer knobs (mirrors `SteerableVaultParams` in umst-steerable-vault).
+/// Agent-editable steer knobs — generic over objective-lane type `L`.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub struct SteerKnobs {
+pub struct SteerKnobs<L> {
     pub thickness_m: f64,
     pub live_x_offset_frac: f64,
     pub wind_fx_n: f64,
-    pub objective_lane: SteerObjectiveLane,
+    pub objective_lane: L,
 }
 
-/// Thrust-network objective lane (string-stable for JSON witnesses).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub enum SteerObjectiveLane {
-    ThrustNetworkBlock,
-    ThrustNetworkStrip,
-    ComplianceMinArchived,
-}
-
-impl SteerObjectiveLane {
-    #[must_use]
-    pub const fn as_label(self) -> &'static str {
-        match self {
-            Self::ThrustNetworkBlock => "ThrustNetworkBlock",
-            Self::ThrustNetworkStrip => "ThrustNetworkStrip",
-            Self::ComplianceMinArchived => "ComplianceMinArchived",
-        }
-    }
-}
-
-/// TNA witness at `v_tna` (Block LP metrics).
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub struct TnaStrikeWitness {
-    pub block_r: f64,
-    pub abutment_thrust_n: f64,
-    pub eq_residual: f64,
-    pub phase_gate_admissible: bool,
-}
-
-/// Decision-tree node outcome after evaluating steer input.
+/// Decision-tree node outcome after evaluating steer input — generic over witness `W`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum SteerDecision {
+pub enum SteerDecision<W> {
     /// Advance to next vertebra on the cast spine.
     AdvanceVertebra { label: String, admissible: bool },
-    /// Re-solve thrust network (thickness or load morph changed equilibrium).
-    ReSolveThrust {
+    /// Re-solve equilibrium (geometry or load changed).
+    ReSolve {
         reason: String,
-        witness: TnaStrikeWitness,
+        witness: W,
     },
     /// Phase gate rejected — agent must back off steer edit.
     GateReject { verdict: String, margin: f64 },
-    /// Sweep thickness bracket (MinR funicular envelope exploration).
+    /// Sweep thickness bracket (envelope exploration).
     SweepThicknessBracket {
         thickness_min_m: f64,
         thickness_max_m: f64,
@@ -66,126 +38,126 @@ pub enum SteerDecision {
     MorphLoadOffset { from_frac: f64, to_frac: f64 },
 }
 
-/// Evaluate the cast-spine decision tree for one agent edit step.
+/// Consumer-implemented policy that evaluates one steer step.
 ///
-/// `prior` — previous TNA witness (if any); `delta` — measurable change after steer.
-#[must_use]
-pub fn evaluate_steer_branch(
-    knobs: &SteerKnobs,
-    witness: &TnaStrikeWitness,
-    prior: Option<&TnaStrikeWitness>,
-) -> SteerDecision {
-    if !witness.phase_gate_admissible || witness.eq_residual >= 1e-5 {
-        return SteerDecision::GateReject {
-            verdict: format!(
-                "v_tna block_lp eq_res={:.3e} (lane={})",
-                witness.eq_residual,
-                knobs.objective_lane.as_label()
-            ),
-            margin: witness.eq_residual,
-        };
-    }
-
-    if let Some(p) = prior {
-        let h_delta = (witness.abutment_thrust_n - p.abutment_thrust_n).abs();
-        let r_delta = (witness.block_r - p.block_r).abs();
-        if h_delta > 50.0 || r_delta > 1e-4 {
-            return SteerDecision::ReSolveThrust {
-                reason: format!(
-                    "H_delta={h_delta:.1}N r_delta={r_delta:.6} (offset={:.2})",
-                    knobs.live_x_offset_frac
-                ),
-                witness: *witness,
-            };
-        }
-    }
-
-    if knobs.live_x_offset_frac.abs() > 0.05 {
-        return SteerDecision::MorphLoadOffset {
-            from_frac: 0.0,
-            to_frac: knobs.live_x_offset_frac,
-        };
-    }
-
-    if knobs.thickness_m < 0.10 || knobs.thickness_m > 0.25 {
-        return SteerDecision::SweepThicknessBracket {
-            thickness_min_m: 0.06,
-            thickness_max_m: 0.32,
-        };
-    }
-
-    SteerDecision::AdvanceVertebra {
-        label: "v_tna".into(),
-        admissible: witness.phase_gate_admissible,
-    }
+/// `L` = objective-lane type, `W` = witness type.
+pub trait SteerPolicy<L, W> {
+    /// Evaluate the decision tree for one agent edit step.
+    fn evaluate(
+        &self,
+        knobs: &SteerKnobs<L>,
+        witness: &W,
+        prior: Option<&W>,
+    ) -> SteerDecision<W>;
 }
 
-/// JSON-serializable decision-tree trace for agent episodes.
+/// JSON-serializable decision-tree trace for agent episodes — generic over `L` and `W`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SteerDecisionTrace {
-    pub knobs: SteerKnobs,
-    pub witness: TnaStrikeWitness,
-    pub decision: SteerDecision,
+pub struct SteerDecisionTrace<L, W> {
+    pub knobs: SteerKnobs<L>,
+    pub witness: W,
+    pub decision: SteerDecision<W>,
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn demo_witness(h: f64, r: f64) -> TnaStrikeWitness {
-        TnaStrikeWitness {
-            block_r: r,
-            abutment_thrust_n: h,
-            eq_residual: 1e-7,
-            phase_gate_admissible: true,
+    #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+    struct DummyLane;
+
+    #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+    struct DummyWitness {
+        value: f64,
+        admissible: bool,
+    }
+
+    struct DummySteerPolicy;
+
+    impl SteerPolicy<DummyLane, DummyWitness> for DummySteerPolicy {
+        fn evaluate(
+            &self,
+            knobs: &SteerKnobs<DummyLane>,
+            witness: &DummyWitness,
+            prior: Option<&DummyWitness>,
+        ) -> SteerDecision<DummyWitness> {
+            if !witness.admissible {
+                return SteerDecision::GateReject {
+                    verdict: "inadmissible".into(),
+                    margin: witness.value,
+                };
+            }
+            if let Some(p) = prior {
+                if (witness.value - p.value).abs() > 0.1 {
+                    return SteerDecision::ReSolve {
+                        reason: "delta exceeded".into(),
+                        witness: *witness,
+                    };
+                }
+            }
+            if knobs.live_x_offset_frac.abs() > 0.05 {
+                return SteerDecision::MorphLoadOffset {
+                    from_frac: 0.0,
+                    to_frac: knobs.live_x_offset_frac,
+                };
+            }
+            SteerDecision::AdvanceVertebra {
+                label: "v_next".into(),
+                admissible: witness.admissible,
+            }
+        }
+    }
+
+    fn demo_witness(v: f64) -> DummyWitness {
+        DummyWitness {
+            value: v,
+            admissible: true,
         }
     }
 
     #[test]
-    fn load_offset_triggers_resolve_thrust() {
+    fn load_offset_triggers_re_solve() {
         let knobs = SteerKnobs {
             thickness_m: 0.15,
             live_x_offset_frac: 0.6,
             wind_fx_n: 0.0,
-            objective_lane: SteerObjectiveLane::ThrustNetworkBlock,
+            objective_lane: DummyLane,
         };
-        let prior = demo_witness(12_000.0, 0.42);
-        let witness = demo_witness(12_800.0, 0.418);
-        let d = evaluate_steer_branch(&knobs, &witness, Some(&prior));
+        let prior = demo_witness(0.42);
+        let witness = demo_witness(0.80);
+        let d = DummySteerPolicy.evaluate(&knobs, &witness, Some(&prior));
         assert!(
-            matches!(d, SteerDecision::ReSolveThrust { .. }),
-            "expected ReSolveThrust, got {d:?}"
+            matches!(d, SteerDecision::ReSolve { .. }),
+            "expected ReSolve, got {d:?}"
         );
     }
 
     #[test]
-    fn symmetric_baseline_advances_v_tna() {
+    fn symmetric_baseline_advances() {
         let knobs = SteerKnobs {
             thickness_m: 0.15,
             live_x_offset_frac: 0.0,
             wind_fx_n: 0.0,
-            objective_lane: SteerObjectiveLane::ThrustNetworkBlock,
+            objective_lane: DummyLane,
         };
-        let witness = demo_witness(12_000.0, 0.42);
-        let d = evaluate_steer_branch(&knobs, &witness, None);
+        let witness = demo_witness(0.42);
+        let d = DummySteerPolicy.evaluate(&knobs, &witness, None);
         assert!(matches!(d, SteerDecision::AdvanceVertebra { .. }));
     }
 
     #[test]
-    fn inadmissible_eq_residual_rejects() {
+    fn inadmissible_rejects() {
         let knobs = SteerKnobs {
             thickness_m: 0.15,
             live_x_offset_frac: 0.0,
             wind_fx_n: 0.0,
-            objective_lane: SteerObjectiveLane::ThrustNetworkBlock,
+            objective_lane: DummyLane,
         };
-        let witness = TnaStrikeWitness {
-            block_r: 0.4,
-            abutment_thrust_n: 10_000.0,
-            eq_residual: 1e-2,
-            phase_gate_admissible: false,
+        let witness = DummyWitness {
+            value: 0.4,
+            admissible: false,
         };
-        let d = evaluate_steer_branch(&knobs, &witness, None);
+        let d = DummySteerPolicy.evaluate(&knobs, &witness, None);
         assert!(matches!(d, SteerDecision::GateReject { .. }));
     }
 }

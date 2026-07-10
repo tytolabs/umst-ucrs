@@ -118,13 +118,13 @@ pub struct DesignSheafOverSpine<M> {
     pub restriction: SheafRestriction,
     pub cohomology_seam: SheafCohomologySeam,
     pub material_frontier: MaterialEvolutionFrontier,
-    /// Optional steerability routing from TNA metric shape (cast lifecycle).
+    /// Optional steerability routing from consumer-supplied metric (cast lifecycle).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub steerability: Option<SteerabilityDecision<M>>,
 }
 
 
-/// Steerability branch selected from TNA metrics + spine phase gate.
+/// Steerability branch selected from consumer metrics + spine phase gate.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SteerabilityBranch {
     Hold,

@@ -19,7 +19,7 @@ pub struct UnitVec3 {
 }
 
 impl UnitVec3 {
-    /// Vault legacy self-weight axis (−Y).
+    /// Default self-weight axis (−Y).
     #[must_use]
     pub const fn negative_y() -> Self {
         Self {
@@ -74,7 +74,7 @@ pub struct Frame {
 
 impl Frame {
     #[must_use]
-    pub fn cast_vault_default() -> Self {
+    pub fn default_negative_y() -> Self {
         Self {
             gravity_dir: UnitVec3::negative_y(),
             time_origin: OriginEvent::formwork_strike(),
@@ -238,7 +238,7 @@ mod tests {
 
     #[test]
     fn default_frame_is_negative_y() {
-        let f = Frame::cast_vault_default();
+        let f = Frame::default_negative_y();
         assert_eq!(f.gravity_dir, UnitVec3::negative_y());
         assert_eq!(f.time_origin.label, "formwork_strike");
     }
