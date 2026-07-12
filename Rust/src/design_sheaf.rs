@@ -123,7 +123,6 @@ pub struct DesignSheafOverSpine<M> {
     pub steerability: Option<SteerabilityDecision<M>>,
 }
 
-
 /// Steerability branch selected from consumer metrics + spine phase gate.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SteerabilityBranch {
@@ -145,7 +144,10 @@ pub struct SteerabilityDecision<M> {
 }
 
 /// Route steerability from generic metric shape and consumer policy (minimal decision tree machinery).
-pub fn route_steerability<M: Clone>(metric: &M, policy: &impl DecisionPolicy<M>) -> SteerabilityDecision<M> {
+pub fn route_steerability<M: Clone>(
+    metric: &M,
+    policy: &impl DecisionPolicy<M>,
+) -> SteerabilityDecision<M> {
     SteerabilityDecision {
         branch: policy.route_decision(metric),
         metric: metric.clone(),
@@ -157,11 +159,30 @@ impl<M: Clone> DesignSheafOverSpine<M> {
 
     #[must_use]
     pub fn from_spine(spine: &Spine) -> Self {
-        Self { time_axis: Self::TIME_AXIS_LABEL.into(), sections: spine.vertebrae.iter().map(SheafSection::from_vertebra).collect(), gluing: SheafGluingWitness { conservation_axiom: "d∘d=0".into(), sections_glue: spine_admissible_under_gluing(spine) }, restriction: SheafRestriction::hex_coarsen_cell_field(), cohomology_seam: SheafCohomologySeam::memory_h1_seam(), material_frontier: MaterialEvolutionFrontier::cartridge_frontier(), steerability: None }
+        Self {
+            time_axis: Self::TIME_AXIS_LABEL.into(),
+            sections: spine
+                .vertebrae
+                .iter()
+                .map(SheafSection::from_vertebra)
+                .collect(),
+            gluing: SheafGluingWitness {
+                conservation_axiom: "d∘d=0".into(),
+                sections_glue: spine_admissible_under_gluing(spine),
+            },
+            restriction: SheafRestriction::hex_coarsen_cell_field(),
+            cohomology_seam: SheafCohomologySeam::memory_h1_seam(),
+            material_frontier: MaterialEvolutionFrontier::cartridge_frontier(),
+            steerability: None,
+        }
     }
 
     #[must_use]
-    pub fn from_spine_with_metric(spine: &Spine, metric: Option<M>, policy: &impl DecisionPolicy<M>) -> Self {
+    pub fn from_spine_with_metric(
+        spine: &Spine,
+        metric: Option<M>,
+        policy: &impl DecisionPolicy<M>,
+    ) -> Self {
         let sections: Vec<_> = spine
             .vertebrae
             .iter()
@@ -200,11 +221,17 @@ mod steerability_tests {
     use super::*;
 
     #[derive(Clone)]
-    struct DummyMetric { val: f64 }
+    struct DummyMetric {
+        val: f64,
+    }
     struct DummyPolicy;
     impl DecisionPolicy<DummyMetric> for DummyPolicy {
         fn route_decision(&self, metric: &DummyMetric) -> SteerabilityBranch {
-            if metric.val > 0.5 { SteerabilityBranch::ExploreOffset } else { SteerabilityBranch::Hold }
+            if metric.val > 0.5 {
+                SteerabilityBranch::ExploreOffset
+            } else {
+                SteerabilityBranch::Hold
+            }
         }
     }
 

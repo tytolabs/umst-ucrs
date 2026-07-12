@@ -23,10 +23,7 @@ pub enum SteerDecision<W> {
     /// Advance to next vertebra on the cast spine.
     AdvanceVertebra { label: String, admissible: bool },
     /// Re-solve equilibrium (geometry or load changed).
-    ReSolve {
-        reason: String,
-        witness: W,
-    },
+    ReSolve { reason: String, witness: W },
     /// Phase gate rejected — agent must back off steer edit.
     GateReject { verdict: String, margin: f64 },
     /// Sweep thickness bracket (envelope exploration).
@@ -43,12 +40,7 @@ pub enum SteerDecision<W> {
 /// `L` = objective-lane type, `W` = witness type.
 pub trait SteerPolicy<L, W> {
     /// Evaluate the decision tree for one agent edit step.
-    fn evaluate(
-        &self,
-        knobs: &SteerKnobs<L>,
-        witness: &W,
-        prior: Option<&W>,
-    ) -> SteerDecision<W>;
+    fn evaluate(&self, knobs: &SteerKnobs<L>, witness: &W, prior: Option<&W>) -> SteerDecision<W>;
 }
 
 /// JSON-serializable decision-tree trace for agent episodes — generic over `L` and `W`.
