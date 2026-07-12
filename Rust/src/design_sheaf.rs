@@ -111,71 +111,57 @@ impl MaterialEvolutionFrontier {
 
 /// Spine as time-axis: collect sections + gluing witness.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DesignSheafOverSpine {
+pub struct DesignSheafOverSpine<M> {
     pub time_axis: String,
     pub sections: Vec<SheafSection>,
     pub gluing: SheafGluingWitness,
     pub restriction: SheafRestriction,
     pub cohomology_seam: SheafCohomologySeam,
     pub material_frontier: MaterialEvolutionFrontier,
-    /// Optional steerability routing from TNA metric shape (cast lifecycle).
+    /// Optional steerability routing from consumer-supplied metric (cast lifecycle).
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub steerability: Option<SteerabilityDecision>,
+    pub steerability: Option<SteerabilityDecision<M>>,
 }
 
-/// TNA metric shape fed from steerable-vault lifecycle / bracket solve.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct TnaMetricShape {
-    pub thrust_bracket_width: f64,
-    pub phase_gate: String,
-    pub objective_lane: String,
-}
 
-/// Steerability branch selected from TNA metrics + spine phase gate.
+/// Steerability branch selected from consumer metrics + spine phase gate.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SteerabilityBranch {
-    HoldSymmetric,
-    ExploreLoadOffset,
-    WidenBracketSweep,
+    Hold,
+    ExploreOffset,
+    WidenSweep,
     RejectInadmissible,
+}
+
+pub trait DecisionPolicy<M> {
+    fn route_decision(&self, metric: &M) -> SteerabilityBranch;
 }
 
 /// Routed steerability decision for agent / UCRS spine export.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SteerabilityDecision {
+pub struct SteerabilityDecision<M> {
     pub branch: SteerabilityBranch,
-    pub metric: TnaMetricShape,
+    pub metric: M,
 }
 
-/// Route steerability from TNA metric shape (minimal decision tree).
-#[must_use]
-pub fn route_steerability(metric: &TnaMetricShape) -> SteerabilityDecision {
-    let branch = if metric.phase_gate.contains("fail") || metric.phase_gate.contains("inadmissible")
-    {
-        SteerabilityBranch::RejectInadmissible
-    } else if metric.thrust_bracket_width < 0.05 {
-        SteerabilityBranch::HoldSymmetric
-    } else if metric.objective_lane == "block_lp" && metric.thrust_bracket_width > 0.1 {
-        SteerabilityBranch::ExploreLoadOffset
-    } else {
-        SteerabilityBranch::WidenBracketSweep
-    };
+/// Route steerability from generic metric shape and consumer policy (minimal decision tree machinery).
+pub fn route_steerability<M: Clone>(metric: &M, policy: &impl DecisionPolicy<M>) -> SteerabilityDecision<M> {
     SteerabilityDecision {
-        branch,
+        branch: policy.route_decision(metric),
         metric: metric.clone(),
     }
 }
 
-impl DesignSheafOverSpine {
+impl<M: Clone> DesignSheafOverSpine<M> {
     pub const TIME_AXIS_LABEL: &'static str = "spine_is_time_axis_of_design_sheaf";
 
     #[must_use]
     pub fn from_spine(spine: &Spine) -> Self {
-        Self::from_spine_with_metric(spine, None)
+        Self { time_axis: Self::TIME_AXIS_LABEL.into(), sections: spine.vertebrae.iter().map(SheafSection::from_vertebra).collect(), gluing: SheafGluingWitness { conservation_axiom: "d∘d=0".into(), sections_glue: spine_admissible_under_gluing(spine) }, restriction: SheafRestriction::hex_coarsen_cell_field(), cohomology_seam: SheafCohomologySeam::memory_h1_seam(), material_frontier: MaterialEvolutionFrontier::cartridge_frontier(), steerability: None }
     }
 
     #[must_use]
-    pub fn from_spine_with_metric(spine: &Spine, metric: Option<TnaMetricShape>) -> Self {
+    pub fn from_spine_with_metric(spine: &Spine, metric: Option<M>, policy: &impl DecisionPolicy<M>) -> Self {
         let sections: Vec<_> = spine
             .vertebrae
             .iter()
@@ -185,7 +171,7 @@ impl DesignSheafOverSpine {
             conservation_axiom: "d∘d=0".into(),
             sections_glue: spine_admissible_under_gluing(spine),
         };
-        let steerability = metric.map(|m| route_steerability(&m));
+        let steerability = metric.map(|m| route_steerability(&m, policy));
         Self {
             time_axis: Self::TIME_AXIS_LABEL.into(),
             sections,
@@ -213,25 +199,19 @@ pub fn spine_admissible_under_gluing(spine: &Spine) -> bool {
 mod steerability_tests {
     use super::*;
 
-    #[test]
-    fn route_explores_load_offset_for_wide_block_bracket() {
-        let metric = TnaMetricShape {
-            thrust_bracket_width: 0.15,
-            phase_gate: "compression_admissible_envelope".into(),
-            objective_lane: "block_lp".into(),
-        };
-        let decision = route_steerability(&metric);
-        assert_eq!(decision.branch, SteerabilityBranch::ExploreLoadOffset);
+    #[derive(Clone)]
+    struct DummyMetric { val: f64 }
+    struct DummyPolicy;
+    impl DecisionPolicy<DummyMetric> for DummyPolicy {
+        fn route_decision(&self, metric: &DummyMetric) -> SteerabilityBranch {
+            if metric.val > 0.5 { SteerabilityBranch::ExploreOffset } else { SteerabilityBranch::Hold }
+        }
     }
 
     #[test]
-    fn route_rejects_inadmissible_phase_gate() {
-        let metric = TnaMetricShape {
-            thrust_bracket_width: 0.2,
-            phase_gate: "compression_inadmissible_envelope".into(),
-            objective_lane: "block_lp".into(),
-        };
-        let decision = route_steerability(&metric);
-        assert_eq!(decision.branch, SteerabilityBranch::RejectInadmissible);
+    fn test_generic_routing() {
+        let m = DummyMetric { val: 0.8 };
+        let d = route_steerability(&m, &DummyPolicy);
+        assert_eq!(d.branch, SteerabilityBranch::ExploreOffset);
     }
 }
