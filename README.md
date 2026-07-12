@@ -213,16 +213,21 @@ Greedy highest-credit peer selection is Landauer-optimal on tree sync topologies
 
 ## 3. Cross-Domain Integration Specifications
 
-UCRS is the **temporal witness organ** of the gate spine — it **stamps** when sibling fibers commit; it does not replace domain physics or formal proofs.
+**What this section is for.** Time is not a free coordinate. UCRS is the fiber that answers: *when did this commit land, and how much information was spent to share a “now”?* It **stamps** sibling fibers — it does not replace their physics or proofs. Open a persona below for surface, pipeline, outcome, and an honest limit.
+
+Matter still validates constitutive law; Knowing still proves observation cost; Acting still owns Economic predicates. UCRS supplies the shared **when + provenance** vocabulary those commits compose through.
 
 <a id="31-multi-agent-sync-economics"></a>
 <details>
 <summary><b>1. Multi-agent sync economics</b> (Mesh integrators, clock peers)</summary>
 
-* **Domain Focus / Integration Surface:** `LocalClock` / `CreditLedger` / `landauer_cost` / optional P2P — [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md).
-* **Composition / Pipeline:** Greedy peer selection minimizes total Landauer `E` under accuracy constraints; Byzantine peers lose credit without a separate BFT protocol.
-* **Computational Outcome:** Shared, gate-checked *now* — agents spend energy only when sync improves phase understanding.
-* **Honest limit:** Not production-complete mesh; `p2p` is feature-gated; does not replace NTP/PTP ([`FOUNDATION.md`](FOUNDATION.md)).
+* **Domain Focus / Integration Surface:** Gate-checked clock sync — `LocalClock`, `CreditLedger`, `landauer_cost`, optional P2P mesh. Deep dive: [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md).
+
+* **Composition / Pipeline:** Sync only when Landauer cost fits the budget and Clausius–Duhem holds on the clock free-energy. Greedy peer selection prefers accurate clocks; Byzantine peers lose credit without a separate BFT protocol.
+
+* **Computational Outcome:** A shared, gate-checked *now* — agents spend energy only when sync improves their understanding of phase offset, and accuracy becomes preferred sync credit.
+
+* **Honest limit:** Not a production-complete mesh. `p2p` is feature-gated. Does not replace NTP/PTP ([`FOUNDATION.md`](FOUNDATION.md)).
 
 </details>
 
@@ -231,9 +236,12 @@ UCRS is the **temporal witness organ** of the gate spine — it **stamps** when 
 <summary><b>2. Stamp / memory provenance</b> (Memory ingest, agent MCP)</summary>
 
 * **Domain Focus / Integration Surface:** `UcrsObservedAt`, `TemporalWitness`, `UMST_UCRS_WITNESS` — [`Rust/src/observation.rs`](Rust/src/observation.rs).
-* **Composition / Pipeline:** Cartridge `ucrs-provenance` at memory accept; `witness_for_agent` from [`Rust/src/lib.rs:87`](Rust/src/lib.rs) for Tier-2 vs synthetic.
-* **Computational Outcome:** `ucrs_seq` monotonicity on durable accepts; catalog digest pin is **catalog** time-slice — stamp is **runtime** time.
-* **Honest limit:** Does not validate constitutive law — gate does; MCP host = concrete only.
+
+* **Composition / Pipeline:** Cartridge `ucrs-provenance` at memory accept. `witness_for_agent` ([`Rust/src/lib.rs:87`](Rust/src/lib.rs)) chooses Tier-2 vs synthetic. Catalog digest pin is **catalog** time-slice; stamp is **runtime** time.
+
+* **Computational Outcome:** Monotonic `ucrs_seq` on durable accepts so Matter / Knowing / Acting events share one when+provenance record without inventing a second clock story.
+
+* **Honest limit:** Does not validate constitutive law — the gate does. MCP host = concrete only; UCRS is a library.
 
 </details>
 
@@ -242,9 +250,12 @@ UCRS is the **temporal witness organ** of the gate spine — it **stamps** when 
 <summary><b>3. Design spine / sheaf</b> (Design-time integrators)</summary>
 
 * **Domain Focus / Integration Surface:** `Frame` → `Vertebra` → `DesignSheafOverSpine` — [`frame_spine.rs`](Rust/src/frame_spine.rs), [`design_sheaf.rs`](Rust/src/design_sheaf.rs).
-* **Composition / Pipeline:** Generic witness / stamp spine; domain steering purged @ `5a3df25` — TNA/vault types live in consumer crates.
-* **Computational Outcome:** Time-axis structure Matter / Knowing / Acting compose through under stamps.
-* **Honest limit:** `MaterialEvolutionFrontier` and `SheafCohomologySeam` are **Proposed** (`built = false`); no mix recipes here.
+
+* **Composition / Pipeline:** Generic witness / stamp spine. Domain steering purged @ `5a3df25` (infra-purity) — TNA/vault types live in consumer crates, not here.
+
+* **Computational Outcome:** A time-axis structure Matter / Knowing / Acting can compose through under stamps, without UCRS storing mix recipes or contribution content.
+
+* **Honest limit:** `MaterialEvolutionFrontier` and `SheafCohomologySeam` are **Proposed** (`built = false`). No mix recipes here — see cartridge [`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json).
 
 </details>
 
@@ -252,19 +263,34 @@ UCRS is the **temporal witness organ** of the gate spine — it **stamps** when 
 <details>
 <summary><b>4. Formal track honesty</b> (Lean L1–L8, catalog witnesses)</summary>
 
-* **Domain Focus / Integration Surface:** Lean `Ucrs/` track — see [`PROOF-STATUS.md`](PROOF-STATUS.md); manifold [`ucrs-catalog.json`](https://github.com/tytolabs/umst-manifold/blob/main/artifacts/ucrs-catalog.json) as tertiary preview.
-* **Composition / Pipeline:** Rust tests + gate are authoritative for runtime; Lean L5–L8 remain **sorry stubs** labeled Proposed.
-* **Computational Outcome:** Agents cite L1–L4 where proved; do not treat L5–L8 as shipped proofs.
-* **Honest limit:** Never hardcode rival catalog SHAs; re-open manifold lock + script.
+* **Domain Focus / Integration Surface:** Lean `Ucrs/` track — [`PROOF-STATUS.md`](PROOF-STATUS.md). Manifold [`ucrs-catalog.json`](https://github.com/tytolabs/umst-manifold/blob/main/artifacts/ucrs-catalog.json) is a tertiary fiber preview only.
+
+* **Composition / Pipeline:** Rust `cargo test` + gate are authoritative for runtime. Lean L5–L8 remain **sorry stubs** labeled Proposed — scaffolding, not shipped proofs.
+
+* **Computational Outcome:** Agents cite L1–L4 where proved and treat L5–L8 as roadmap, not as `lake`-green production claims.
+
+* **Honest limit:** Never hardcode rival catalog SHAs — re-open the manifold lock + count script.
 
 </details>
 
-**Cross-domain impact:** Without a shared stamp spine, “when” and “who paid thermodynamically” fragment across repos. UCRS makes **sync economics** and **provenance stamps** one composable layer.
+**Cross-domain impact.** Without a shared stamp spine, “when” and “who paid thermodynamically” fragment across repos. UCRS makes **sync economics** and **provenance stamps** one composable layer so catalog witnesses, memory ingest, and formal fibers can align on a single `ucrs_seq` / `stamp_tier` vocabulary ([`Rust/src/observation.rs`](Rust/src/observation.rs)).
+
+<details>
+<summary><strong>Worked composition examples (no new claims)</strong></summary>
+
+| Scenario | Matter / Knowing / Acting event | UCRS stamp role |
+|:---|:---|:---|
+| Cartridge `accept` after gate PASS | `contribution.v1` row written | `observed_at` / `ucrs_seq` on memory record |
+| Formal catalog export consumed | Manifold witness R0 before hot gate | Digest pin is **catalog** time-slice; stamp is **runtime** time |
+| Double-slit MI advisory | Observation cost computed in Lean | Stamp does not re-prove MI — links **when** cost was accounted |
+| Agent MCP `umst_contribute` | Cold-edge stdio | `UMST_UCRS_WITNESS=synthetic` in CI; `live` for Tier-2 |
+
+</details>
 
 <details>
 <summary><strong>What UCRS does NOT replace (scope guardrail)</strong></summary>
 
-1. **NTP/PTP** — UCRS provides a formal thermodynamic framework; it does not replace network time protocols ([`FOUNDATION.md`](FOUNDATION.md)).
+1. **NTP/PTP** — UCRS provides a thermodynamic sync framework; it does not replace network time protocols ([`FOUNDATION.md`](FOUNDATION.md)).
 2. **Research memory** — mix recipes and hydration outcomes live in cartridge [`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json).
 3. **Domain steering** — TNA / vault logic in consumer crates post infra-purity.
 4. **Hot physics** — DEC, solvers, arena mmap → [`umst-manifold`](https://github.com/tytolabs/umst-manifold).
