@@ -127,11 +127,11 @@ Time is not a free coordinate. Every agent that claims to share a “now” with
   - [9.3 Guarantees](#93-guarantees-fileline)
   - [9.4 Operational mapping](#94-operational-mapping)
   - [9.5 Proposed](#95-proposed-not-yet-built)
-  - [9.6 Principles](#96-principles-honest)
+  - [9.6 Principles](#96-principles)
 - [§10 Conclusion](#10-conclusion-inferences--forward-path)
   - [What this repo demonstrates](#what-this-repo-demonstrates)
   - [What surprised us](#what-surprised-us)
-  - [Forward path](#forward-path-honest)
+  - [Forward path](#forward-path)
 - [Related repositories](#related-repositories)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgments)
@@ -522,7 +522,7 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 | Lean L5–L8 | sorry stubs — not production proofs |
 | P2P mesh production | optional feature; in progress |
 
-### 9.6 Principles (honest)
+### 9.6 Principles
 
 * **Sync is measurement.** Clock alignment pays Landauer cost or is rejected — time is not a free coordinate.
 * **Stamps, not physics.** UCRS records when and how much information was spent; it does not validate constitutive law or re-prove MI.
@@ -541,11 +541,11 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 
 ### What surprised us
 
-- **Infra-purity @ `5a3df25`** — stripping domain steering from the core crate clarified the Time fiber; consumers own TNA/vault logic.
-- **Lean L5–L8 honesty** — sorry stubs are labeled Proposed so agents do not treat them as shipped proofs.
-- **Default `[]` features** — library consumers get stamps without pulling libp2p.
+- **Subtraction was the upgrade.** The infra-purity refactor (`5a3df25`) *removed* capability — TNA and steering logic left the core for consumer crates — and the fiber got better, not poorer. Forcing the Time layer to know nothing about concrete, vaults, or any domain is exactly what lets Matter, Knowing, and Acting all stamp against it. Frugality, it turned out, applies to the dependency graph, not only to the joules.
+- **Labeling "not yet proved" beats hiding it.** Lean L5–L8 are `sorry` stubs. Rather than quietly omit them, they carry a Proposed label so no agent mistakes a stub for a shipped proof. The honesty ledger we demand of the physics, we applied to our own proof status — and it made the repo easier to trust, not harder.
+- **The common case shouldn't pay for the rare one.** `default = []` means a consumer that only wants stamps never compiles `libp2p`. You pay for the P2P mesh only if you ask for it — the same "spend only what the work requires" ethic that governs sync, governing the build.
 
-### Forward path (honest)
+### Forward path
 
 - Close Lean L3–L8 gaps without new physics axioms.
 - Harden optional P2P path behind explicit feature + ops docs.
