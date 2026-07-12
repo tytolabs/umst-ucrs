@@ -6,6 +6,8 @@ Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Stud
 
 # Universal Calendar Resolution Spine
 
+**Repository:** [`tytolabs/umst-ucrs`](https://github.com/tytolabs/umst-ucrs) — **time** fiber: temporal witness / stamp spine + gate-checked sync economics.
+
 ### `umst-ucrs` — temporal witness / stamp spine
 
 > _This ecosystem is dedicated to the thousands of unnamed contributors who wrote formal proofs, maintained open-source compilers, and built mathematical libraries for years — often without evidence that any of it would be used beyond pure theory. They chose to make their work free, because they understood that knowledge about physical reality cannot be owned. Whatever this system achieves is yours._
@@ -14,7 +16,7 @@ Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Stud
 
 **What it is.** The **time** organ of the shared thermodynamic admissibility gate: a Rust library that makes time itself gate-checked and Landauer-frugal — multi-agent sync economics **and** a generic temporal-witness / stamp spine for design steps across the stack.
 
-**The gate / time idea.** Every sync is a typed measurement that resolves phase uncertainty at the Landauer floor (`k_B T ln 2` J/bit). Sync fires only when `gate_check` admits it against desync-energy budget and Clausius–Duhem on ψ; wasteful paths are rejected.
+**The gate idea.** Every sync is a typed measurement that resolves phase uncertainty at the Landauer floor (`k_B T ln 2` J/bit). Sync fires only when `gate_check` admits it against desync-energy budget and Clausius–Duhem on ψ; wasteful paths are **rejected** — structural accept/reject, not a soft penalty.
 
 **Honest is / isn't.** **Is:** Rust clock / gate / credit / Landauer / observation stamps / frame–sheaf–decision infra (post infra-purity @ `5a3df25`); optional `p2p` daemon path; Lean + Haskell + Python scaffolds with status in [`PROOF-STATUS.md`](PROOF-STATUS.md). **Isn't:** a hot-arena physics kernel, an MCP host, or domain steering (TNA / vault logic lives in consumer crates). Do **not** blend “Rust tests green”, “Lean L5–L8 proved”, and “mesh daemon production-ready” into one completion %.
 
@@ -37,6 +39,8 @@ These public repos share **one** thermodynamic admissibility gate, applied acros
 | **Time** | **this repo** ([`umst-ucrs`](https://github.com/tytolabs/umst-ucrs)) **← you are here** | Temporal witness / stamp spine |
 
 Sibling links only — no paper-series arc naming in this README. Already-public per-repo DOI badges stay where they exist; this repo does not invent new ones here.
+
+**Time substrate** (stamp spine + sync economics). Physics runtime, catalog lock, and cold-edge MCP live in [`umst-manifold`](https://github.com/tytolabs/umst-manifold) and [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge).
 
 ### Real objects (categorical — not “the system”)
 
@@ -70,9 +74,9 @@ UCRS is **infrastructure**, not a tensor hot-arena kernel.
 
 Do not imply UCRS sits on the manifold arena hot path. See [`docs/benchmarks/arena_vs_mcp.md`](https://github.com/tytolabs/umst-manifold/blob/main/docs/benchmarks/arena_vs_mcp.md) for hot/cold split on physics.
 
-### Honesty ledger (status @ `e4666ba`)
+### Honesty ledger (one status pointer)
 
-**One status pointer:** [`PROOF-STATUS.md`](PROOF-STATUS.md). Protocol detail: [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md). Formal lineage: [`FOUNDATION.md`](FOUNDATION.md). Roadmap: [`EXPERIMENTS_AND_ROADMAP.md`](EXPERIMENTS_AND_ROADMAP.md).
+Status accounting @ **`e4666ba`**. **One status pointer:** [`PROOF-STATUS.md`](PROOF-STATUS.md). Protocol detail: [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md). Formal lineage: [`FOUNDATION.md`](FOUNDATION.md). Roadmap: [`EXPERIMENTS_AND_ROADMAP.md`](EXPERIMENTS_AND_ROADMAP.md). Strengthen every disclaimer below; soften none.
 
 | Layer | Status | Evidence |
 |:---|:---|:---|
@@ -85,6 +89,10 @@ Do not imply UCRS sits on the manifold arena hot path. See [`docs/benchmarks/are
 | **Cohomology / memory H¹** | Seam only | `SheafCohomologySeam.built = false` ([`design_sheaf.rs:72–86`](Rust/src/design_sheaf.rs)) |
 
 **Infra-purity landmark:** domain steering (TNA / vault types) purged @ `5a3df25` (PR #9). UCRS does **not** store mix recipes or contribution content — those live in cartridge research memory ([`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json)).
+
+### UCRS in plain words
+
+Time is not a free coordinate. Every agent that claims to share a “now” with another agent is making a **measurement** — resolving uncertainty about phase offset at the Landauer floor. UCRS encodes that price in code: sync only when the gate admits it, stamp every durable accept with **when** and **how much information** was spent, and route multi-agent credit so accurate clocks become preferred sync partners. The **spine** (`Frame` → `Vertebra` → `DesignSheafOverSpine`) is the time-axis under those stamps — the **time morphism** Matter / Knowing / Acting compose through.
 
 <details>
 <summary><strong>Table of contents</strong></summary>
@@ -116,12 +124,6 @@ Two faces, one substance:
 > **The simple version:** a shared, gate-checked *now* — agents spend energy only when it improves their understanding of the present, and every durable accept can carry that thermodynamic time.
 
 **Mathematical spine (informal).** Let `H(phase_j | phase_i)` be conditional entropy resolved by a sync edge. Landauer cost is `E = k_B T ln(2) · H`. The credit ledger tracks bit transfers; greedy peer selection minimizes total `E` under accuracy constraints ([`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md) §4). Clock admissibility reuses the manifold / formal gate family (`clausius_duhem_admissible` via `umst-math`; formal `gateCheck` in [`umst-formal`](https://github.com/tytolabs/umst-formal)), specialized to desync-energy budgets.
-
-### UCRS in plain words
-
-Time is not a free coordinate. Every agent that claims to share a “now” with another agent is making a **measurement** — resolving uncertainty about phase offset. That resolution has a thermodynamic price floor. UCRS encodes that price in code: sync only when the gate admits it, stamp every durable accept with **when** and **how much information** was spent, and route multi-agent credit so accurate clocks become preferred sync partners.
-
-The **spine** (`Frame` → `Vertebra` → `DesignSheafOverSpine`) is how design steps line up on a time axis under those stamps — not a second product on top of Matter / Knowing / Acting, but the **time morphism** those fibers compose through.
 
 <details>
 <summary><strong>Landauer + credit properties (from CREDIT-SYSTEM)</strong></summary>
