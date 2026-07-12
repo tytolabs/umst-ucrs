@@ -556,12 +556,14 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 <a id="related-repositories"></a>
 ## Related repositories
 
-| Repo | Focus |
-|:---|:---|
-| [`umst-manifold`](https://github.com/tytolabs/umst-manifold) | DEC carrier + catalog lock |
-| [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) | Cementitious law + MCP |
-| [`umst-formal`](https://github.com/tytolabs/umst-formal) | Acting / Economic fiber |
-| [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) | Knowing / observation-cost fiber |
+Shared gate spine — **time** (this fiber) · **matter** · **knowing** · **acting**. Each sibling below is listed for how it composes **with this stamp / sync library**.
+
+| Repository | Spine role | Relation to this Time fiber |
+|:---|:---|:---|
+| [`umst-manifold`](https://github.com/tytolabs/umst-manifold) | **Matter** substrate | Hot DEC / gate / arena. UCRS does **not** replace solvers — it stamps *when* an admitted transition or catalog consume is recorded. Catalog digest SSOT stays on the manifold lock. |
+| [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) | **Matter** cartridge + MCP | MCP host and research memory. Optional `ucrs-provenance` / `UMST_UCRS_WITNESS` at contribute/accept — UCRS is a **library**, not `umst-mcp`. Mix recipes stay in cartridge `contribution.v1`. |
+| [`umst-formal`](https://github.com/tytolabs/umst-formal) | **Acting** | Kleisli / Economic admissibility predicates. A stamp marks when a commitment landed; it does not discharge `CoreAdmissible`. |
+| [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) | **Knowing** | Observation-cost proofs. A stamp links *when* MI / Landauer cost was accounted — it does not re-prove Englert / PMIC. |
 
 ---
 
