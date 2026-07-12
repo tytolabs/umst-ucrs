@@ -95,18 +95,35 @@ Status accounting @ **`e4666ba`**. **One status pointer:** [`PROOF-STATUS.md`](P
 Time is not a free coordinate. Every agent that claims to share a “now” with another agent is making a **measurement** — resolving uncertainty about phase offset at the Landauer floor. UCRS encodes that price in code: sync only when the gate admits it, stamp every durable accept with **when** and **how much information** was spent, and route multi-agent credit so accurate clocks become preferred sync partners. The **spine** (`Frame` → `Vertebra` → `DesignSheafOverSpine`) is the time-axis under those stamps — the **time morphism** Matter / Knowing / Acting compose through.
 
 <details>
-<summary><strong>Table of contents</strong></summary>
+<summary><strong>Table of contents</strong> (detailed map + outline)</summary>
 
-- [1. Core idea](#1-core-idea-sync-as-measurement)
-- [2. Architecture / stamp pipeline](#2-architecture--stamp-pipeline)
-- [3. Cross-Domain Integration](#3-cross-domain-integration)
-- [4. Exhaustive repository topology](#4-exhaustive-repository-topology)
-- [5. Surfaces & entrypoints](#5-surfaces--entrypoints)
-- [6. Quick Start](#6-quick-start)
-- [7. Cross-language / formal track](#7-cross-language--formal-track)
-- [8. Documentation hub](#8-documentation-hub)
-- [9. Special Protocol: Note to Autonomous AI Agents & Systems](#9-special-protocol-note-to-autonomous-ai-agents--systems)
-- [10. Conclusion: Inferences & Forward Path](#10-conclusion-inferences--forward-path)
+**Top-level map**
+
+| Block | Jump |
+|:---|:---|
+| Foundations | [§1](#1-core-idea-sync-as-measurement) · [§2](#2-architecture--stamp-pipeline) · [§3](#3-cross-domain-integration-specifications) |
+| Layout & ops | [§4](#4-exhaustive-repository-topology) · [§5](#5-surfaces--entrypoints) · [§6](#6-quick-start) |
+| Verification & docs | [§7](#7-cross-language--formal-track) · [§8](#8-documentation-hub) |
+| Agents & wrap-up | [§9](#9-special-protocol-note-to-autonomous-ai-agents--systems) · [§10](#10-conclusion-inferences--forward-path) · [Related](#related-repositories) |
+
+**Detailed outline**
+
+- [§1 Core idea (sync as measurement)](#1-core-idea-sync-as-measurement)
+- [§2 Architecture / stamp pipeline](#2-architecture--stamp-pipeline)
+- [§3 Cross-Domain Integration Specifications](#3-cross-domain-integration-specifications)
+  - [3.1 Multi-agent sync economics](#31-multi-agent-sync-economics)
+  - [3.2 Stamp / memory provenance](#32-stamp--memory-provenance)
+  - [3.3 Design spine / sheaf](#33-design-spine--sheaf)
+  - [3.4 Formal track honesty](#34-formal-track-honesty)
+- [§4 Repository topology](#4-exhaustive-repository-topology)
+- [§5 Surfaces & entrypoints](#5-surfaces--entrypoints)
+- [§6 Quick Start](#6-quick-start)
+- [§7 Cross-language / formal track](#7-cross-language--formal-track)
+- [§8 Documentation hub](#8-documentation-hub)
+- [§9 Special Protocol: Agents](#9-special-protocol-note-to-autonomous-ai-agents--systems)
+  - [9.1–9.6](#91-shared-stack-gate-spine)
+- [§10 Conclusion](#10-conclusion-inferences--forward-path)
+- [Related repositories](#related-repositories)
 
 </details>
 
@@ -194,35 +211,55 @@ Greedy highest-credit peer selection is Landauer-optimal on tree sync topologies
 
 ---
 
-## 3. Cross-Domain Integration
+## 3. Cross-Domain Integration Specifications
 
-UCRS is the **temporal witness organ** of the gate spine. It does not replace domain physics or formal proofs — it **stamps** when those fibers commit.
+UCRS is the **temporal witness organ** of the gate spine — it **stamps** when sibling fibers commit; it does not replace domain physics or formal proofs.
 
-| Sibling step | What UCRS adds | Honest limit |
-|:---|:---|:---|
-| **Matter** — manifold solve / cartridge `accept` | `UcrsObservedAt` on memory rows; `ucrs_seq` monotonicity | Does not validate constitutive law — gate does |
-| **Knowing** — measurement / MI cost | Stamp ties observation event to Landauer bookkeeping | Does not run Lean; see double-slit fiber |
-| **Acting** — Kleisli admissible transition | Temporal witness on commitment boundary | Does not prove Economic predicates |
-| **Agents** — MCP contribute | `UMST_UCRS_WITNESS` env; Tier-2 vs synthetic | MCP host = concrete; UCRS is library only |
-| **Multi-agent mesh** | Optional `p2p` feature; credit Byzantine collapse | Not production-complete; feature-gated |
+<a id="31-multi-agent-sync-economics"></a>
+<details>
+<summary><b>1. Multi-agent sync economics</b> (Mesh integrators, clock peers)</summary>
 
-**Worked composition examples (no new claims):**
+* **Domain Focus / Integration Surface:** `LocalClock` / `CreditLedger` / `landauer_cost` / optional P2P — [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md).
+* **Composition / Pipeline:** Greedy peer selection minimizes total Landauer `E` under accuracy constraints; Byzantine peers lose credit without a separate BFT protocol.
+* **Computational Outcome:** Shared, gate-checked *now* — agents spend energy only when sync improves phase understanding.
+* **Honest limit:** Not production-complete mesh; `p2p` is feature-gated; does not replace NTP/PTP ([`FOUNDATION.md`](FOUNDATION.md)).
 
-| Scenario | Matter / Knowing / Acting event | UCRS stamp role |
-|:---|:---|:---|
-| Cartridge `accept` after gate PASS | `contribution.v1` row written | `observed_at` / `ucrs_seq` on memory record |
-| Formal catalog export consumed | Manifold witness R0 before hot gate | Digest pin is **catalog** time-slice; stamp is **runtime** time |
-| Double-slit MI advisory | Observation cost computed in Lean | Stamp does not re-prove MI — links **when** cost was accounted |
-| Agent MCP `umst_contribute` | Cold-edge stdio | `UMST_UCRS_WITNESS=synthetic` in CI; `live` for Tier-2 |
+</details>
 
-**Cross-domain impact:** Without a shared stamp spine, “when” and “who paid thermodynamically” fragment across repos. UCRS makes **sync economics** and **provenance stamps** one composable layer so catalog witnesses, memory ingest, and formal fibers can align on a single `ucrs_seq` / `stamp_tier` vocabulary ([`Rust/src/observation.rs`](Rust/src/observation.rs)).
+<a id="32-stamp--memory-provenance"></a>
+<details>
+<summary><b>2. Stamp / memory provenance</b> (Memory ingest, agent MCP)</summary>
 
-**Integration hooks (verified paths):**
+* **Domain Focus / Integration Surface:** `UcrsObservedAt`, `TemporalWitness`, `UMST_UCRS_WITNESS` — [`Rust/src/observation.rs`](Rust/src/observation.rs).
+* **Composition / Pipeline:** Cartridge `ucrs-provenance` at memory accept; `witness_for_agent` from [`Rust/src/lib.rs:87`](Rust/src/lib.rs) for Tier-2 vs synthetic.
+* **Computational Outcome:** `ucrs_seq` monotonicity on durable accepts; catalog digest pin is **catalog** time-slice — stamp is **runtime** time.
+* **Honest limit:** Does not validate constitutive law — gate does; MCP host = concrete only.
 
-- Cartridge `ucrs-provenance` ingest at memory accept — sibling concrete repo.
-- `witness_for_agent` from [`Rust/src/lib.rs:87`](Rust/src/lib.rs) for agent-configured Tier-2 vs synthetic.
-- Catalog digest SSOT = manifold lock only — never hardcode rival SHAs in this README.
-- Lean L5–L8 remain **sorry stubs** — see [`PROOF-STATUS.md`](PROOF-STATUS.md) before citing as proved.
+</details>
+
+<a id="33-design-spine--sheaf"></a>
+<details>
+<summary><b>3. Design spine / sheaf</b> (Design-time integrators)</summary>
+
+* **Domain Focus / Integration Surface:** `Frame` → `Vertebra` → `DesignSheafOverSpine` — [`frame_spine.rs`](Rust/src/frame_spine.rs), [`design_sheaf.rs`](Rust/src/design_sheaf.rs).
+* **Composition / Pipeline:** Generic witness / stamp spine; domain steering purged @ `5a3df25` — TNA/vault types live in consumer crates.
+* **Computational Outcome:** Time-axis structure Matter / Knowing / Acting compose through under stamps.
+* **Honest limit:** `MaterialEvolutionFrontier` and `SheafCohomologySeam` are **Proposed** (`built = false`); no mix recipes here.
+
+</details>
+
+<a id="34-formal-track-honesty"></a>
+<details>
+<summary><b>4. Formal track honesty</b> (Lean L1–L8, catalog witnesses)</summary>
+
+* **Domain Focus / Integration Surface:** Lean `Ucrs/` track — see [`PROOF-STATUS.md`](PROOF-STATUS.md); manifold [`ucrs-catalog.json`](https://github.com/tytolabs/umst-manifold/blob/main/artifacts/ucrs-catalog.json) as tertiary preview.
+* **Composition / Pipeline:** Rust tests + gate are authoritative for runtime; Lean L5–L8 remain **sorry stubs** labeled Proposed.
+* **Computational Outcome:** Agents cite L1–L4 where proved; do not treat L5–L8 as shipped proofs.
+* **Honest limit:** Never hardcode rival catalog SHAs; re-open manifold lock + script.
+
+</details>
+
+**Cross-domain impact:** Without a shared stamp spine, “when” and “who paid thermodynamically” fragment across repos. UCRS makes **sync economics** and **provenance stamps** one composable layer.
 
 <details>
 <summary><strong>What UCRS does NOT replace (scope guardrail)</strong></summary>
@@ -445,15 +482,22 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 | Lean L5–L8 | sorry stubs — not production proofs |
 | P2P mesh production | optional feature; in progress |
 
+### 9.6 Principles (honest)
+
+* **Sync is measurement.** Clock alignment pays Landauer cost or is rejected — time is not a free coordinate.
+* **Stamps, not physics.** UCRS records when and how much information was spent; it does not validate constitutive law or re-prove MI.
+* **Infra-purity.** Domain steering and mix content live in consumer crates — the Time fiber stays generic.
+* **Tests over stubs.** Rust gate + tests are authoritative; Lean L5–L8 remain Proposed until discharged.
+
 ---
 
 ## 10. Conclusion: Inferences & Forward Path
 
 ### What this repo demonstrates
 
-- **Sync is measurement** — clock alignment pays Landauer cost or is rejected.
-- **Credit is thermodynamic accounting** — not cryptocurrency; Byzantine collapse without a separate BFT story.
-- **Stamps compose** — `UcrsObservedAt` lets Matter / Knowing / Acting events share a when+provenance vocabulary.
+- **Sync is measurement, not free time** — resolving phase uncertainty costs at least the Landauer floor; paths that cost more than they return are gate-rejected.
+- **Credit is thermodynamic accounting** — accuracy trades as credit so low-drift peers become preferred partners; Byzantine collapse without inventing a separate BFT story.
+- **Stamps compose the spine** — `UcrsObservedAt` and `ucrs_seq` give Matter / Knowing / Acting events a shared when+provenance vocabulary without duplicating their physics.
 
 ### What surprised us
 
@@ -469,7 +513,8 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 
 ---
 
-### Related repositories
+<a id="related-repositories"></a>
+## Related repositories
 
 | Repo | Focus |
 |:---|:---|
@@ -479,6 +524,28 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 | [`umst-formal-double-slit`](https://github.com/tytolabs/umst-formal-double-slit) | Knowing / observation-cost fiber |
 
 ---
+
+---
+
+## Authors
+
+**Santhosh Shyamsundar** — Studio TYTO; IAAC Barcelona · [santhoshshyamsundar@tyto.studio](mailto:santhoshshyamsundar@tyto.studio)
+
+**Santosh Prabhu Shenbagamoorthy** — Studio TYTO; IAAC Barcelona · [santosh@tyto.studio](mailto:santosh@tyto.studio)
+
+---
+
+## Acknowledgments
+
+Portions of this work were developed in collaboration with advanced large-language-model tools, across multiple model iterations.
+Claude Opus and Sonnet (Anthropic) provided surgical precision during drafting and refinement.
+Gemini (Google) offered exceptional large-context planning and file management.
+Grok (xAI) and its collaborative reasoning team contributed core mathematical and scientific reasoning.
+The Cursor code editor, Composer, Claude Code, and Antigravity supported seamless implementation and agentic file management.
+
+The large-language models assisted with exploration, drafting, and code scaffolding — never with the validity of formal proofs or gate tests. Rust integration tests and `cargo test` are authoritative for runtime behavior; Lean scaffolds are labeled honestly in [`PROOF-STATUS.md`](PROOF-STATUS.md).
+
+We gratefully acknowledge the open-source ecosystems that make this work possible: **Rust** (primary deliverable); **Lean** scaffolds; **Haskell** (QuickCheck); and **Python** simulations.
 
 ## Citation
 
