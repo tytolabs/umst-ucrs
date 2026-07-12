@@ -36,7 +36,7 @@ These public repos share **one** thermodynamic admissibility gate, applied acros
 | **Acting** | [`umst-formal`](https://github.com/tytolabs/umst-formal) | Economic-admissibility formal fiber |
 | **Time** | **this repo** ([`umst-ucrs`](https://github.com/tytolabs/umst-ucrs)) **← you are here** | Temporal witness / stamp spine |
 
-Sibling links only — no programme/paper framing in this README. Already-public per-repo DOI badges stay where they exist; this repo does not invent new ones here.
+Sibling links only — no paper-series arc naming in this README. Already-public per-repo DOI badges stay where they exist; this repo does not invent new ones here.
 
 **Compositional cohesion.** Matter / knowing / acting each run under the shared gate. UCRS supplies the **when + provenance** morphism: any design step (manifold solve, cartridge accept, formal Kleisli step, double-slit observation cost) can carry a `UcrsObservedAt` stamp. The spine (`Frame` → ordered `Vertebra` → `DesignSheafOverSpine`) is the time-axis under that stamp — not a second product.
 
@@ -98,7 +98,7 @@ Consumers (e.g. cartridge `ucrs-provenance`) depend on the library only. Do not 
 
 | Layer | Status | Evidence |
 |:---|:---|:---|
-| **Rust library** | Working | `cd Rust && cargo test` @ `5a3df25` → **59** passed, 0 failed (paste below) |
+| **Rust library** | Working | `cd Rust && cargo test` @ `0921552` → **59** passed, 0 failed (paste below) |
 | **P2P daemon** | Optional / in progress | Feature-gated; not required for stamps |
 | **Lean** | Mixed | L1–L2 proved; L3 partial; L4 axiom; L5–L8 **sorry stubs** — see [`PROOF-STATUS.md`](PROOF-STATUS.md). Treat L5–L8 as **Proposed (not yet built)** as proofs. |
 | **Haskell QuickCheck** | Scaffold | 5 properties in `Haskell/test/Spec.hs` ([`PROOF-STATUS.md`](PROOF-STATUS.md)) |
@@ -108,14 +108,14 @@ Consumers (e.g. cartridge `ucrs-provenance`) depend on the library only. Do not 
 
 **Strengthen — do not soften:** UCRS does **not** store mix recipes, hydration outcomes, or contribution content — those live in cartridge research memory ([`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json)). Infra-purity purged TNA / vault domain types from this crate; consumers own domain steering.
 
-### Rust test paste (`origin/master` @ `5a3df25`)
+### Rust test paste (`origin/master` @ `0921552`)
 
 ```bash
-git checkout 5a3df25   # or origin/master after merge of infra-purity
+git checkout 0921552   # or origin/master
 cd Rust && cargo test
 ```
 
-Summary (full run 2026-07-12, SHA `5a3df255cb6d6a1d53937bd33444b39083667c00`):
+Summary (full run 2026-07-12, SHA `0921552b93939f49041e53d8e1ac2070d94cbd82`):
 
 ```text
 lib unit tests:                 39 passed
