@@ -96,6 +96,7 @@ Time is not a free coordinate. Every agent that claims to share a “now” with
 
 <details>
 <summary><strong>Table of contents</strong> (detailed map + outline)</summary>
+<br>
 
 **Top-level map**
 
@@ -104,9 +105,9 @@ Time is not a free coordinate. Every agent that claims to share a “now” with
 | Foundations | [§1](#1-core-idea-sync-as-measurement) · [§2](#2-architecture--stamp-pipeline) · [§3](#3-cross-domain-integration-specifications) |
 | Layout & ops | [§4](#4-exhaustive-repository-topology) · [§5](#5-surfaces--entrypoints) · [§6](#6-quick-start) |
 | Verification & docs | [§7](#7-cross-language--formal-track) · [§8](#8-documentation-hub) |
-| Agents & wrap-up | [§9](#9-special-protocol-note-to-autonomous-ai-agents--systems) · [§10](#10-conclusion-inferences--forward-path) · [Related](#related-repositories) |
+| Agents & wrap-up | [§9](#9-special-protocol-note-to-autonomous-ai-agents--systems) · [§10](#10-conclusion-inferences--forward-path) · [Related](#related-repositories) · [Authors](#authors) · [Acknowledgments](#acknowledgments) · [Contributing](#contributing) · [Citation](#citation) · [License](#license) |
 
-**Detailed outline**
+**Detailed outline** — every entry links to a stable anchor (`README.md#…`); collapsible sections use `<details>` but share the same deep-link fragments.
 
 - [§1 Core idea (sync as measurement)](#1-core-idea-sync-as-measurement)
 - [§2 Architecture / stamp pipeline](#2-architecture--stamp-pipeline)
@@ -121,9 +122,22 @@ Time is not a free coordinate. Every agent that claims to share a “now” with
 - [§7 Cross-language / formal track](#7-cross-language--formal-track)
 - [§8 Documentation hub](#8-documentation-hub)
 - [§9 Special Protocol: Agents](#9-special-protocol-note-to-autonomous-ai-agents--systems)
-  - [9.1–9.6](#91-shared-stack-gate-spine)
+  - [9.1 Shared stack](#91-shared-stack-gate-spine)
+  - [9.2 Hot vs cold](#92-hot-vs-cold-this-fiber)
+  - [9.3 Guarantees](#93-guarantees-fileline)
+  - [9.4 Operational mapping](#94-operational-mapping)
+  - [9.5 Proposed](#95-proposed-not-yet-built)
+  - [9.6 Principles](#96-principles-honest)
 - [§10 Conclusion](#10-conclusion-inferences--forward-path)
+  - [What this repo demonstrates](#what-this-repo-demonstrates)
+  - [What surprised us](#what-surprised-us)
+  - [Forward path](#forward-path-honest)
 - [Related repositories](#related-repositories)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgments)
+- [Contributing](#contributing)
+- [Citation](#citation)
+- [License](#license)
 
 </details>
 
@@ -551,8 +565,6 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 
 ---
 
----
-
 ## Authors
 
 **Santhosh Shyamsundar** — Studio TYTO · [santhoshshyamsundar@tyto.studio](mailto:santhoshshyamsundar@tyto.studio)
@@ -573,6 +585,14 @@ The large-language models assisted with exploration, drafting, and code scaffold
 
 We gratefully acknowledge the open-source ecosystems that make this work possible: **Rust** (primary deliverable); **Lean** scaffolds; **Haskell** (QuickCheck); and **Python** simulations.
 
+---
+
+## Contributing
+
+Corrections welcome via PR. Run `cd Rust && cargo test` before Rust changes; update [`PROOF-STATUS.md`](PROOF-STATUS.md) when Lean track status changes. Do not soften honesty limits in [`FOUNDATION.md`](FOUNDATION.md) or credit docs.
+
+---
+
 ## Citation
 
 ```bibtex
@@ -586,10 +606,8 @@ We gratefully acknowledge the open-source ecosystems that make this work possibl
 }
 ```
 
-## Contributing
-
-Corrections welcome via PR. Run `cd Rust && cargo test` before Rust changes; update [`PROOF-STATUS.md`](PROOF-STATUS.md) when Lean track status changes. Do not soften honesty limits in [`FOUNDATION.md`](FOUNDATION.md) or credit docs.
+---
 
 ## License
 
-MIT License. Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO.
+Released under the [MIT License](LICENSE). © 2026 Studio TYTO.
