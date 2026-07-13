@@ -8,24 +8,24 @@ Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Stud
 
 **Repository:** [`tytolabs/umst-ucrs`](https://github.com/tytolabs/umst-ucrs) — **time** fiber: temporal witness / stamp spine + gate-checked sync economics.
 
-### `umst-ucrs` — temporal witness / stamp spine
-
-> _This ecosystem is dedicated to the thousands of unnamed contributors who wrote formal proofs, maintained open-source compilers, and built mathematical libraries for years — often without evidence that any of it would be used beyond pure theory. They chose to make their work free, because they understood that knowledge about physical reality cannot be owned. Whatever this system achieves is yours._
-
-**Gloss.** “Calendar” here means systems of time-representation (Y2038-class epoch/clock drift), not appointments; UCRS is the constitutional-time and temporal-provenance spine.
-
-**What it is.** The **time** organ of the shared thermodynamic admissibility gate: a Rust library that makes time itself gate-checked and Landauer-frugal — multi-agent sync economics **and** a generic temporal-witness / stamp spine for design steps across the stack.
-
-**The gate idea.** Every sync is a typed measurement that resolves phase uncertainty at the Landauer floor (`k_B T ln 2` J/bit). Sync fires only when `gate_check` admits it against desync-energy budget and Clausius–Duhem on ψ; wasteful paths are **rejected** — structural accept/reject, not a soft penalty.
-
-**Honest is / isn't.** **Is:** Rust clock / gate / credit / Landauer / observation stamps / frame–sheaf–decision infra (post infra-purity @ `5a3df25`); optional `p2p` daemon path; Lean + Haskell + Python scaffolds with status in [`PROOF-STATUS.md`](PROOF-STATUS.md). **Isn't:** a hot-arena physics kernel, an MCP host, or domain steering (TNA / vault logic lives in consumer crates). Do **not** blend “Rust tests green”, “Lean L5–L8 proved”, and “mesh daemon production-ready” into one completion %.
-
 <!-- readme:status -->
 [![CI — Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
 [![CI — Lean](https://github.com/tytolabs/umst-ucrs/actions/workflows/lean.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/lean.yml)
 [![CI — Haskell](https://github.com/tytolabs/umst-ucrs/actions/workflows/haskell.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/haskell.yml)
 [![CI — Python](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
+
+> _This ecosystem is dedicated to the thousands of unnamed contributors who wrote formal proofs, maintained open-source compilers, and built mathematical libraries for years — often without evidence that any of it would be used beyond pure theory. They chose to make their work free, because they understood that knowledge about physical reality cannot be owned. Whatever this system achieves is yours._
+
+### UCRS in plain words
+
+Time is not a free coordinate. Every agent that claims to share a “now” with another agent is making a **measurement** — resolving uncertainty about phase offset at the Landauer floor. UCRS encodes that price in code: sync only when the gate admits it, stamp every durable accept with **when** and **how much information** was spent, and route multi-agent credit so accurate clocks become preferred sync partners. The **spine** (`Frame` → `Vertebra` → `DesignSheafOverSpine`) is the time-axis under those stamps — the **time morphism** Matter / Knowing / Acting compose through.
+
+**Gloss.** “Calendar” here means systems of time-representation (Y2038-class epoch/clock drift), not appointments; UCRS is the constitutional-time and temporal-provenance spine.
+
+**What it is.** The **time** organ of the shared thermodynamic admissibility gate: a Rust library that makes time itself gate-checked and Landauer-frugal — multi-agent sync economics **and** a generic temporal-witness / stamp spine for design steps across the stack.
+
+**The gate idea.** Every sync is a typed measurement that resolves phase uncertainty at the Landauer floor (`k_B T ln 2` J/bit). Sync fires only when `gate_check` admits it against desync-energy budget and Clausius–Duhem on ψ; wasteful paths are **rejected** — structural accept/reject, not a soft penalty.
 
 ### Shared stack (matter · knowing · acting · time)
 
@@ -61,39 +61,6 @@ Sibling links only — no paper-series arc naming in this README. Already-public
 
 Wire schema for ticks: [`Rust/src/wire.rs`](Rust/src/wire.rs). Logging / HLC policy (HLC never overwrites `ucrs_seq`): [`Docs/LOGGING_POLICY.md`](Docs/LOGGING_POLICY.md) · [`Docs/HLC_SIDECAR.md`](Docs/HLC_SIDECAR.md).
 
-### Hot arena vs cold edge (performance honesty)
-
-UCRS is **infrastructure**, not a tensor hot-arena kernel.
-
-| Path | What | Where | Character |
-|:---|:---|:---|:---|
-| **Hot (library)** | In-process stamp / witness / gate / credit / spine types | `Rust/src/` — default features `[]` | Pure-ish Rust; no libp2p in default consumers |
-| **Warm** | Cartridge `ucrs-provenance` ingest attaches stamps at accept boundary | [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) | Cold-edge MCP; not UCRS-hosted |
-| **Cold** | Optional P2P gossip daemon | `Rust/src/p2p.rs`, `Rust/src/bin/p2p.rs` — `--features p2p` | Network I/O; not required for stamps |
-| **Not here** | DEC cochains, Burn solvers, MCP tools | [`umst-manifold`](https://github.com/tytolabs/umst-manifold), concrete `umst-mcp` | Authoritative MCP = concrete [`AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md) |
-
-Do not imply UCRS sits on the manifold arena hot path. See [`docs/benchmarks/arena_vs_mcp.md`](https://github.com/tytolabs/umst-manifold/blob/main/docs/benchmarks/arena_vs_mcp.md) for hot/cold split on physics.
-
-### Honesty ledger (one status pointer)
-
-Status accounting @ **`e4666ba`**. **One status pointer:** [`PROOF-STATUS.md`](PROOF-STATUS.md). Protocol detail: [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md). Formal lineage: [`FOUNDATION.md`](FOUNDATION.md). Roadmap: [`EXPERIMENTS_AND_ROADMAP.md`](EXPERIMENTS_AND_ROADMAP.md). Strengthen every disclaimer below; soften none.
-
-| Layer | Status | Evidence |
-|:---|:---|:---|
-| **Rust library** | Working | `cd Rust && cargo test` @ **`e4666ba`** → **59** passed, 0 failed (paste in [§6](#6-quick-start)) |
-| **P2P daemon** | Optional / in progress | Feature-gated; not required for stamps |
-| **Lean** | Mixed | L1–L2 proved; L3 partial; L4 axiom; L5–L8 **sorry stubs** — see [`PROOF-STATUS.md`](PROOF-STATUS.md) |
-| **Haskell QuickCheck** | Scaffold | 5 properties in `Haskell/test/Spec.hs` |
-| **Python sims** | Foundation | `Python/sim/` topology + drift studies |
-| **Material evolution between vertebrae** | **Proposed (not yet built)** | `MaterialEvolutionFrontier.built = false` ([`design_sheaf.rs:89–107`](Rust/src/design_sheaf.rs)) |
-| **Cohomology / memory H¹** | Seam only | `SheafCohomologySeam.built = false` ([`design_sheaf.rs:72–86`](Rust/src/design_sheaf.rs)) |
-
-**Infra-purity landmark:** domain steering (TNA / vault types) purged @ `5a3df25` (PR #9). UCRS does **not** store mix recipes or contribution content — those live in cartridge research memory ([`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json)).
-
-### UCRS in plain words
-
-Time is not a free coordinate. Every agent that claims to share a “now” with another agent is making a **measurement** — resolving uncertainty about phase offset at the Landauer floor. UCRS encodes that price in code: sync only when the gate admits it, stamp every durable accept with **when** and **how much information** was spent, and route multi-agent credit so accurate clocks become preferred sync partners. The **spine** (`Frame` → `Vertebra` → `DesignSheafOverSpine`) is the time-axis under those stamps — the **time morphism** Matter / Knowing / Acting compose through.
-
 <details>
 <summary><strong>Table of contents</strong> (detailed map + outline)</summary>
 <br>
@@ -105,7 +72,7 @@ Time is not a free coordinate. Every agent that claims to share a “now” with
 | Foundations | [§1](#1-core-idea-sync-as-measurement) · [§2](#2-architecture--stamp-pipeline) · [§3](#3-cross-domain-integration-specifications) |
 | Layout & ops | [§4](#4-exhaustive-repository-topology) · [§5](#5-surfaces--entrypoints) · [§6](#6-quick-start) |
 | Verification & docs | [§7](#7-cross-language--formal-track) · [§8](#8-documentation-hub) |
-| Agents & wrap-up | [§9](#9-special-protocol-note-to-autonomous-ai-agents--systems) · [§10](#10-conclusion-inferences--forward-path) · [Related](#related-repositories) · [Authors](#authors) · [Acknowledgments](#acknowledgments) · [Contributing](#contributing) · [Citation](#citation) · [License](#license) |
+| Agents & wrap-up | [§9](#9-special-protocol-note-to-autonomous-ai-agents--systems) · [§10](#10-honesty-and-limits) · [§11](#11-conclusion-inferences--forward-path) · [Related](#related-repositories) · [Authors](#authors) · [Acknowledgments](#acknowledgments) · [Contributing](#contributing) · [Citation](#citation) · [License](#license) |
 
 **Detailed outline** — every entry links to a stable anchor (`README.md#…`); collapsible sections use `<details>` but share the same deep-link fragments.
 
@@ -128,7 +95,8 @@ Time is not a free coordinate. Every agent that claims to share a “now” with
   - [9.4 Operational mapping](#94-operational-mapping)
   - [9.5 Proposed](#95-proposed-not-yet-built)
   - [9.6 Principles](#96-principles)
-- [§10 Conclusion](#10-conclusion-inferences--forward-path)
+- [§10 Honesty and limits](#10-honesty-and-limits)
+- [§11 Conclusion](#11-conclusion-inferences--forward-path)
   - [What this repo demonstrates](#what-this-repo-demonstrates)
   - [What surprised us](#what-surprised-us)
   - [Forward path](#forward-path)
@@ -142,7 +110,6 @@ Time is not a free coordinate. Every agent that claims to share a “now” with
 </details>
 
 ---
-
 ## 1. Core idea (sync as measurement)
 
 Atomic clocks give a precise physical *tick*. UCRS sits **above** them and does what they cannot: it measures **temporal drift** between clocks and agents, and forces each sync to pay only the **Landauer-floor** cost to resolve phase uncertainty. If a sync path would cost more than it returns, the thermodynamic gate **rejects** it.
@@ -531,7 +498,41 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 
 ---
 
-## 10. Conclusion: Inferences & Forward Path
+
+## 10. Honesty and limits
+
+**Honest is / isn't.** **Is:** Rust clock / gate / credit / Landauer / observation stamps / frame–sheaf–decision infra (post infra-purity @ `5a3df25`); optional `p2p` daemon path; Lean + Haskell + Python scaffolds with status in [`PROOF-STATUS.md`](PROOF-STATUS.md). **Isn't:** a hot-arena physics kernel, an MCP host, or domain steering (TNA / vault logic lives in consumer crates). Do **not** blend “Rust tests green”, “Lean L5–L8 proved”, and “mesh daemon production-ready” into one completion %.
+
+### Hot arena vs cold edge (performance honesty)
+
+UCRS is **infrastructure**, not a tensor hot-arena kernel.
+
+| Path | What | Where | Character |
+|:---|:---|:---|:---|
+| **Hot (library)** | In-process stamp / witness / gate / credit / spine types | `Rust/src/` — default features `[]` | Pure-ish Rust; no libp2p in default consumers |
+| **Warm** | Cartridge `ucrs-provenance` ingest attaches stamps at accept boundary | [`umst-concrete-cartridge`](https://github.com/tytolabs/umst-concrete-cartridge) | Cold-edge MCP; not UCRS-hosted |
+| **Cold** | Optional P2P gossip daemon | `Rust/src/p2p.rs`, `Rust/src/bin/p2p.rs` — `--features p2p` | Network I/O; not required for stamps |
+| **Not here** | DEC cochains, Burn solvers, MCP tools | [`umst-manifold`](https://github.com/tytolabs/umst-manifold), concrete `umst-mcp` | Authoritative MCP = concrete [`AGENT_MCP.md`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/docs/AGENT_MCP.md) |
+
+Do not imply UCRS sits on the manifold arena hot path. See [`docs/benchmarks/arena_vs_mcp.md`](https://github.com/tytolabs/umst-manifold/blob/main/docs/benchmarks/arena_vs_mcp.md) for hot/cold split on physics.
+
+### Honesty ledger (one status pointer)
+
+Status accounting @ **`e4666ba`**. **One status pointer:** [`PROOF-STATUS.md`](PROOF-STATUS.md). Protocol detail: [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md). Formal lineage: [`FOUNDATION.md`](FOUNDATION.md). Roadmap: [`EXPERIMENTS_AND_ROADMAP.md`](EXPERIMENTS_AND_ROADMAP.md). Strengthen every disclaimer below; soften none.
+
+| Layer | Status | Evidence |
+|:---|:---|:---|
+| **Rust library** | Working | `cd Rust && cargo test` @ **`e4666ba`** → **59** passed, 0 failed (paste in [§6](#6-quick-start)) |
+| **P2P daemon** | Optional / in progress | Feature-gated; not required for stamps |
+| **Lean** | Mixed | L1–L2 proved; L3 partial; L4 axiom; L5–L8 **sorry stubs** — see [`PROOF-STATUS.md`](PROOF-STATUS.md) |
+| **Haskell QuickCheck** | Scaffold | 5 properties in `Haskell/test/Spec.hs` |
+| **Python sims** | Foundation | `Python/sim/` topology + drift studies |
+| **Material evolution between vertebrae** | **Proposed (not yet built)** | `MaterialEvolutionFrontier.built = false` ([`design_sheaf.rs:89–107`](Rust/src/design_sheaf.rs)) |
+| **Cohomology / memory H¹** | Seam only | `SheafCohomologySeam.built = false` ([`design_sheaf.rs:72–86`](Rust/src/design_sheaf.rs)) |
+
+**Infra-purity landmark:** domain steering (TNA / vault types) purged @ `5a3df25` (PR #9). UCRS does **not** store mix recipes or contribution content — those live in cartridge research memory ([`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/blob/main/schemas/contribution.v1.json)).
+
+## 11. Conclusion: Inferences & Forward Path
 
 ### What this repo demonstrates
 
