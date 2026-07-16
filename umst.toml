@@ -1,0 +1,16 @@
+# Self-description manifest (blueprint §18 / NEW_REPOS_BUILD_SPEC C8).
+# Consumed by umst-meta when implemented; not checked yet.
+
+name = "tytolabs/umst-ucrs"
+path = "umst-ucrs"
+
+kind = "spine"
+spdx = "MIT"
+layer = "spine"
+formal_anchors = ["physicalSecondLaw"]
+status = "wip"
+
+[registry]
+id = "tytolabs/umst-ucrs"
+validation_status = "unvalidated"
+notes = "Time fiber — temporal witness / stamp spine + Landauer sync economics."
