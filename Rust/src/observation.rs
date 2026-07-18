@@ -231,7 +231,13 @@ mod tests {
         let mut w = TemporalWitness::new(1);
         let a = w.stamp();
         let b = w.stamp();
-        assert!(b.ucrs_seq.unwrap() > a.ucrs_seq.unwrap());
+        let a_seq = a
+            .ucrs_seq
+            .expect("TemporalWitness first stamp must emit ucrs_seq (FP §6 Track T.1)");
+        let b_seq = b
+            .ucrs_seq
+            .expect("TemporalWitness second stamp must emit ucrs_seq (FP §6 Track T.1)");
+        assert!(b_seq > a_seq);
     }
 
     #[test]
