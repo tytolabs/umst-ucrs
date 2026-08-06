@@ -1,6 +1,13 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
 
+//! Consumer contract: `umst_ucrs::shared_types::frame_spine` (Wave 1 · CELL_UCRS_READY_U2_FRAME).
+//! Cast-spine morphisms reachable via `Frame` · `Spine` · `Vertebra` · `SpineTime` · `MaterialState` —
+//! **not** daemon · p2p · agent_tick.
+//!
+//! **Morphisms (consumer hot path):** `Frame::default_negative_y` · `SpineTime::{origin,service,strike_early_age}` ·
+//! `MaterialState::{cured_service,early_age_strike}` · `Spine::{final_vertebra,cast_rho}` · `UnitVec3::negative_y`.
+//!
 //! UCRS frame / spine contract — coupling root for geometry × material × load × time.
 //!
 //! Additive foundation: cast funicular is the 2-vertebra degenerate case; print / steer /
@@ -241,5 +248,15 @@ mod tests {
         let f = Frame::default_negative_y();
         assert_eq!(f.gravity_dir, UnitVec3::negative_y());
         assert_eq!(f.time_origin.label, "formwork_strike");
+    }
+
+    #[test]
+    fn w8e14_empty_spine_has_no_cast_rho() {
+        let spine = Spine {
+            frame: Frame::default_negative_y(),
+            vertebrae: vec![],
+        };
+        assert!(spine.final_vertebra().is_none());
+        assert!(spine.cast_rho().is_none());
     }
 }

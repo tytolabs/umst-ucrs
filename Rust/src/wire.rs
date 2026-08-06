@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 // Wire format for gossip P2P: JSON payload + 32-byte keyed digest `sig` (no libp2p in this module).
 
+//! Consumer contract: `umst_ucrs::shared_types::wire` (Wave 1 · CELL_UCRS_READY_U1_WIRE).
+//! Stamps-only consumers import `ClockTick`, `sign_tick`, `verify_tick` — **not**
+//! `apply_inbound_clock_tick` on web/concrete hot paths.
+//!
 //! **Schema:** `ClockTick` JSON fields `agent_id`, `phase_entropy_bits`, `landauer_cost_j`,
 //! `accuracy_score`, `sig` (hex-ready byte array serialized as JSON array of u8 in tests; over
 //! the wire the daemon uses raw `serde_json` of the struct with sig as `[u8;32]`).
@@ -178,5 +182,22 @@ mod tests {
         let o = apply_inbound_clock_tick(&mut clock, &mut ledger, &config, &tick, b"k");
         assert_eq!(o, MergeOutcome::Accepted);
         assert!(ledger.peers.contains_key(&2));
+    }
+
+    #[test]
+    fn w8e14_invalid_sig_rejects() {
+        let mut clock = LocalClock::new(10.0, 300.0);
+        clock.phase_uncertainty_sec = 1e-6;
+        let mut ledger = CreditLedger::new(1, 300.0);
+        let config = AgentConfig::default();
+        let tick = ClockTick {
+            agent_id: 2,
+            phase_entropy_bits: 2.0,
+            landauer_cost_j: 0.0,
+            accuracy_score: 0.99,
+            sig: [0xFF; 32],
+        };
+        let o = apply_inbound_clock_tick(&mut clock, &mut ledger, &config, &tick, b"k");
+        assert_eq!(o, MergeOutcome::RejectedBadSig);
     }
 }

@@ -1,11 +1,32 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
 
-//! Thermodynamic admissibility gate for clock synchronization.
+//! Consumer contract: `umst_ucrs::gate` (Wave 3 · CELL_UCRS_READY_U3_GATE).
+//! Sync-economics gate morphisms reachable via `gate_check` · `gated_sync` ·
+//! `ClockThermState` · `GateVerdict` — **not** material CD (cartridge `umst-gate` owns matter).
 //!
-//! Binds the Clausius–Duhem conjunct via [`umst_math::clausius_duhem_admissible`] (SSOT —
-//! same predicate family as `gateCheck` in `umst-formal/Lean/Compat/Gate.lean` on ψ).
-//! Clock sync adds Landauer budget + desync-energy domain on [`ClockThermState`].
+//! **Morphisms (sync hot path):** `gate_check` · `gated_sync` · `ClockThermState` · `GateVerdict`.
+//!
+//! **Lattice home:** `umst_ucrs::gate` (keep — not `shared_types`; stamp-only consumers must not import).
+//!
+//! **Reroute (G2):** `gate_check → clausius_duhem` binds [`umst_math::clausius_duhem_admissible`]
+//! on desync ψ — same predicate family as `gateCheck` in `umst-formal/Lean/Compat/Gate.lean`.
+//!
+//! | Conjunct | Role in sync economics |
+//! |----------|------------------------|
+//! | **Landauer budget** | `sync_cost ≤ budget_j` |
+//! | **Clausius–Duhem** | `ψ_new ≤ ψ_old` on desync energy |
+//! | **Monotone cost** | `total_sync_cost_j` strictly increasing across admitted syncs |
+//! | **Reject free-run** | over-budget or CD-violating sync → `GateVerdict::Reject` |
+//!
+//! **Consumer fence (honest):**
+//!
+//! ```text
+//! CONSUMER_GATE_IMPORTS_ONLY :=
+//!   egoff · daemon (feature)  →  gate_check · gated_sync · ClockThermState
+//!   web · concrete · bench    ⊄  gate_check (stamp-only — use shared_types)
+//!   all consumers             ⊄  gate_check for material CD (umst-gate / umst-math SSOT)
+//! ```
 
 use crate::landauer;
 use umst_math::clausius_duhem_admissible;
@@ -131,5 +152,16 @@ mod tests {
             s2.total_sync_cost_j > s1.total_sync_cost_j,
             "Total sync cost must be monotonically increasing"
         );
+    }
+
+    #[test]
+    fn w8e14_zero_desync_rejects_cd_violation() {
+        let state = ClockThermState {
+            desync_energy_j: 0.0,
+            budget_j: landauer::landauer_cost(10.0, 300.0),
+            temperature_k: 300.0,
+            total_sync_cost_j: 0.0,
+        };
+        assert_eq!(gate_check(&state, 3.0), GateVerdict::Reject);
     }
 }

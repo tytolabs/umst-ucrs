@@ -1,0 +1,28 @@
+{
+  "schema_version": "s0_pqc_kat_reference.v0",
+  "authority": "SEC-UCRS-PARITY · FIPS 202 SHA3-256 + PQClean pqcrypto-* byte-width anchors",
+  "sha3_256": {
+    "empty_hex": "a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a",
+    "abc_hex": "3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532",
+    "long_v1": {
+      "preimage_prefix": "umst-s0-parity-kat-long-message-v1",
+      "preimage_suffix": "0..=255",
+      "digest_hex": "6534a50911a79569ee3c5ae0d172489fe83f95b20dea5a41ec75a90a77fc4f14"
+    }
+  },
+  "ml_kem_768": {
+    "public_key_bytes": 1184,
+    "secret_key_bytes": 2400,
+    "ciphertext_bytes": 1088,
+    "shared_secret_bytes": 32
+  },
+  "ml_dsa_65": {
+    "public_key_bytes": 1952,
+    "secret_key_bytes": 4032
+  },
+  "slh_dsa_128s": {
+    "public_key_bytes": 32,
+    "secret_key_bytes": 64
+  },
+  "sha3_digest_bytes": 32
+}

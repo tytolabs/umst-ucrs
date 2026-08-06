@@ -201,4 +201,10 @@ mod tests {
         // 1 bit at 300K: ~2.87e-21 J
         assert!((record.landauer_floor_j - 2.87e-21).abs() < 1e-22);
     }
+
+    #[test]
+    fn w8e14_energy_reading_delta_zero_same() {
+        let a = EnergyReading { microjoules: 1000 };
+        assert!((a.delta(&a)).abs() < f64::EPSILON);
+    }
 }

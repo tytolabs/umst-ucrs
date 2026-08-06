@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
 
+//! Consumer contract: `umst_ucrs::shared_types::design_sheaf` (Wave 1 · CELL_UCRS_READY_U2_SHEAF).
+//! Cast-spine sheaf morphisms reachable via `DesignSheafOverSpine` · `route_steerability` ·
+//! `spine_admissible_under_gluing` — **not** daemon · p2p · agent_tick.
+//!
+//! **Morphisms (consumer hot path):** `DesignSheafOverSpine::{from_spine,from_spine_with_metric}` ·
+//! `route_steerability` · `spine_admissible_under_gluing` · `SheafSection::from_vertebra` ·
+//! `SheafGluingWitness::dec_conservation` · `SheafRestriction::hex_coarsen_cell_field`.
+//!
 //! Design sheaf facets — the spine is the **time-axis** of the admissibility sheaf.
 //!
 //! | Facet | Role in cast lifecycle |
@@ -240,5 +248,51 @@ mod steerability_tests {
         let m = DummyMetric { val: 0.8 };
         let d = route_steerability(&m, &DummyPolicy);
         assert_eq!(d.branch, SteerabilityBranch::ExploreOffset);
+    }
+}
+
+#[cfg(test)]
+mod gluing_tests {
+    use super::*;
+    use crate::frame_spine::{
+        Frame, MaterialState, Spine, SpineTime, Vertebra, VertebraGateVerdict,
+    };
+    use crate::observation::{StampTier, UcrsObservedAt};
+
+    fn stub_vertebra(admissible: bool) -> Vertebra {
+        Vertebra {
+            t: SpineTime::service(),
+            rho_ref: vec![1.0],
+            material: MaterialState::cured_service(),
+            load: [0.0, 0.0, 0.0],
+            gate: VertebraGateVerdict {
+                admissible,
+                h_notension: -1.0,
+                verdict_label: "test".into(),
+            },
+            stamp: UcrsObservedAt {
+                stamp_tier: StampTier::UcrsTier2,
+                ucrs_seq: Some(1),
+                phase_entropy_bits_q: None,
+                phase_entropy_bits_scale: None,
+                credit_head_bits_q: None,
+                credit_head_bits_scale: None,
+                wall_ms: None,
+            },
+        }
+    }
+
+    #[test]
+    fn w8e14_spine_admissible_under_gluing_honest() {
+        let spine = Spine {
+            frame: Frame::default_negative_y(),
+            vertebrae: vec![stub_vertebra(true)],
+        };
+        assert!(spine_admissible_under_gluing(&spine));
+        let bad = Spine {
+            vertebrae: vec![stub_vertebra(false)],
+            ..spine
+        };
+        assert!(!spine_admissible_under_gluing(&bad));
     }
 }

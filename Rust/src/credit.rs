@@ -245,4 +245,10 @@ mod tests {
         let expected = landauer::landauer_cost(10.0, 300.0);
         assert!((cost - expected).abs() < f64::EPSILON);
     }
+
+    #[test]
+    fn w8e14_best_peer_none_when_empty() {
+        let ledger = CreditLedger::new(0, 300.0);
+        assert!(ledger.best_peer().is_none());
+    }
 }
