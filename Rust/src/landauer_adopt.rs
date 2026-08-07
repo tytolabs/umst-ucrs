@@ -86,7 +86,7 @@ pub const PRIOR_Z95_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_Z95_1232.md";
 
 /// Prior AGAP night deepen receipt.
 pub const PRIOR_AGAP_RECEIPT_PATH: &str =
-    "archived/residuals/misc-outputs-tmp/COMPLETION_AGAP_AGENT_LIB-LANDAUER_2350.md";
+    "old/residuals/residuals/misc-outputs-tmp/COMPLETION_AGAP_AGENT_LIB-LANDAUER_2350.md";
 
 /// UCRS wire hop count (pairwise + A7-4 global + ARCS parity cross-ref).
 pub const WIRE_HOP_COUNT: usize = 4;
