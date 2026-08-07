@@ -2,7 +2,7 @@
 # Consumed by umst-meta when implemented; not checked yet.
 
 name = "tytolabs/umst-ucrs"
-path = "umst-ucrs"
+path = "umst/umst-ucrs"
 
 kind = "spine"
 spdx = "MIT"
