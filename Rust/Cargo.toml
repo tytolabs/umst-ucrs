@@ -74,19 +74,19 @@ harness = false
 
 [[test]]
 name = "s0_crypto_ucrs_parity"
-path = "tests/s0_crypto_ucrs_parity.rs"
+path = "tests/crypto_ucrs_parity.rs"
 
 [[test]]
 name = "s0_crypto_ucrs_algebra_parity"
-path = "tests/s0_crypto_ucrs_algebra_parity.rs"
+path = "tests/crypto_ucrs_algebra_parity.rs"
 
 [[test]]
 name = "s0_kat_reference_parity"
-path = "tests/s0_kat_reference_parity.rs"
+path = "tests/kat_reference_parity.rs"
 
 [[test]]
 name = "s1_trust_ucrs_wire_parity"
-path = "tests/s1_trust_ucrs_wire_parity.rs"
+path = "tests/trust_ucrs_wire_parity.rs"
 
 [[test]]
 name = "gate_cd_drift_fixture"
