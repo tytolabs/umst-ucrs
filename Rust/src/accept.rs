@@ -160,7 +160,10 @@ pub enum TrustStampReject {
 
 impl DurableAccept {
     /// Bind a validated trust warrant to an existing UCRS stamp.
-    pub fn bind(observed_at: UcrsObservedAt, trust: TrustAttestedWarrant) -> Result<Self, TrustStampReject> {
+    pub fn bind(
+        observed_at: UcrsObservedAt,
+        trust: TrustAttestedWarrant,
+    ) -> Result<Self, TrustStampReject> {
         trust.validate()?;
         if observed_at.ucrs_seq.is_none() {
             return Err(TrustStampReject::MissingUcrsSeq);

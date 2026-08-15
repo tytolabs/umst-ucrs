@@ -12,7 +12,9 @@ use umst_ucrs::crypto::kem::ml_kem_768::{
     decapsulate as u_decap, encapsulate as u_encap, KemError as UcrsKemError,
     ML_KEM_768_SHARED_SECRET_BYTES,
 };
-use umst_ucrs::crypto::sig::ml_dsa_65::{sign as u_sign, verify as u_verify, SigError as UcrsSigError};
+use umst_ucrs::crypto::sig::ml_dsa_65::{
+    sign as u_sign, verify as u_verify, SigError as UcrsSigError,
+};
 
 /// NIST SHA3-256("abc") short-message KAT (FIPS 202).
 const ABC_SHA3_256: [u8; 32] = [

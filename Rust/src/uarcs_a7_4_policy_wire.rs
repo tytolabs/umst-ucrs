@@ -45,16 +45,13 @@ pub const PRIOR_Z47_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_Z47_1015.md";
 pub const SWARM_C25_0831_36_JOB_ID: &str = "SWARM-C25-0831-36";
 
 /// Bench Y71 census authority (source-reviewed; no crate dep).
-pub const BENCH_Y71_AUTHORITY: &str =
-    "crates/umst-bench/src/uarcs_a7_4_policy_wire_census.rs";
+pub const BENCH_Y71_AUTHORITY: &str = "crates/umst-bench/src/uarcs_a7_4_policy_wire_census.rs";
 
 /// Arcs Z47 semantic-bind authority (source-reviewed; no crate dep).
-pub const ARCS_Z47_AUTHORITY: &str =
-    "umst-arcs/crates/umst-arcs/src/uarcs_a7_4_semantic_bind.rs";
+pub const ARCS_Z47_AUTHORITY: &str = "umst-arcs/crates/umst-arcs/src/uarcs_a7_4_semantic_bind.rs";
 
 /// Arcs P6 coordination authority (source-reviewed; no crate dep).
-pub const ARCS_P6_AUTHORITY: &str =
-    "umst-arcs/crates/umst-arcs/src/coordination_cost_p6.rs";
+pub const ARCS_P6_AUTHORITY: &str = "umst-arcs/crates/umst-arcs/src/coordination_cost_p6.rs";
 
 /// Indexed P6 obligations still OPEN on arcs owner @ Y71 census.
 pub const P6_OPEN_OBLIGATION_COUNT: usize = 4;
@@ -190,7 +187,9 @@ pub fn uarcs_a7_4_ucrs_policy_prep_wired() -> bool {
         && landauer_ucrs_pairwise_mi_entropy_bridge_wired()
         && stamp.stamp_tier == StampTier::UcrsTier2
         && stamp.phase_entropy_bits_scale.unwrap_or(0) == WIRE_SCALE
-        && TrustCipherSuite::nist_pqc_balanced_3().kem.contains("ml-kem")
+        && TrustCipherSuite::nist_pqc_balanced_3()
+            .kem
+            .contains("ml-kem")
         && DURABLE_ACCEPT_SCHEMA_VERSION == "durable_accept.v0"
 }
 

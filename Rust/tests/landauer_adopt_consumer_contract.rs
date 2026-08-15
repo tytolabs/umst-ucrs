@@ -8,13 +8,16 @@ use umst_ucrs::landauer_adopt::{
     landauer_ucrs_adopt_honest, landauer_ucrs_pairwise_adopt_closed,
     landauer_ucrs_wire_hops_closed_count, landauer_ucrs_wire_hops_honest,
     lib_adopt_a_landauer_accel_ac36_probe, lib_adopt_a_landauer_p1542_b4_probe,
-    lib_adopt_a_landauer_p1938_k3_probe, WIRE_HOP_COUNT, WIRE_HOPS_CLOSED_DEFAULT,
+    lib_adopt_a_landauer_p1938_k3_probe, WIRE_HOPS_CLOSED_DEFAULT, WIRE_HOP_COUNT,
 };
 
 #[test]
 fn landauer_adopt_witness_morphisms_reachable() {
     assert!(landauer_ucrs_wire_hops_honest());
-    assert_eq!(landauer_ucrs_wire_hops_closed_count(), WIRE_HOPS_CLOSED_DEFAULT);
+    assert_eq!(
+        landauer_ucrs_wire_hops_closed_count(),
+        WIRE_HOPS_CLOSED_DEFAULT
+    );
     assert!(landauer_ucrs_pairwise_adopt_closed());
     assert!(landauer_ucrs_adopt_honest());
     assert_eq!(WIRE_HOP_COUNT, 4);

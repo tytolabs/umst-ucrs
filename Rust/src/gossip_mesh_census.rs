@@ -415,8 +415,8 @@ pub struct HaskellUcrsGossipMeshPropertySlot {
 
 /// Reduction probes for all five `HASKELL_SPEC_AUTHORITY` properties.
 #[must_use]
-pub fn haskell_ucrs_gossip_mesh_property_slots() -> [HaskellUcrsGossipMeshPropertySlot; HASKELL_PROPERTY_COUNT]
-{
+pub fn haskell_ucrs_gossip_mesh_property_slots(
+) -> [HaskellUcrsGossipMeshPropertySlot; HASKELL_PROPERTY_COUNT] {
     [
         HaskellUcrsGossipMeshPropertySlot {
             index: 1,
@@ -458,8 +458,7 @@ pub fn haskell_ucrs_gossip_mesh_property_slots_wired() -> bool {
 /// Whether all five Haskell QuickCheck properties reduce on the Rust gossip mesh path.
 #[must_use]
 pub fn haskell_ucrs_gossip_mesh_properties_wired() -> bool {
-    haskell_ucrs_kb_matches_ssot()
-        && haskell_ucrs_gossip_mesh_property_slots_wired()
+    haskell_ucrs_kb_matches_ssot() && haskell_ucrs_gossip_mesh_property_slots_wired()
 }
 
 /// Whether Haskell UCRS mesh notes are adopted on the gossip prep spine.
@@ -594,8 +593,7 @@ pub fn uarcs_gossip_mesh_ac82_probe() -> UarcsGossipMeshAc82Probe {
     UarcsGossipMeshAc82Probe {
         ac82_job_id: COMPOSER_AC82_JOB_ID,
         ac82_slot: ACCEL_AC82_SLOT,
-        ac82_receipt_honest: COMPOSER_AC82_RECEIPT_PATH
-            == "outputs/.tmp/COMPOSER_ACCEL2_AC82.md",
+        ac82_receipt_honest: COMPOSER_AC82_RECEIPT_PATH == "outputs/.tmp/COMPOSER_ACCEL2_AC82.md",
         f64_cross_ref_honest: PRIOR_F64_RECEIPT_PATH.contains("COMPOSER_F64_UCRS_1934"),
         f86_cross_ref_honest: PRIOR_F86_RECEIPT_PATH.contains("COMPOSER_F86_UCRS_GOSSIP_1942"),
         g86_absent_cross_ref_honest: PRIOR_G86_ABSENT_RECEIPT_PATH
@@ -605,7 +603,8 @@ pub fn uarcs_gossip_mesh_ac82_probe() -> UarcsGossipMeshAc82Probe {
         x85_cross_ref_honest: PRIOR_X85_RECEIPT_PATH.contains("COMPOSER_X85_0734"),
         haskell_gate_cross_ref_honest: HASKELL_GATE_AUTHORITY.contains("Umst/Ucrs/Gate.hs"),
         haskell_credit_cross_ref_honest: HASKELL_CREDIT_AUTHORITY.contains("Umst/Ucrs/Credit.hs"),
-        haskell_landauer_cross_ref_honest: HASKELL_LANDAUER_AUTHORITY.contains("Umst/Ucrs/Landauer.hs"),
+        haskell_landauer_cross_ref_honest: HASKELL_LANDAUER_AUTHORITY
+            .contains("Umst/Ucrs/Landauer.hs"),
         haskell_property_count: HASKELL_PROPERTY_COUNT,
         haskell_properties_wired: haskell_ucrs_gossip_mesh_properties_wired(),
         haskell_adopt_closed: haskell_ucrs_gossip_mesh_adopt_closed(),
@@ -869,10 +868,7 @@ mod tests {
             haskell_ucrs_gate_check(5.0, landauer::landauer_cost(3.0, 300.0), 10.0),
             GateVerdict::Reject
         );
-        assert_eq!(
-            haskell_ucrs_gate_check(10.0, 5.0, 2.5),
-            GateVerdict::Admit
-        );
+        assert_eq!(haskell_ucrs_gate_check(10.0, 5.0, 2.5), GateVerdict::Admit);
     }
 
     #[test]
@@ -907,7 +903,9 @@ mod tests {
         assert_eq!(haskell_landauer_cost(-1.0, 300.0), 0.0);
         assert_eq!(haskell_landauer_cost(3.0, 0.0), 0.0);
         let positive = haskell_landauer_cost(3.0, HASKELL_MESH_TEMPERATURE_K);
-        assert!((positive - landauer::landauer_cost(3.0, HASKELL_MESH_TEMPERATURE_K)).abs() < 1e-30);
+        assert!(
+            (positive - landauer::landauer_cost(3.0, HASKELL_MESH_TEMPERATURE_K)).abs() < 1e-30
+        );
     }
 
     #[test]

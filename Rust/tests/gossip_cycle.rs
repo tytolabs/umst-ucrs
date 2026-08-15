@@ -16,10 +16,9 @@ use umst_ucrs::gossip_mesh_census::{
 };
 use umst_ucrs::p2p::{
     apply_gated_inbound, gate_check_before_sync, localhost_mesh_bootstrap, localhost_peer_config,
-    outbound_tick_if_admitted, ABSORBED_E64_SECRET, FLEET_COMPOSER_F64_JOB_ID,
+    outbound_tick_if_admitted, GatedSyncOutcome, ABSORBED_E64_SECRET, FLEET_COMPOSER_F64_JOB_ID,
     FLEET_COMPOSER_F64_RECEIPT_PATH, FLEET_COMPOSER_F86_JOB_ID, FLEET_COMPOSER_F86_RECEIPT_PATH,
-    FLEET_COMPOSER_G86_JOB_ID, FLEET_COMPOSER_G86_RECEIPT_PATH, GatedSyncOutcome,
-    LOCALHOST_MESH_PORTS,
+    FLEET_COMPOSER_G86_JOB_ID, FLEET_COMPOSER_G86_RECEIPT_PATH, LOCALHOST_MESH_PORTS,
 };
 use umst_ucrs::wire::{self, verify_tick, ClockTick, MergeOutcome};
 use umst_ucrs::{gate::GateVerdict, AgentConfig};
@@ -64,7 +63,13 @@ fn gossip_cycle_second_round_monotonic() {
     let t1 = outbound_tick_if_admitted(&clock_out, &publisher, ABSORBED_E64_SECRET)
         .expect("first outbound");
     assert_eq!(
-        apply_gated_inbound(&mut clock_in, &mut ledger, &receiver, &t1, ABSORBED_E64_SECRET),
+        apply_gated_inbound(
+            &mut clock_in,
+            &mut ledger,
+            &receiver,
+            &t1,
+            ABSORBED_E64_SECRET
+        ),
         GatedSyncOutcome::Admitted(MergeOutcome::Accepted)
     );
 
@@ -74,7 +79,13 @@ fn gossip_cycle_second_round_monotonic() {
     let t2 = outbound_tick_if_admitted(&clock_out, &publisher, ABSORBED_E64_SECRET)
         .expect("second outbound");
     assert_eq!(
-        apply_gated_inbound(&mut clock_in, &mut ledger, &receiver, &t2, ABSORBED_E64_SECRET),
+        apply_gated_inbound(
+            &mut clock_in,
+            &mut ledger,
+            &receiver,
+            &t2,
+            ABSORBED_E64_SECRET
+        ),
         GatedSyncOutcome::Admitted(MergeOutcome::Accepted)
     );
 }
@@ -166,7 +177,13 @@ fn gossip_cycle_wrong_secret_rejects_inbound() {
     let tick = outbound_tick_if_admitted(&clock_out, &publisher, ABSORBED_E64_SECRET)
         .expect("outbound admitted");
     assert_eq!(
-        apply_gated_inbound(&mut clock_in, &mut ledger, &receiver, &tick, b"wrong-secret"),
+        apply_gated_inbound(
+            &mut clock_in,
+            &mut ledger,
+            &receiver,
+            &tick,
+            b"wrong-secret"
+        ),
         GatedSyncOutcome::Admitted(MergeOutcome::RejectedBadSig)
     );
 }

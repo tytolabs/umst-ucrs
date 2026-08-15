@@ -44,15 +44,30 @@ fn r3a1_sha3_empty_abc_long_kat_ucrs_algebra() -> TestResult {
 #[test]
 fn r3a2_ml_kem_byte_width_fixture_matches_pqclean_and_crates() -> TestResult {
     let kat = load_s0_kat_reference()?;
-    assert_eq!(kat.ml_kem_768.public_key_bytes, kyber768::public_key_bytes());
-    assert_eq!(kat.ml_kem_768.secret_key_bytes, kyber768::secret_key_bytes());
-    assert_eq!(kat.ml_kem_768.ciphertext_bytes, kyber768::ciphertext_bytes());
-    assert_eq!(kat.ml_kem_768.shared_secret_bytes, kyber768::shared_secret_bytes());
+    assert_eq!(
+        kat.ml_kem_768.public_key_bytes,
+        kyber768::public_key_bytes()
+    );
+    assert_eq!(
+        kat.ml_kem_768.secret_key_bytes,
+        kyber768::secret_key_bytes()
+    );
+    assert_eq!(
+        kat.ml_kem_768.ciphertext_bytes,
+        kyber768::ciphertext_bytes()
+    );
+    assert_eq!(
+        kat.ml_kem_768.shared_secret_bytes,
+        kyber768::shared_secret_bytes()
+    );
 
     assert_eq!(ML_KEM_768_PUBLIC_KEY_BYTES, kat.ml_kem_768.public_key_bytes);
     assert_eq!(ML_KEM_768_SECRET_KEY_BYTES, kat.ml_kem_768.secret_key_bytes);
     assert_eq!(ML_KEM_768_CIPHERTEXT_BYTES, kat.ml_kem_768.ciphertext_bytes);
-    assert_eq!(ML_KEM_768_SHARED_SECRET_BYTES, kat.ml_kem_768.shared_secret_bytes);
+    assert_eq!(
+        ML_KEM_768_SHARED_SECRET_BYTES,
+        kat.ml_kem_768.shared_secret_bytes
+    );
 
     assert_eq!(
         umst_algebra::crypto::kem::ml_kem_768::ML_KEM_768_PUBLIC_KEY_BYTES,
@@ -64,9 +79,18 @@ fn r3a2_ml_kem_byte_width_fixture_matches_pqclean_and_crates() -> TestResult {
 #[test]
 fn r3a3_sig_byte_width_fixture_matches_pqclean_and_crates() -> TestResult {
     let kat = load_s0_kat_reference()?;
-    assert_eq!(kat.ml_dsa_65.public_key_bytes, dilithium3::public_key_bytes());
-    assert_eq!(kat.ml_dsa_65.secret_key_bytes, dilithium3::secret_key_bytes());
-    assert_eq!(kat.slh_dsa_128s.public_key_bytes, sphincssha2128ssimple::public_key_bytes());
+    assert_eq!(
+        kat.ml_dsa_65.public_key_bytes,
+        dilithium3::public_key_bytes()
+    );
+    assert_eq!(
+        kat.ml_dsa_65.secret_key_bytes,
+        dilithium3::secret_key_bytes()
+    );
+    assert_eq!(
+        kat.slh_dsa_128s.public_key_bytes,
+        sphincssha2128ssimple::public_key_bytes()
+    );
     assert_eq!(
         kat.slh_dsa_128s.secret_key_bytes,
         sphincssha2128ssimple::secret_key_bytes()

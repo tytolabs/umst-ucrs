@@ -75,11 +75,7 @@ pub fn coordination_cost(mutual_info_bits: f64, temperature_kelvin: f64) -> f64 
 /// Returns `None` when marginals are inconsistent with joint support (negative MI)
 /// or inputs are non-finite. Matches Lean `multiInformationBits_pair` @ n=2.
 #[must_use]
-pub fn pairwise_mutual_information_bits(
-    h_x: f64,
-    h_y: f64,
-    joint_entropy: f64,
-) -> Option<f64> {
+pub fn pairwise_mutual_information_bits(h_x: f64, h_y: f64, joint_entropy: f64) -> Option<f64> {
     if !h_x.is_finite() || !h_y.is_finite() || !joint_entropy.is_finite() {
         return None;
     }

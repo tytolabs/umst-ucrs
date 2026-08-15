@@ -9,6 +9,8 @@
 //! The binary (`src/main.rs`) is a thin wrapper: constructs [`ucrs_keep::AgentConfig`], starts the
 //! simulation / P2P loop, and exports Prometheus metrics.
 
+/// Durable accept stamps — `TrustAttested` warrant + `UcrsObservedAt` (S-Q4; no TrustLedger).
+pub mod accept;
 pub mod clock;
 pub mod credit;
 /// S-0 crypto parity — PQC reference (`umst_math::crypto` mirror).
@@ -21,35 +23,38 @@ pub mod design_sheaf;
 /// Frame / spine contract — cast funicular as degenerate 2-vertebra trajectory.
 pub mod frame_spine;
 pub mod gate;
+/// AC82 — UARCS-gossip mesh_wired false census (`mesh_wired` false unless WEB-034 measured).
+pub mod gossip_mesh_census;
 pub mod landauer;
 /// LIB-ADOPT-A-LANDAUER — UCRS pattern SSOT adoption witness (P1542 B4).
 pub mod landauer_adopt;
-/// AC21 — UARCS-004 policy-present deepen (`present_wired` false unless measured).
-pub mod uarcs_004_policy_present;
-/// AC82 — UARCS-gossip mesh_wired false census (`mesh_wired` false unless WEB-034 measured).
-pub mod gossip_mesh_census;
-/// AC81 — UARCS-A7-4 policy wire deepen (`policy_wired` false unless measured).
-pub mod uarcs_a7_4_policy_wire;
 #[cfg(feature = "a7-4")]
 /// A7-4 global multi-information Landauer cost (feature-gated).
 pub mod landauer_global;
 /// Immutable observation stamps for durable agent logs (`UcrsObservedAt`, `TemporalWitness`).
 pub mod observation;
-/// Durable accept stamps — `TrustAttested` warrant + `UcrsObservedAt` (S-Q4; no TrustLedger).
-pub mod accept;
 /// P2P gossip types + gate-guarded sync hook (no libp2p in default builds).
 pub mod p2p;
 pub mod rapl;
-pub mod telemetry;
-/// Gossip wire format + signature glue (no libp2p — safe for default library-only builds).
-pub mod wire;
 /// Consumer contract facade — observation, accept, wire, crypto, cast spine (Wave 0).
 pub mod shared_types;
+pub mod telemetry;
+/// AC21 — UARCS-004 policy-present deepen (`present_wired` false unless measured).
+pub mod uarcs_004_policy_present;
+/// AC81 — UARCS-A7-4 policy wire deepen (`policy_wired` false unless measured).
+pub mod uarcs_a7_4_policy_wire;
 /// Spine locals — clock, credit, agent loop, landauer_global (Wave 1 · U1_LIB barrel split).
 pub mod ucrs_keep;
+/// Gossip wire format + signature glue (no libp2p — safe for default library-only builds).
+pub mod wire;
 
 // --- Wave 2 compat shims (deprecated root re-exports) ---
 
+#[deprecated(note = "use umst_ucrs::shared_types::accept")]
+pub use accept::{
+    DurableAccept, DurableAcceptWire, TrustAttestedWarrant, TrustCipherSuite, TrustStampReject,
+    DURABLE_ACCEPT_SCHEMA_VERSION,
+};
 #[deprecated(note = "use umst_ucrs::shared_types::decision_tree")]
 pub use decision_tree::{SteerDecision, SteerDecisionTrace, SteerKnobs, SteerPolicy};
 #[deprecated(note = "use umst_ucrs::shared_types::design_sheaf")]
@@ -61,11 +66,6 @@ pub use design_sheaf::{
 #[deprecated(note = "use umst_ucrs::shared_types::frame_spine")]
 pub use frame_spine::{
     Frame, MaterialState, OriginEvent, Spine, SpineTime, UnitVec3, Vertebra, VertebraGateVerdict,
-};
-#[deprecated(note = "use umst_ucrs::shared_types::accept")]
-pub use accept::{
-    DurableAccept, DurableAcceptWire, TrustAttestedWarrant, TrustCipherSuite,
-    TrustStampReject, DURABLE_ACCEPT_SCHEMA_VERSION,
 };
 #[deprecated(note = "use umst_ucrs::shared_types::observation")]
 pub use observation::{TemporalWitness, UcrsObservedAt};

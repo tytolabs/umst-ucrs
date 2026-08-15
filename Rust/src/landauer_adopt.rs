@@ -98,7 +98,8 @@ pub const IS_THERMODYNAMIC_FLOOR: bool = true;
 pub const IS_WALL_CLOCK: bool = false;
 
 /// Landauer bound citation — Primitive-fact (physics); not measured lab ε.
-pub const LANDAUER_BOUND_PRIMITIVE_FACT: &str = "k_B T ln(2) per bit — Landauer (1961); SI k_B exact per 2019 redefinition";
+pub const LANDAUER_BOUND_PRIMITIVE_FACT: &str =
+    "k_B T ln(2) per bit — Landauer (1961); SI k_B exact per 2019 redefinition";
 
 /// One UCRS-side wire hop in the A-LANDAUER ladder.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -203,8 +204,7 @@ pub fn landauer_ucrs_pairwise_symbols_wired() -> bool {
         && coordination_cost(0.5, t) == landauer_cost(0.5, t)
         && desync_energy(2.0, t) == landauer_cost(2.0, t)
         && pairwise_mutual_information_bits(h_x, h_y, joint) == Some(i_xy)
-        && coordination_cost_from_entropies(h_x, h_y, joint, t)
-            == Some(coordination_cost(i_xy, t))
+        && coordination_cost_from_entropies(h_x, h_y, joint, t) == Some(coordination_cost(i_xy, t))
         && (K_B - 1.380_649e-23).abs() < f64::EPSILON
 }
 
@@ -217,8 +217,7 @@ pub fn landauer_ucrs_pairwise_mi_entropy_bridge_wired() -> bool {
     let i_xy = 1.5;
     let joint = h_x + h_y - i_xy;
     pairwise_mutual_information_bits(h_x, h_y, joint) == Some(i_xy)
-        && coordination_cost_from_entropies(h_x, h_y, joint, t)
-            == Some(coordination_cost(i_xy, t))
+        && coordination_cost_from_entropies(h_x, h_y, joint, t) == Some(coordination_cost(i_xy, t))
         && pairwise_mutual_information_bits(1.0, 1.0, 10.0).is_none()
 }
 
@@ -240,8 +239,8 @@ pub fn landauer_ucrs_a7_4_mi_wired_on_build() -> bool {
 #[must_use]
 pub fn landauer_ucrs_a7_4_mi_wired() -> bool {
     use super::landauer_global::{
-        coordination_cost_global, coordination_cost_global_from_entropies,
-        multi_information_bits, n2_global_joules_matches_pairwise, n2_global_matches_pairwise_ssot,
+        coordination_cost_global, coordination_cost_global_from_entropies, multi_information_bits,
+        n2_global_joules_matches_pairwise, n2_global_matches_pairwise_ssot,
     };
     let h_x = 4.0;
     let h_y = 3.0;
@@ -290,8 +289,7 @@ pub fn lib_adopt_a_landauer_p1542_b4_probe() -> LibAdoptALandauerP1542B4Probe {
     LibAdoptALandauerP1542B4Probe {
         p1542_job_id: COMPOSER_P1542_B4_JOB_ID,
         p1542_slot: COMPOSER_P1542_B4_SLOT,
-        p1542_receipt_honest: COMPOSER_P1542_B4_RECEIPT_PATH
-            == "outputs/.tmp/COMPOSER_P1542_B4.md",
+        p1542_receipt_honest: COMPOSER_P1542_B4_RECEIPT_PATH == "outputs/.tmp/COMPOSER_P1542_B4.md",
         z95_cross_ref_honest: PRIOR_Z95_RECEIPT_PATH == "outputs/.tmp/COMPOSER_Z95_1232.md",
         wire_hops_closed: landauer_ucrs_wire_hops_closed_count(),
         pairwise_symbols_wired: landauer_ucrs_pairwise_symbols_wired(),
@@ -346,8 +344,7 @@ pub fn lib_adopt_a_landauer_p1938_k3_probe() -> LibAdoptALandauerP1938K3Probe {
     LibAdoptALandauerP1938K3Probe {
         p1938_job_id: COMPOSER_P1938_K3_JOB_ID,
         p1938_slot: COMPOSER_P1938_K3_SLOT,
-        p1938_receipt_honest: COMPOSER_P1938_K3_RECEIPT_PATH
-            == "outputs/.tmp/COMPOSER_P1938_K3.md",
+        p1938_receipt_honest: COMPOSER_P1938_K3_RECEIPT_PATH == "outputs/.tmp/COMPOSER_P1938_K3.md",
         b4_receipt_honest: PRIOR_P1542_B4_RECEIPT_PATH == COMPOSER_P1542_B4_RECEIPT_PATH,
         z95_cross_ref_honest: PRIOR_Z95_RECEIPT_PATH == "outputs/.tmp/COMPOSER_Z95_1232.md",
         wire_hops_closed: landauer_ucrs_wire_hops_closed_count(),
@@ -523,7 +520,10 @@ mod tests {
     #[test]
     fn landauer_ucrs_pairwise_adopt_closed_on_default_build() {
         assert!(landauer_ucrs_pairwise_adopt_closed());
-        assert_eq!(landauer_ucrs_wire_hops_closed_count(), WIRE_HOPS_CLOSED_DEFAULT);
+        assert_eq!(
+            landauer_ucrs_wire_hops_closed_count(),
+            WIRE_HOPS_CLOSED_DEFAULT
+        );
         #[cfg(not(feature = "a7-4"))]
         assert!(!landauer_ucrs_a7_4_mi_wired_on_build());
     }

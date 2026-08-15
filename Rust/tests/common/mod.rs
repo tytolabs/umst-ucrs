@@ -7,8 +7,7 @@ use std::path::PathBuf;
 pub type TestResult = Result<(), Box<dyn std::error::Error>>;
 
 /// Committed S-0 PQC KAT reference (`tests/fixtures/s0_pqc_kat_reference.json`).
-pub const S0_PQC_KAT_REFERENCE_JSON: &str =
-    include_str!("../fixtures/s0_pqc_kat_reference.json");
+pub const S0_PQC_KAT_REFERENCE_JSON: &str = include_str!("../fixtures/s0_pqc_kat_reference.json");
 
 #[derive(Debug, Deserialize)]
 pub struct S0PqcKatReference {

@@ -85,11 +85,7 @@ pub fn coordination_cost_global_from_entropies(
 
 /// Whether n=2 multi-information reduces to pairwise Shannon MI on declared entropies.
 #[must_use]
-pub fn n2_global_matches_pairwise_ssot(
-    h_x: f64,
-    h_y: f64,
-    mutual_info_bits: f64,
-) -> bool {
+pub fn n2_global_matches_pairwise_ssot(h_x: f64, h_y: f64, mutual_info_bits: f64) -> bool {
     let joint = h_x + h_y - mutual_info_bits;
     multi_information_bits(joint, &[h_x, h_y])
         .map(|mi_n| (mi_n - mutual_info_bits).abs() < f64::EPSILON)
@@ -98,10 +94,7 @@ pub fn n2_global_matches_pairwise_ssot(
 
 /// Whether global joules match pairwise coordination cost at n=2.
 #[must_use]
-pub fn n2_global_joules_matches_pairwise(
-    mutual_info_bits: f64,
-    temperature_kelvin: f64,
-) -> bool {
+pub fn n2_global_joules_matches_pairwise(mutual_info_bits: f64, temperature_kelvin: f64) -> bool {
     let global = coordination_cost_global(mutual_info_bits, temperature_kelvin);
     let pairwise = super::landauer::coordination_cost(mutual_info_bits, temperature_kelvin);
     (global - pairwise).abs() < f64::EPSILON
@@ -177,8 +170,7 @@ mod tests {
         let joint = h_x + h_y - i_xy;
         let global =
             coordination_cost_global_from_entropies(joint, &[h_x, h_y], T_ROOM).expect("valid");
-        let pairwise =
-            coordination_cost_from_entropies(h_x, h_y, joint, T_ROOM).expect("valid");
+        let pairwise = coordination_cost_from_entropies(h_x, h_y, joint, T_ROOM).expect("valid");
         assert!((global - pairwise).abs() < f64::EPSILON);
     }
 

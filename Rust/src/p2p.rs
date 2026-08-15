@@ -17,15 +17,13 @@ pub const FLEET_COMPOSER_F64_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F64_UCR
 pub const FLEET_COMPOSER_F86_JOB_ID: &str = "FLEET-COMPOSER-F86-UCRS-GOSSIP";
 
 /// FLEET-COMPOSER-F F86 receipt path (parent workspace relative).
-pub const FLEET_COMPOSER_F86_RECEIPT_PATH: &str =
-    "outputs/.tmp/COMPOSER_F86_UCRS_GOSSIP_1942.md";
+pub const FLEET_COMPOSER_F86_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F86_UCRS_GOSSIP_1942.md";
 
 /// FLEET-COMPOSER-G G86 job id — gossip mesh wire probe (honest mesh-open).
 pub const FLEET_COMPOSER_G86_JOB_ID: &str = "FLEET-COMPOSER-G86-UCRS-GOSSIP";
 
 /// FLEET-COMPOSER-G G86 receipt path (parent workspace relative).
-pub const FLEET_COMPOSER_G86_RECEIPT_PATH: &str =
-    "outputs/.tmp/COMPOSER_G86_UCRS_GOSSIP_2143.md";
+pub const FLEET_COMPOSER_G86_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_G86_UCRS_GOSSIP_2143.md";
 
 /// Prior E64 gossip cycle cut absorbed by F86.
 pub const ABSORBED_E64_SECRET: &[u8] = b"e64-gossip-cycle";

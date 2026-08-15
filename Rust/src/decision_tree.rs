@@ -165,10 +165,7 @@ mod tests {
         let d = DummySteerPolicy.evaluate(&knobs, &witness, None);
         assert!(matches!(
             d,
-            SteerDecision::MorphLoadOffset {
-                to_frac: 0.25,
-                ..
-            }
+            SteerDecision::MorphLoadOffset { to_frac: 0.25, .. }
         ));
     }
 }

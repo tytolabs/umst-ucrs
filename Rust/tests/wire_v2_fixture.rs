@@ -13,9 +13,8 @@ fn wire_v2_fixture_json_roundtrip() {
 
     let obs = UcrsObservedAt::from_v2_wire(&wire);
     let back = obs.to_v2_wire();
-    let json = serde_json::to_string(&back).expect(
-        "UcrsObservedAt v2 roundtrip must serialize to JSON (FP §6 Track T.2)",
-    );
+    let json = serde_json::to_string(&back)
+        .expect("UcrsObservedAt v2 roundtrip must serialize to JSON (FP §6 Track T.2)");
     let reparsed: ObservedAtV2Wire = serde_json::from_str(&json).expect(
         "UcrsObservedAt v2 roundtrip JSON must deserialize ObservedAtV2Wire (FP §6 Track T.2)",
     );

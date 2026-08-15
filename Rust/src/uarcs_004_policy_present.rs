@@ -39,8 +39,7 @@ pub const ARCS_UARCS_004_AUTHORITY: &str =
     "umst-arcs/crates/umst-arcs/src/uarcs_004_present_wired.rs";
 
 /// Bench Y72 census authority (source-reviewed; no crate dep).
-pub const BENCH_Y72_AUTHORITY: &str =
-    "crates/umst-bench/src/uarcs_004_present_wired_census.rs";
+pub const BENCH_Y72_AUTHORITY: &str = "crates/umst-bench/src/uarcs_004_present_wired_census.rs";
 
 /// WEB-026 constitutional D1 owner (orthogonal flip).
 pub const WEB_026_OWNER: &str = "WEB-026";
@@ -167,7 +166,9 @@ pub fn uarcs_004_ucrs_present_prep_wired() -> bool {
     let stamp = witness.stamp();
     stamp.stamp_tier == StampTier::UcrsTier2
         && stamp.phase_entropy_bits_scale.unwrap_or(0) == WIRE_SCALE
-        && TrustCipherSuite::nist_pqc_balanced_3().kem.contains("ml-kem")
+        && TrustCipherSuite::nist_pqc_balanced_3()
+            .kem
+            .contains("ml-kem")
         && DURABLE_ACCEPT_SCHEMA_VERSION == "durable_accept.v0"
 }
 

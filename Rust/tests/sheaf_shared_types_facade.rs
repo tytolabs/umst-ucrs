@@ -4,8 +4,8 @@
 //! U2 sheaf facade parity — `shared_types::design_sheaf` consumer contract (CELL_UCRS_READY_U2_SHEAF).
 
 use umst_ucrs::shared_types::design_sheaf::{
-    DesignSheafOverSpine, DecisionPolicy, SheafGluingWitness, SheafSection, SteerabilityBranch,
-    route_steerability, spine_admissible_under_gluing,
+    route_steerability, spine_admissible_under_gluing, DecisionPolicy, DesignSheafOverSpine,
+    SheafGluingWitness, SheafSection, SteerabilityBranch,
 };
 use umst_ucrs::shared_types::frame_spine::{
     Frame, MaterialState, Spine, SpineTime, Vertebra, VertebraGateVerdict,
@@ -45,10 +45,7 @@ fn shared_types_design_sheaf_morphisms_constructors() {
     assert_eq!(section.verdict_label, "ok");
 
     let sheaf = DesignSheafOverSpine::<()>::from_spine(&spine);
-    assert_eq!(
-        sheaf.time_axis,
-        DesignSheafOverSpine::<()>::TIME_AXIS_LABEL
-    );
+    assert_eq!(sheaf.time_axis, DesignSheafOverSpine::<()>::TIME_AXIS_LABEL);
     assert_eq!(sheaf.sections.len(), 2);
     assert!(sheaf.gluing.sections_glue);
     assert!(spine_admissible_under_gluing(&spine));
@@ -90,5 +87,8 @@ fn shared_types_design_sheaf_steerability_roundtrip() {
     let back: DesignSheafOverSpine<DummyMetric> =
         serde_json::from_str(&json).expect("DesignSheafOverSpine deserializes");
     assert_eq!(back.sections.len(), sheaf.sections.len());
-    assert_eq!(back.time_axis, DesignSheafOverSpine::<DummyMetric>::TIME_AXIS_LABEL);
+    assert_eq!(
+        back.time_axis,
+        DesignSheafOverSpine::<DummyMetric>::TIME_AXIS_LABEL
+    );
 }

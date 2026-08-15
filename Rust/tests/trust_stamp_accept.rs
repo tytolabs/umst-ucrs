@@ -26,7 +26,10 @@ fn integration_trust_attested_binds_to_ucrs_stamp() {
     assert!(accept.observed_at.ucrs_seq.is_some());
     assert_eq!(accept.trust.attestation_chain_root, root);
     assert_eq!(accept.trust.scope, "Federated");
-    assert_ne!(accept.trust.cipher_suite, TrustCipherSuite::classical_only());
+    assert_ne!(
+        accept.trust.cipher_suite,
+        TrustCipherSuite::classical_only()
+    );
 }
 
 #[test]
@@ -68,9 +71,8 @@ fn integration_monotonic_seq_across_three_durable_accepts() {
 #[test]
 fn integration_suite_mismatch_warrant_still_roundtrips_on_wire() {
     let mut witness = TemporalWitness::new(7);
-    let mut warrant = fixture_warrant(
-        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-    );
+    let mut warrant =
+        fixture_warrant("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
     warrant.cipher_suite = TrustCipherSuite::classical_only();
     let accept = witness.stamp_durable_accept(warrant).unwrap();
     let wire = accept.to_wire();
