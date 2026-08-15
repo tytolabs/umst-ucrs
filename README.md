@@ -517,7 +517,7 @@ Do not imply UCRS sits on the manifold arena hot path. See [`docs/benchmarks/are
 
 ### Honesty ledger (one status pointer)
 
-Status accounting @ **`e4666ba`**. **One status pointer:** [`PROOF-STATUS.md`](PROOF-STATUS.md). Protocol detail: [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md). Formal lineage: [`FOUNDATION.md`](FOUNDATION.md). Roadmap: [`EXPERIMENTS_AND_ROADMAP.md`](EXPERIMENTS_AND_ROADMAP.md). Strengthen every disclaimer below; soften none.
+Status accounting @ **`bb079ab`** (2026-08-15). **One status pointer:** [`PROOF-STATUS.md`](PROOF-STATUS.md). Protocol detail: [`CREDIT-SYSTEM.md`](CREDIT-SYSTEM.md). Formal lineage: [`FOUNDATION.md`](FOUNDATION.md). Roadmap: [`EXPERIMENTS_AND_ROADMAP.md`](EXPERIMENTS_AND_ROADMAP.md). Strengthen every disclaimer below; soften none.
 
 | Layer | Status | Evidence |
 |:---|:---|:---|
