@@ -246,9 +246,9 @@ Matter still validates constitutive law; Knowing still proves observation cost; 
 
 * **Domain Focus / Integration Surface:** Lean `Ucrs/` track — [`PROOF-STATUS.md`](PROOF-STATUS.md). Manifold [`ucrs-catalog.json`](https://github.com/tytolabs/umst-manifold/blob/main/artifacts/ucrs-catalog.json) is a tertiary fiber preview only.
 
-* **Composition / Pipeline:** Rust `cargo test` + gate are authoritative for runtime. Lean L5–L8 remain **sorry stubs** labeled Proposed — scaffolding, not shipped proofs.
+* **Composition / Pipeline:** Rust `cargo test` + gate are authoritative for runtime. Lean L1–L2 proved; L3 partial Landauer bound; **L4–L8 proved** with content (zero `sorry`, zero `: True`, no new axiom) — see [`PROOF-STATUS.md`](PROOF-STATUS.md).
 
-* **Computational Outcome:** Agents cite L1–L4 where proved and treat L5–L8 as roadmap, not as `lake`-green production claims.
+* **Computational Outcome:** Agents may cite L1–L8 Lean theorems where `lake build` succeeds; Rust gate + tests remain authoritative for runtime behaviour.
 
 * **Honest limit:** Never hardcode rival catalog SHAs — re-open the manifold lock + count script.
 
@@ -394,8 +394,8 @@ let stamp = witness.stamp(); // UcrsTier2: ucrs_seq, phase_entropy_bits_q, ...
 | L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | **Proved** | 0 |
 | L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | **Proved** | 0 |
 | L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | **Partial** | 0 |
-| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | **Axiom** | 0 |
-| L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | **Sorry stub** | 1 each — **Proposed (not yet built)** as proofs |
+| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | **Proved** | 0 — former Tier-2 axiom → theorem |
+| L5–L8 | `Lean/Ucrs/L5_*.lean` … `L8_*.lean` | **Proved** | 0 each — contentful; no `: True`, no `sorry` |
 | Haskell | `Haskell/test/Spec.hs` | 5 properties | scaffold |
 | Rust | `Rust/src/`, `Rust/tests/` | Active | 59 tests |
 | Python | `Python/sim/` | Foundation | not a proof track |
@@ -410,11 +410,11 @@ Regenerate: `cd Lean && lake build`; `cd ../Haskell && cabal test`; `cd ../Rust 
 | `L1_LandauerNonneg.lean` | Landauer nonnegativity (proved) |
 | `L2_TensorLandauer.lean` | Tensor additivity (proved) |
 | `L3_CreditGreedy.lean` | Greedy credit partial theorem |
-| `L4_GateAdmit.lean` | Gate admit (axiom) |
-| `L5_ClockCoalgebra.lean` | Sorry stub — Proposed |
-| `L6_ByzantineIsolation.lean` | Sorry stub — Proposed |
-| `L7_SyncOverhead.lean` | Sorry stub — Proposed |
-| `L8_WireMonotone.lean` | Sorry stub — Proposed |
+| `L4_GateAdmit.lean` | Gate admit (proved; `gate_admit_within_budget`) |
+| `L5_ClockCoalgebra.lean` | Clock drift bound (proved) |
+| `L6_ByzantineIsolation.lean` | Byzantine isolation (proved) |
+| `L7_SyncOverhead.lean` | Sync overhead via L1 (proved) |
+| `L8_WireMonotone.lean` | Wire seq monotone (proved) |
 
 </details>
 
@@ -477,7 +477,7 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 ### 9.4 Operational mapping
 
 - **May:** depend on `umst_ucrs` as a library; call `witness_for_agent`; read stamp fields on memory rows.
-- **Must not:** treat UCRS as MCP host; blend Lean L5–L8 stubs into “proved”; store domain mix content here.
+- **Must not:** treat UCRS as MCP host; treat optional P2P mesh as required for stamps; store domain mix content here.
 - **MCP tools:** authoritative list = concrete `umst-mcp` only.
 
 ### 9.5 Proposed (not yet built)
@@ -486,7 +486,6 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 |:---|:---|
 | `MaterialEvolutionFrontier` | `built = false` in design sheaf |
 | `SheafCohomologySeam` | seam only |
-| Lean L5–L8 | sorry stubs — not production proofs |
 | P2P mesh production | optional feature; in progress |
 
 ### 9.6 Principles
@@ -494,7 +493,7 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 * **Sync is measurement.** Clock alignment pays Landauer cost or is rejected — time is not a free coordinate.
 * **Stamps, not physics.** UCRS records when and how much information was spent; it does not validate constitutive law or re-prove MI.
 * **Infra-purity.** Domain steering and mix content live in consumer crates — the Time fiber stays generic.
-* **Tests over stubs.** Rust gate + tests are authoritative; Lean L5–L8 remain Proposed until discharged.
+* **Tests and proofs.** Rust gate + tests are authoritative for runtime; Lean L4–L8 are proved contentful theorems — do not re-label them Proposed.
 
 ---
 
@@ -524,7 +523,7 @@ Status accounting @ **`e4666ba`**. **One status pointer:** [`PROOF-STATUS.md`](P
 |:---|:---|:---|
 | **Rust library** | Working | `cd Rust && cargo test` @ **`e4666ba`** → **59** passed, 0 failed (paste in [§6](#6-quick-start)) |
 | **P2P daemon** | Optional / in progress | Feature-gated; not required for stamps |
-| **Lean** | Mixed | L1–L2 proved; L3 partial; L4 axiom; L5–L8 **sorry stubs** — see [`PROOF-STATUS.md`](PROOF-STATUS.md) |
+| **Lean** | L1–L8 closed except L3 partial | L1–L2 proved; L3 partial bound; **L4–L8 proved** (zero `sorry`) — see [`PROOF-STATUS.md`](PROOF-STATUS.md) |
 | **Haskell QuickCheck** | Scaffold | 5 properties in `Haskell/test/Spec.hs` |
 | **Python sims** | Foundation | `Python/sim/` topology + drift studies |
 | **Material evolution between vertebrae** | **Proposed (not yet built)** | `MaterialEvolutionFrontier.built = false` ([`design_sheaf.rs:89–107`](Rust/src/design_sheaf.rs)) |
@@ -543,12 +542,12 @@ Status accounting @ **`e4666ba`**. **One status pointer:** [`PROOF-STATUS.md`](P
 ### What surprised us
 
 - **Subtraction was the upgrade.** The infra-purity refactor (`5a3df25`) *removed* capability — TNA and steering logic left the core for consumer crates — and the fiber got better, not poorer. Forcing the Time layer to know nothing about concrete, vaults, or any domain is exactly what lets Matter, Knowing, and Acting all stamp against it. Frugality, it turned out, applies to the dependency graph, not only to the joules.
-- **Labeling "not yet proved" beats hiding it.** Lean L5–L8 are `sorry` stubs. Rather than quietly omit them, they carry a Proposed label so no agent mistakes a stub for a shipped proof. The honesty ledger we demand of the physics, we applied to our own proof status — and it made the repo easier to trust, not harder.
+- **Labeling "not yet proved" beats hiding it.** While Lean L5–L8 were open, they carried a Proposed / `sorry`-stub label so no agent mistook scaffolding for a shipped proof. Those proofs are now discharged with content (and L4’s former axiom is a theorem); the labels came off when the proofs closed. The honesty ledger we demand of the physics, we applied to our own proof status — and it made the repo easier to trust, not harder.
 - **The common case shouldn't pay for the rare one.** `default = []` means a consumer that only wants stamps never compiles `libp2p`. You pay for the P2P mesh only if you ask for it — the same "spend only what the work requires" ethic that governs sync, governing the build.
 
 ### Forward path
 
-- Close Lean L3–L8 gaps without new physics axioms.
+- Close the remaining Lean L3 greedy-optimality gap without new physics axioms; keep L4–L8 green under `lake build`.
 - Harden optional P2P path behind explicit feature + ops docs.
 - Deeper manifold catalog integration (link lock; never hardcode rival SHAs).
 
