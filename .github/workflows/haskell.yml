@@ -4,9 +4,9 @@ name: Haskell
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
 
 jobs:
   quickcheck:

@@ -4,9 +4,9 @@ name: Python
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

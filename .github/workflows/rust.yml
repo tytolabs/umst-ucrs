@@ -5,9 +5,9 @@ name: Rust
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -45,6 +45,21 @@ jobs:
             git -C umst-manifold checkout "$MANIFOLD_SHA"
           fi
           git -C umst-manifold merge-base --is-ancestor "$MANIFOLD_SHA" HEAD
+      - name: Read pinned umst-foundations ref
+        id: foundations_pin
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          sha=$(python3 -c "import tomllib; print(tomllib.load(open('.umst-pins.toml','rb'))['umst-foundations']['sha'])")
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - name: Clone umst-foundations for path dependencies (private)
+        working-directory: ${{ github.workspace }}
+        env:
+          UMST_PRIVATE_CHECKOUT: ${{ secrets.UMST_PRIVATE_CHECKOUT }}
+          FOUNDATIONS_SHA: ${{ steps.foundations_pin.outputs.sha }}
+        run: |
+          set -euo pipefail
+          bash .github/scripts/checkout-umst-siblings.sh "umst-foundations@${FOUNDATIONS_SHA}"
       - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # master
         with:
           toolchain: 1.88.0
