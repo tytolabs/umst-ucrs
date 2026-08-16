@@ -1,4 +1,4 @@
-SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+-- SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 /-
   SPDX-License-Identifier: MIT
   L8 — Wire v2 sequence numbers are monotone under stamp advance.
