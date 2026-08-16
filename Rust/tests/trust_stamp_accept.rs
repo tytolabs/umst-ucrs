@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! Integration: `TrustAttested` warrant ↔ `UcrsObservedAt` durable accept binding (SEC-UCRS-STAMP).
 
 use umst_ucrs::{

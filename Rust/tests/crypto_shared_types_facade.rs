@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! U1 crypto facade parity — `shared_types::crypto` consumer contract (CELL_UCRS_READY_U1_CRYPTO).
 
 use umst_ucrs::shared_types::crypto::{

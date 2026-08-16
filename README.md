@@ -1,6 +1,6 @@
-<!--
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 SPDX-License-Identifier: MIT
-Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
+<!--
 -->
 <!-- markdownlint-disable-file MD013 MD040 MD001 MD026 — hero README is intentionally dense; other docs stay strict via shared config. -->
 
@@ -569,9 +569,9 @@ Shared gate spine — **time** (this fiber) · **matter** · **knowing** · **ac
 
 ## Authors
 
-**Santhosh Shyamsundar** — Studio TYTO · [santhoshshyamsundar@tyto.studio](mailto:santhoshshyamsundar@tyto.studio)
+**Santhosh Shyamsundar** —  · [santhoshshyamsundar@tyto.studio](mailto:santhoshshyamsundar@tyto.studio)
 
-**Santosh Prabhu Shenbagamoorthy** — Studio TYTO · [santosh@tyto.studio](mailto:santosh@tyto.studio)
+**Santosh Prabhu Shenbagamoorthy** —  · [santosh@tyto.studio](mailto:santosh@tyto.studio)
 
 ---
 
@@ -602,7 +602,7 @@ Corrections welcome via PR. Run `cd Rust && cargo test` before Rust changes; upd
   title     = {{UMST-UCRS}: Universal Calendar Resolution Spine},
   author    = {Shyamsundar, Santhosh and Shenbagamoorthy, Santosh Prabhu},
   year      = {2026},
-  publisher = {Studio TYTO},
+  publisher = {},
   url       = {https://github.com/tytolabs/umst-ucrs},
   license   = {MIT}
 }
@@ -612,7 +612,7 @@ Corrections welcome via PR. Run `cd Rust && cargo test` before Rust changes; upd
 
 ## License
 
-Released under the [MIT License](LICENSE). © 2026 Studio TYTO.
+Released under the [MIT License](LICENSE). © 2026 .
 
 <!-- AUTO-LATTICE:BEGIN -->
 ## Lattice position

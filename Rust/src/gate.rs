@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Consumer contract: `umst_ucrs::gate` (Wave 3 · CELL_UCRS_READY_U3_GATE).
 //! Sync-economics gate morphisms reachable via `gate_check` · `gated_sync` ·
 //! `ClockThermState` · `GateVerdict` — **not** material CD (cartridge `umst-gate` owns matter).

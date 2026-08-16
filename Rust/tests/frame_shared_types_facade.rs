@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! U2 frame facade parity — `shared_types::frame_spine` consumer contract (CELL_UCRS_READY_U2_FRAME).
 
 use umst_ucrs::shared_types::frame_spine::{

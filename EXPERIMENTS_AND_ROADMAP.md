@@ -1,3 +1,5 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+SPDX-License-Identifier: MIT
 # FCP-VI: Experiments and Remaining Work
 
 > Towards UMST VI — Compositional Thermodynamic Accounting for

@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! FLEET-COMPOSER-F F64/F86 — gate-guarded gossip outbound→inbound cycle (no libp2p).
 //!
 //! Absorbs E64 unit probe; exercises `p2p::{outbound_tick_if_admitted, apply_gated_inbound}`

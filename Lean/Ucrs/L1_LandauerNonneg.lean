@@ -1,3 +1,4 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 /-
   SPDX-License-Identifier: MIT
   L1 — Landauer bit energy nonnegativity (derived from umst-formal).

@@ -1,3 +1,5 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+SPDX-License-Identifier: MIT
 # Foundation: Relationship to Prior FCP Work
 
 > **Independent repo:** `umst-ucrs` is the **Universal Calendar Resolution Spine** — public on GitHub (`tytolabs/umst-ucrs`). FCP-VI/Zenodo are not this repo's identity; they remain referenced only as inherited formal lineage below.

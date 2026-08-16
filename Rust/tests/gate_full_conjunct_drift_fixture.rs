@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! Full four-conjunct gate drift: umst-math gate_sdf ↔ formal thermo snapshots.
 
 use std::fs;

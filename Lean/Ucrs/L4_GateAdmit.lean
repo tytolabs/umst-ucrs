@@ -1,3 +1,4 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 /-
   SPDX-License-Identifier: MIT
   L4 — Gate admits sync within thermodynamic budget (0 sorry, 0 axiom).

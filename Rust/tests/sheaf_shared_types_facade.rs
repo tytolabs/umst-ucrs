@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! U2 sheaf facade parity — `shared_types::design_sheaf` consumer contract (CELL_UCRS_READY_U2_SHEAF).
 
 use umst_ucrs::shared_types::design_sheaf::{

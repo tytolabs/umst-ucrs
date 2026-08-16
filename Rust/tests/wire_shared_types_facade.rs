@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! U1 wire facade parity — `shared_types::wire` consumer contract (CELL_UCRS_READY_U1_WIRE).
 
 use umst_ucrs::shared_types::wire::{sign_tick, verify_tick, ClockTick, MergeOutcome};

@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! UCRS spine locals — clock, credit, agent loop, landauer_global (Wave 1 · CELL_UCRS_READY_U1_LIB).
 //!
 //! Stamp-only consumers must use [`crate::shared_types`] — **not** this module.

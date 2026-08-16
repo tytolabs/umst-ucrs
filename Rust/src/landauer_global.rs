@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Consumer contract: `umst_ucrs::ucrs_keep::coordination_cost_global` (Wave 4 · CELL_UCRS_READY_U4_LANDAUER_GLOBAL).
 //! Global multi-information Landauer morphisms reachable via
 //! `landauer_global::{multi_information_bits,coordination_cost_global,n2_global_matches_pairwise_ssot,

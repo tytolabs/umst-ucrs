@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! UMST-UCRS library crate.
 //!
 //! Consumer contract: `umst_ucrs::shared_types` (Wave 0–1 · observation · accept · wire · crypto · cast spine).

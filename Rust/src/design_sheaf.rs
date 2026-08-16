@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Consumer contract: `umst_ucrs::shared_types::design_sheaf` (Wave 1 · CELL_UCRS_READY_U2_SHEAF).
 //! Cast-spine sheaf morphisms reachable via `DesignSheafOverSpine` · `route_steerability` ·
 //! `spine_admissible_under_gluing` — **not** daemon · p2p · agent_tick.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! Shared fixture roundtrip: Rust `observed_at.v2` ↔ cartridge `wire_v2.rs`.
 
 use umst_ucrs::observation::{ObservedAtV2Wire, UcrsObservedAt, WIRE_SCALE};

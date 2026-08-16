@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! FLEET-COMPOSER ACCEL-C AC81 — UARCS-A7-4 policy wire UCRS owner deepen.
 //!
 //! UCRS owns **when + provenance** observation stamps and Landauer pairwise SSOT that

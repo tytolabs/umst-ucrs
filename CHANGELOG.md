@@ -1,3 +1,5 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+SPDX-License-Identifier: MIT
 # Changelog
 
 All notable changes to **UMST-UCRS** (`tytolabs/umst-ucrs`) are documented here.

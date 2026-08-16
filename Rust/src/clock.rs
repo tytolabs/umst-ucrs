@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Consumer contract: `umst_ucrs::ucrs_keep::LocalClock` (Wave 4 · CELL_UCRS_READY_U4_CLOCK).
 //! Local oscillator morphisms reachable via `LocalClock::{new,update_uncertainty,phase_entropy_bits,
 //! desync_energy_joules,record_sync,time_since_sync,predicted_error_at}` — **not** wire/p2p hot path.

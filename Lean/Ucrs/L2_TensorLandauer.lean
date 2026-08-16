@@ -1,3 +1,4 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 /-
   SPDX-License-Identifier: MIT
   L2 — Tensor Landauer additivity (algebraic; no axiom).

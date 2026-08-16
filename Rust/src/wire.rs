@@ -1,3 +1,4 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
 // Wire format for gossip P2P: JSON payload + 32-byte keyed digest `sig` (no libp2p in this module).
 

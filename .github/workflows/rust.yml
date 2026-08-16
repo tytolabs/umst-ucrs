@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+# SPDX-License-Identifier: MIT
 # Rust crate under Rust/ — isolated checkout (no MaOS mega-workspace).
 name: Rust
 

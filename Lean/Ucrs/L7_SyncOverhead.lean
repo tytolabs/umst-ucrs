@@ -1,3 +1,4 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 /-
   SPDX-License-Identifier: MIT
   L7 — Sync overhead obeys the second-law / Landauer floor (via L1).

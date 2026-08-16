@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Consumer contract: `umst_ucrs::shared_types::frame_spine` (Wave 1 · CELL_UCRS_READY_U2_FRAME).
 //! Cast-spine morphisms reachable via `Frame` · `Spine` · `Vertebra` · `SpineTime` · `MaterialState` —
 //! **not** daemon · p2p · agent_tick.

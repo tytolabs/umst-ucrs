@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! OPERATOR ACCEL AC21 — UARCS-004 `present_wired` UCRS policy-present deepen.
 //!
 //! UCRS owns **when + provenance** observation stamps (`UcrsObservedAt`, `TemporalWitness`,

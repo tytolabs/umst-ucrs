@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! U4 landauer_global consumer contract parity — `umst_ucrs::ucrs_keep::coordination_cost_global`
 //! (CELL_UCRS_READY_U4_LANDAUER_GLOBAL · feature `a7-4`).
 

@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! OPERATOR ACCEL AC82 — UARCS-gossip `mesh_wired` false census (UCRS owner lane).
 //!
 //! UCRS owns **gate-guarded clock gossip prep** (`wire::ClockTick`, `p2p` inbound/outbound cycle)

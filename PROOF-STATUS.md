@@ -1,3 +1,5 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+SPDX-License-Identifier: MIT
 # UCRS proof status (generated)
 
 **Repo:** [`umst-ucrs`](https://github.com/tytolabs/umst-ucrs)  

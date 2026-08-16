@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! Consumer contract: `umst_ucrs::shared_types::crypto` (Wave 1 · CELL_UCRS_READY_U1_CRYPTO).
 //! PQC morphisms reachable via `hash` · `kem` · `sig` submodules — **not** daemon · p2p · agent_tick.
 //!

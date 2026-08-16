@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! S-0 — ε-bisim parity: `umst_ucrs::crypto` vs `umst_math::crypto` + `umst_algebra::crypto` (R-3.9.x deepen).
 
 use umst_algebra::crypto::hash::sha3_256::digest as algebra_digest;

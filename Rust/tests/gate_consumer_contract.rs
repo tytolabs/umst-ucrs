@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! U3 gate consumer contract parity — `umst_ucrs::gate` sync economics (CELL_UCRS_READY_U3_GATE).
 
 use umst_math::clausius_duhem_admissible;

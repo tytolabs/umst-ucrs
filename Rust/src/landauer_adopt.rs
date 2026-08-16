@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Consumer contract: `umst_ucrs::bench::landauer_adopt` (Wave 6 · CELL_UCRS_READY_U6_LANDAUER_ADOPT).
 //! LIB-ADOPT-A-LANDAUER adoption witness morphisms reachable via
 //! `landauer_adopt::{landauer_ucrs_wire_hops_honest,landauer_ucrs_pairwise_adopt_closed,

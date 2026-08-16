@@ -1,3 +1,5 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+SPDX-License-Identifier: MIT
 # UCRS logging policy — immutable observation stamps
 
 **Status:** Draft policy (2026-06-18)  

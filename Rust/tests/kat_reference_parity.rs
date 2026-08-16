@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! S-0 — committed KAT reference fixture drives ucrs↔algebra parity (SEC-UCRS-PARITY deepen).
 
 mod common;

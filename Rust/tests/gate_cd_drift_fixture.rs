@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! U1 — Clausius–Duhem drift fixture: ucrs gate + umst-math SSOT vs shared vectors.
 
 use std::fs;

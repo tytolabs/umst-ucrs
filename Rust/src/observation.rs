@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Immutable observation stamps for durable logs (`UcrsObservedAt`).
 //!
 //! Wire shape aligns with [`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/schemas/contribution.v1.json)

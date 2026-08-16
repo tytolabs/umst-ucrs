@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! S-0 — ε-bisim parity: `umst_algebra::crypto` ↔ `umst_ucrs::crypto` (R-3.9.x deepen).
 //!
 //! Relocated from `umst-algebra/tests/` (OP5A-PARITY-RELOC; SSOT: `docs/OP5_EXCEPTION_UMST_ALGEBRA.md` §3.2.1).
