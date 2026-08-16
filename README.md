@@ -616,7 +616,7 @@ Released under the [MIT License](LICENSE). © 2026 .
 <!-- AUTO-LATTICE:BEGIN -->
 ## Lattice position
 
-**What it is:** `tytolabs/umst-ucrs` — Time fiber — temporal witness / stamp spine + Landauer sync economics.
+**Role.** `tytolabs/umst-ucrs` — Time fiber — temporal witness / stamp spine + Landauer sync economics.
 
 **One-line role:** `spine` on layer `spine` (status `wip`, stability `evolving`, semver `0.1.0`).
 
