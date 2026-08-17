@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+// SPDX-License-Identifier: MIT
 //! P2P gossip daemon: libp2p noise/yamux/mDNS/GossipSub mesh for UCRS clock sync.
 //!
 //! Publishes gate-guarded JSON [`umst_ucrs::wire::ClockTick`] on gossipsub topic

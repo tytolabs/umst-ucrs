@@ -1,8 +1,10 @@
+SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+SPDX-License-Identifier: MIT
 # Tier-1 HLC sidecar pattern
 
 **Status:** Design note (2026-06-19)  
 **Audience:** Cartridge MCP operators, `umst-ucrs` embedders  
-**Companion:** [`LOGGING_POLICY.md`](LOGGING_POLICY.md) · [`contribution-stack-ucrs-timing-research.md`](https://github.com/tytolabs/MaOS-Workspace/blob/main/outputs/.plans/contribution-stack-ucrs-timing-research.md)
+**Companion:** [`LOGGING_POLICY.md`](LOGGING_POLICY.md) · [`contribution-stack-ucrs-timing-research.md`](https://github.com/tytolabs/tyto-workspace/blob/main/outputs/.plans/contribution-stack-ucrs-timing-research.md)
 
 ---
 

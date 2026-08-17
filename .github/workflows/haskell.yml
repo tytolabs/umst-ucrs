@@ -1,10 +1,12 @@
+# SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+# SPDX-License-Identifier: MIT
 name: Haskell
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, docs/reorganize-readme]
 
 jobs:
   quickcheck:

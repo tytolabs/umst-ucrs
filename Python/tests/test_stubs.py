@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+# SPDX-License-Identifier: MIT
 """Smoke tests for Phase E2 simulation stubs."""
 
 from __future__ import annotations

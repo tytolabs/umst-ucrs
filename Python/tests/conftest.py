@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+# SPDX-License-Identifier: MIT
 """pytest path setup for umst-ucrs Python sim package."""
 
 from __future__ import annotations

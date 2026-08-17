@@ -1,11 +1,31 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! P2P gossip stubs — peer types, gate-guarded sync hook, localhost mesh helpers.
 //!
 //! Full libp2p swarm lives in `bin/p2p.rs` when the `p2p` feature is enabled.
 //! This module is always available so integration tests can exercise gossip logic
 //! without pulling libp2p into default library builds.
+
+/// FLEET-COMPOSER-F F64 job id — gossip cycle integration test.
+pub const FLEET_COMPOSER_F64_JOB_ID: &str = "FLEET-COMPOSER-F64-UCRS-GOSSIP";
+
+/// FLEET-COMPOSER-F F64 receipt path (parent workspace relative).
+pub const FLEET_COMPOSER_F64_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F64_UCRS_1934.md";
+
+/// FLEET-COMPOSER-F F86 job id — gossip cycle integration test.
+pub const FLEET_COMPOSER_F86_JOB_ID: &str = "FLEET-COMPOSER-F86-UCRS-GOSSIP";
+
+/// FLEET-COMPOSER-F F86 receipt path (parent workspace relative).
+pub const FLEET_COMPOSER_F86_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F86_UCRS_GOSSIP_1942.md";
+
+/// FLEET-COMPOSER-G G86 job id — gossip mesh wire probe (honest mesh-open).
+pub const FLEET_COMPOSER_G86_JOB_ID: &str = "FLEET-COMPOSER-G86-UCRS-GOSSIP";
+
+/// FLEET-COMPOSER-G G86 receipt path (parent workspace relative).
+pub const FLEET_COMPOSER_G86_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_G86_UCRS_GOSSIP_2143.md";
+
+/// Prior E64 gossip cycle cut absorbed by F86.
+pub const ABSORBED_E64_SECRET: &[u8] = b"e64-gossip-cycle";
 
 use crate::credit::{CreditLedger, PeerId};
 use crate::gate::{self, ClockThermState, GateVerdict};
@@ -174,5 +194,31 @@ mod tests {
             apply_gated_inbound(&mut clock, &mut ledger, &config, &tick, b"test"),
             GatedSyncOutcome::RejectedByGate
         );
+    }
+
+    #[test]
+    fn gossip_outbound_inbound_cycle_respects_gate() {
+        let mut clock_out = LocalClock::new(10.0, 300.0);
+        clock_out.phase_uncertainty_sec = 4e-9;
+        let mut clock_in = LocalClock::new(10.0, 300.0);
+        clock_in.phase_uncertainty_sec = 1e-6;
+        let mut ledger = CreditLedger::new(2, 300.0);
+        ledger.add_peer(1, 5.0);
+        let publisher = localhost_peer_config(0, 20.0);
+        let receiver = localhost_peer_config(1, 20.0);
+        let secret = b"e64-gossip-cycle";
+        let tick = outbound_tick_if_admitted(&clock_out, &publisher, secret);
+        assert!(tick.is_some(), "outbound tick admitted under budget");
+        let tick = tick.unwrap();
+        assert_eq!(tick.agent_id, 1);
+        let outcome = apply_gated_inbound(&mut clock_in, &mut ledger, &receiver, &tick, secret);
+        assert_eq!(outcome, GatedSyncOutcome::Admitted(MergeOutcome::Accepted));
+    }
+
+    #[test]
+    fn w8e14_outbound_tick_none_when_low_entropy() {
+        let clock = LocalClock::new(10.0, 300.0);
+        let config = localhost_peer_config(0, 20.0);
+        assert!(outbound_tick_if_admitted(&clock, &config, b"low-entropy").is_none());
     }
 }

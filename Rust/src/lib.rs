@@ -1,15 +1,15 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! UMST-UCRS library crate.
 //!
-//! Re-exports the public modules so downstream crates can consume the
-//! thermodynamic clock, gate, credit-ledger, Landauer-cost, RAPL-telemetry, and Prometheus
-//! bridge APIs without depending on the daemon binary.
+//! Consumer contract: `umst_ucrs::shared_types` (Wave 0–1 · observation · accept · wire · crypto · cast spine).
+//! Spine locals: `umst_ucrs::ucrs_keep` (clock · credit · agent_tick · landauer_global).
 //!
-//! The binary (`src/main.rs`) is a thin wrapper over this library: it constructs an
-//! `AgentConfig`, starts the simulation / P2P loop, and exports Prometheus metrics.
+//! The binary (`src/main.rs`) is a thin wrapper: constructs [`ucrs_keep::AgentConfig`], starts the
+//! simulation / P2P loop, and exports Prometheus metrics.
 
+/// Durable accept stamps — `TrustAttested` warrant + `UcrsObservedAt` (S-Q4; no TrustLedger).
+pub mod accept;
 pub mod clock;
 pub mod credit;
 /// S-0 crypto parity — PQC reference (`umst_math::crypto` mirror).
@@ -22,173 +22,52 @@ pub mod design_sheaf;
 /// Frame / spine contract — cast funicular as degenerate 2-vertebra trajectory.
 pub mod frame_spine;
 pub mod gate;
+/// AC82 — UARCS-gossip mesh_wired false census (`mesh_wired` false unless WEB-034 measured).
+pub mod gossip_mesh_census;
 pub mod landauer;
+/// LIB-ADOPT-A-LANDAUER — UCRS pattern SSOT adoption witness (P1542 B4).
+pub mod landauer_adopt;
+#[cfg(feature = "a7-4")]
+/// A7-4 global multi-information Landauer cost (feature-gated).
+pub mod landauer_global;
 /// Immutable observation stamps for durable agent logs (`UcrsObservedAt`, `TemporalWitness`).
 pub mod observation;
 /// P2P gossip types + gate-guarded sync hook (no libp2p in default builds).
 pub mod p2p;
 pub mod rapl;
+/// Consumer contract facade — observation, accept, wire, crypto, cast spine (Wave 0).
+pub mod shared_types;
 pub mod telemetry;
+/// AC21 — UARCS-004 policy-present deepen (`present_wired` false unless measured).
+pub mod uarcs_004_policy_present;
+/// AC81 — UARCS-A7-4 policy wire deepen (`policy_wired` false unless measured).
+pub mod uarcs_a7_4_policy_wire;
+/// Spine locals — clock, credit, agent loop, landauer_global (Wave 1 · U1_LIB barrel split).
+pub mod ucrs_keep;
 /// Gossip wire format + signature glue (no libp2p — safe for default library-only builds).
 pub mod wire;
 
-use tracing::{info, warn};
+// --- Wave 2 compat shims (deprecated root re-exports) ---
 
+#[deprecated(note = "use umst_ucrs::shared_types::accept")]
+pub use accept::{
+    DurableAccept, DurableAcceptWire, TrustAttestedWarrant, TrustCipherSuite, TrustStampReject,
+    DURABLE_ACCEPT_SCHEMA_VERSION,
+};
+#[deprecated(note = "use umst_ucrs::shared_types::decision_tree")]
 pub use decision_tree::{SteerDecision, SteerDecisionTrace, SteerKnobs, SteerPolicy};
+#[deprecated(note = "use umst_ucrs::shared_types::design_sheaf")]
 pub use design_sheaf::{
     route_steerability, spine_admissible_under_gluing, DecisionPolicy, DesignSheafOverSpine,
     MaterialEvolutionFrontier, SheafCohomologySeam, SheafGluingWitness, SheafRestriction,
     SheafSection, SteerabilityBranch, SteerabilityDecision,
 };
+#[deprecated(note = "use umst_ucrs::shared_types::frame_spine")]
 pub use frame_spine::{
     Frame, MaterialState, OriginEvent, Spine, SpineTime, UnitVec3, Vertebra, VertebraGateVerdict,
 };
+#[deprecated(note = "use umst_ucrs::shared_types::observation")]
 pub use observation::{TemporalWitness, UcrsObservedAt};
 
-use clock::LocalClock;
-use credit::CreditLedger;
-use gate::ClockThermState;
-
-/// Agent configuration.
-#[derive(Debug, Clone)]
-pub struct AgentConfig {
-    /// Unique peer identifier.
-    pub peer_id: credit::PeerId,
-    /// Local oscillator drift rate (ppb).
-    pub drift_ppb: f64,
-    /// Temperature at compute node (Kelvin).
-    pub temperature_k: f64,
-    /// Sync energy budget per window (bits).
-    pub budget_bits: f64,
-    /// Sync interval target (seconds).
-    pub sync_interval_sec: f64,
-}
-
-impl Default for AgentConfig {
-    fn default() -> Self {
-        Self {
-            peer_id: 1,
-            drift_ppb: 10.0,      // typical quartz
-            temperature_k: 300.0, // room temperature
-            budget_bits: 20.0,    // 20 bits per sync window
-            sync_interval_sec: 60.0,
-        }
-    }
-}
-
-/// Single-tick agent loop (for testing and simulation).
-///
-/// In production this runs inside a Tokio async loop with libp2p. Here we expose the core
-/// logic as a synchronous function for unit testing, deterministic simulation, and for
-/// downstream consumers that want to drive the ledger without spinning the
-/// full P2P stack.
-/// Total function: build a live observation witness from agent configuration.
-#[must_use]
-pub fn witness_for_agent(config: &AgentConfig) -> observation::TemporalWitness {
-    observation::TemporalWitness::from_agent(config)
-}
-
-pub fn agent_tick(
-    clock: &mut LocalClock,
-    ledger: &mut CreditLedger,
-    config: &AgentConfig,
-) -> Option<rapl::SyncEnergyRecord> {
-    // 1. Update drift-based uncertainty
-    clock.update_uncertainty();
-    let entropy_bits = clock.phase_entropy_bits();
-
-    if entropy_bits < 1.0 {
-        // Not enough drift to justify a sync — free-run
-        return None;
-    }
-
-    // 2. Construct thermodynamic state for gate check
-    let therm_state = ClockThermState {
-        desync_energy_j: clock.desync_energy_joules(),
-        budget_j: landauer::landauer_cost(config.budget_bits, config.temperature_k),
-        temperature_k: config.temperature_k,
-        total_sync_cost_j: 0.0,
-    };
-
-    // 3. Select best peer via credit system
-    let decision = match ledger.best_peer() {
-        Some(d) => d,
-        None => {
-            warn!("No peers available for sync — free-running");
-            return None;
-        }
-    };
-
-    // 4. Check thermodynamic gate
-    match gate::gate_check(&therm_state, decision.bits_to_resolve) {
-        gate::GateVerdict::Reject => {
-            info!(
-                "Gate rejected sync: cost {} bits > budget {} bits",
-                decision.bits_to_resolve, config.budget_bits
-            );
-            return None;
-        }
-        gate::GateVerdict::Admit => {}
-    }
-
-    // 5. Perform sync (measure energy if RAPL available)
-    let (_, measured_energy) = rapl::measure_energy(|| {
-        // In production: send/receive P2P sync message here.
-        clock.record_sync();
-    });
-
-    // 6. Record in credit ledger
-    ledger.record_sync(decision.peer_id, decision.bits_to_resolve, true);
-
-    // 7. Return energy record for telemetry
-    let record = rapl::SyncEnergyRecord::new(
-        decision.bits_to_resolve,
-        config.temperature_k,
-        measured_energy,
-    );
-
-    info!(
-        "Synced with peer {}: resolved {:.2} bits, Landauer floor {:.2e} J",
-        decision.peer_id, record.bits_resolved, record.landauer_floor_j
-    );
-
-    telemetry::record_sync_event(&record);
-
-    Some(record)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn agent_tick_no_sync_when_fresh() {
-        let config = AgentConfig::default();
-        let mut clock = LocalClock::new(10.0, 300.0);
-        let mut ledger = CreditLedger::new(1, 300.0);
-        ledger.add_peer(2, 5.0);
-        ledger.record_sync(2, 1.0, true);
-
-        let result = agent_tick(&mut clock, &mut ledger, &config);
-        assert!(result.is_none(), "Should not sync with zero drift");
-    }
-
-    #[test]
-    fn full_sync_cycle() {
-        let config = AgentConfig::default();
-        let mut clock = LocalClock::new(10.0, 300.0);
-        let mut ledger = CreditLedger::new(1, 300.0);
-        ledger.add_peer(2, 5.0);
-        ledger.record_sync(2, 5.0, true);
-
-        clock.phase_uncertainty_sec = 1e-6; // 1 µs ~ 10 bits
-        clock.last_sync = std::time::Instant::now() - std::time::Duration::from_secs(100);
-
-        let result = agent_tick(&mut clock, &mut ledger, &config);
-        assert!(result.is_some(), "Should sync after drift");
-
-        let record = result.unwrap();
-        assert!(record.landauer_floor_j > 0.0);
-        assert!(record.bits_resolved > 0.0);
-    }
-}
+/// Root compat — prefer [`ucrs_keep::AgentConfig`].
+pub use ucrs_keep::{agent_tick, witness_for_agent, AgentConfig};

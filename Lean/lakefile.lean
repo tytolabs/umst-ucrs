@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
+-- SPDX-License-Identifier: MIT
+
 import Lake
 open Lake DSL
 
@@ -12,7 +15,7 @@ require «umst-formal» from "../.." / "umst-formal" / "Lean"
 /-!
   UCRS Lean mirror — Mathlib + pinned `umst-formal` Landauer bridge (U4).
   L1–L4: derive Landauer nonneg from formal; L3 partial bound (no `: True` axiom).
-  L5–L8: theorem stubs with `sorry`.
+  L5–L8: proved (U1 wave) — zero `sorry`, zero `: True`, no new axioms.
 -/
 
 lean_lib Ucrs where

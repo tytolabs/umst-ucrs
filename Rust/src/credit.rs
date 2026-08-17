@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Thermodynamic Credit Ledger.
 //!
 //! The credit system ensures least thermodynamic cost in a multi-agent
@@ -244,5 +243,11 @@ mod tests {
         let cost = ledger.total_network_cost_joules();
         let expected = landauer::landauer_cost(10.0, 300.0);
         assert!((cost - expected).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn w8e14_best_peer_none_when_empty() {
+        let ledger = CreditLedger::new(0, 300.0);
+        assert!(ledger.best_peer().is_none());
     }
 }

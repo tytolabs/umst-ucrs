@@ -1,9 +1,11 @@
 cabal-version: 2.4
+
 name:          umst-ucrs-properties
 version:       0.1.0.0
 synopsis:      QuickCheck property stubs mirroring umst-ucrs credit/gate invariants
 description:   Property tests for UCRS thermodynamic credit and gate predicates.
 license:       MIT
+copyright:      2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 author:        Santhosh Shyamsundar
 maintainer:    santhosh@studiotyto.com
 

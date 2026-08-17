@@ -1,11 +1,31 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
-//! Local oscillator model with drift tracking.
+//! Consumer contract: `umst_ucrs::ucrs_keep::LocalClock` (Wave 4 · CELL_UCRS_READY_U4_CLOCK).
+//! Local oscillator morphisms reachable via `LocalClock::{new,update_uncertainty,phase_entropy_bits,
+//! desync_energy_joules,record_sync,time_since_sync,predicted_error_at}` — **not** wire/p2p hot path.
 //!
-//! Each agent maintains a local clock that drifts from the true reference.
-//! Drift accumulates entropy (phase uncertainty), which has a measurable
-//! Landauer cost to resolve via sync.
+//! **Morphisms (egoff hot path):** `LocalClock` · phase entropy · desync energy · sync reset.
+//!
+//! **Lattice home:** `ucrs_keep::LocalClock` (keep — not `shared_types`; web/concrete must not import).
+//!
+//! **Reroute (G2):** `clock::LocalClock → ucrs_keep::LocalClock` re-export (preserved).
+//! `wire::apply_inbound_clock_tick → LocalClock` (preserved · wire antichain — not mutated this wave).
+//!
+//! | Conjunct | Role in local oscillator |
+//! |----------|--------------------------|
+//! | **Drift model** | `drift_ppb` · linear phase uncertainty growth |
+//! | **Phase entropy** | `phase_entropy_bits` — Shannon H over uncertainty interval |
+//! | **Desync energy** | `desync_energy_joules` — Landauer floor D(clock, T) |
+//! | **Sync reset** | `record_sync` — zero uncertainty · refresh timestamp |
+//!
+//! **Consumer fence (honest):**
+//!
+//! ```text
+//! CONSUMER_CLOCK_IMPORTS_ONLY :=
+//!   egoff · daemon (feature)  →  ucrs_keep::LocalClock · phase_entropy_bits · desync_energy_joules
+//!   web · concrete · bench    ⊄  LocalClock (stamp-only — use shared_types observation stamps)
+//!   all consumers             ⊄  apply_inbound_clock_tick (wire.rs — U1_WIRE antichain)
+//! ```
 
 use crate::landauer;
 use std::time::{Duration, Instant};
@@ -127,5 +147,14 @@ mod tests {
         clock.record_sync();
         assert_eq!(clock.phase_uncertainty_sec, 0.0);
         assert_eq!(clock.phase_entropy_bits(), 0.0);
+    }
+
+    #[test]
+    fn w8e14_predicted_error_scales_with_drift() {
+        let clock = LocalClock::new(20.0, 300.0);
+        let near = clock.predicted_error_at(1.0);
+        let far = clock.predicted_error_at(100.0);
+        assert!(far > near, "predicted phase error must grow with horizon");
+        assert!(near >= 0.0);
     }
 }

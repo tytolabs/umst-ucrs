@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Prometheus-compatible metrics for UMST-UCRS.
 //!
 //! Exports real-time measurements for:
@@ -182,5 +181,12 @@ mod tests {
         let _ = &*SYNC_EVENTS_TOTAL;
         let text = gather_text();
         assert!(text.contains("ucrs_sync_events_total"));
+    }
+
+    #[test]
+    fn w8e14_gather_text_nonempty() {
+        let text = gather_text();
+        assert!(!text.is_empty());
+        assert!(text.contains("# HELP"));
     }
 }

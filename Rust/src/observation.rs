@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Immutable observation stamps for durable logs (`UcrsObservedAt`).
 //!
 //! Wire shape aligns with [`contribution.v1`](https://github.com/tytolabs/umst-concrete-cartridge/schemas/contribution.v1.json)
@@ -231,7 +230,13 @@ mod tests {
         let mut w = TemporalWitness::new(1);
         let a = w.stamp();
         let b = w.stamp();
-        assert!(b.ucrs_seq.unwrap() > a.ucrs_seq.unwrap());
+        let a_seq = a
+            .ucrs_seq
+            .expect("TemporalWitness first stamp must emit ucrs_seq (FP §6 Track T.1)");
+        let b_seq = b
+            .ucrs_seq
+            .expect("TemporalWitness second stamp must emit ucrs_seq (FP §6 Track T.1)");
+        assert!(b_seq > a_seq);
     }
 
     #[test]
@@ -250,5 +255,11 @@ mod tests {
         let s = w.stamp();
         assert_eq!(s.stamp_tier, StampTier::UcrsTier2);
         assert_eq!(s.ucrs_seq, Some(1));
+    }
+
+    #[test]
+    fn w8e14_stamp_tier_wire_str_roundtrip() {
+        assert_eq!(StampTier::WallOnly.as_wire_str(), "WallOnly");
+        assert_eq!(StampTier::UcrsTier2.as_wire_str(), "UcrsTier2");
     }
 }

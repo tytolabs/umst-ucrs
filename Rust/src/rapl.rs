@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Intel RAPL (Running Average Power Limit) energy telemetry.
 //!
 //! Reads real energy consumption from the CPU's power meters.
@@ -200,5 +199,11 @@ mod tests {
         let record = SyncEnergyRecord::new(1.0, 300.0, None);
         // 1 bit at 300K: ~2.87e-21 J
         assert!((record.landauer_floor_j - 2.87e-21).abs() < 1e-22);
+    }
+
+    #[test]
+    fn w8e14_energy_reading_delta_zero_same() {
+        let a = EnergyReading { microjoules: 1000 };
+        assert!((a.delta(&a)).abs() < f64::EPSILON);
     }
 }

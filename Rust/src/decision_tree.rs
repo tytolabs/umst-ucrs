@@ -1,6 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Cast spine **decision tree** — generic steerability branches for agent episodes.
 //!
 //! Consumer crates supply concrete witness and lane types; this module provides only the
@@ -151,5 +150,21 @@ mod tests {
         };
         let d = DummySteerPolicy.evaluate(&knobs, &witness, None);
         assert!(matches!(d, SteerDecision::GateReject { .. }));
+    }
+
+    #[test]
+    fn w8e14_morph_load_offset_on_frac() {
+        let knobs = SteerKnobs {
+            thickness_m: 0.15,
+            live_x_offset_frac: 0.25,
+            wind_fx_n: 0.0,
+            objective_lane: DummyLane,
+        };
+        let witness = demo_witness(0.4);
+        let d = DummySteerPolicy.evaluate(&knobs, &witness, None);
+        assert!(matches!(
+            d,
+            SteerDecision::MorphLoadOffset { to_frac: 0.25, .. }
+        ));
     }
 }

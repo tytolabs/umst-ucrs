@@ -1,11 +1,13 @@
+// SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 Santhosh Shyamsundar, Santosh Prabhu Shenbagamoorthy — Studio TYTO
-
 //! Landauer thermodynamic cost computation.
 //!
 //! Mirrors the Lean-verified definitions from `UMSTCore.lean` and
 //! `LandauerBound.lean`. Every constant here matches the formally
 //! verified value to full IEEE-754 f64 precision.
+//!
+//! **Primitive-fact:** Landauer bound `E_bit = k_B T ln(2)` — physics citation
+//! (Landauer 1961); `k_B` exact per 2019 SI redefinition. **Not** measured lab ε.
 
 /// Boltzmann constant in SI (J/K) — exact per 2019 SI redefinition.
 pub const K_B: f64 = 1.380_649e-23;
@@ -65,6 +67,39 @@ pub fn coordination_cost(mutual_info_bits: f64, temperature_kelvin: f64) -> f64 
     landauer_cost(mutual_info_bits, temperature_kelvin)
 }
 
+/// Pairwise Shannon mutual information in bits from declared entropies.
+///
+/// `I(X;Y) = H(X) + H(Y) − H(X,Y)` [log₂].
+///
+/// Returns `None` when marginals are inconsistent with joint support (negative MI)
+/// or inputs are non-finite. Matches Lean `multiInformationBits_pair` @ n=2.
+#[must_use]
+pub fn pairwise_mutual_information_bits(h_x: f64, h_y: f64, joint_entropy: f64) -> Option<f64> {
+    if !h_x.is_finite() || !h_y.is_finite() || !joint_entropy.is_finite() {
+        return None;
+    }
+    let mi = h_x + h_y - joint_entropy;
+    if mi < 0.0 {
+        None
+    } else {
+        Some(mi)
+    }
+}
+
+/// Coordination cost from declared Shannon entropies — bridges MI scalar to joules.
+///
+/// Chains [`pairwise_mutual_information_bits`] → [`coordination_cost`].
+#[must_use]
+pub fn coordination_cost_from_entropies(
+    h_x: f64,
+    h_y: f64,
+    joint_entropy: f64,
+    temperature_kelvin: f64,
+) -> Option<f64> {
+    pairwise_mutual_information_bits(h_x, h_y, joint_entropy)
+        .map(|mi| coordination_cost(mi, temperature_kelvin))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -118,5 +153,38 @@ mod tests {
     fn zero_temperature_zero_cost() {
         assert_eq!(landauer_bit_energy(0.0), 0.0);
         assert_eq!(desync_energy(10.0, 0.0), 0.0);
+    }
+
+    #[test]
+    fn pairwise_mi_from_entropies_matches_direct_scalar() {
+        let h_x = 4.0;
+        let h_y = 3.0;
+        let i_xy = 1.5;
+        let joint = h_x + h_y - i_xy;
+        let mi = pairwise_mutual_information_bits(h_x, h_y, joint).expect("valid joint");
+        assert!((mi - i_xy).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn pairwise_mi_rejects_inconsistent_joint() {
+        assert!(pairwise_mutual_information_bits(1.0, 1.0, 10.0).is_none());
+    }
+
+    #[test]
+    fn coordination_cost_from_entropies_matches_scalar_path() {
+        let h_x = 4.0;
+        let h_y = 3.0;
+        let i_xy = 1.5;
+        let joint = h_x + h_y - i_xy;
+        let from_ent = coordination_cost_from_entropies(h_x, h_y, joint, T_ROOM).expect("valid");
+        let direct = coordination_cost(i_xy, T_ROOM);
+        assert!((from_ent - direct).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn w8e14_landauer_cost_positive_for_positive_bits() {
+        let cost = landauer_cost(2.0, T_ROOM);
+        assert!(cost > 0.0);
+        assert!(cost < landauer_cost(4.0, T_ROOM));
     }
 }
