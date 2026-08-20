@@ -9,11 +9,11 @@ SPDX-License-Identifier: MIT
 **Repository:** ``tytolabs/umst-ucrs`` — **time** fiber: temporal witness / stamp spine + gate-checked sync economics.
 
 <!-- readme:status -->
-[![CI — Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
-[![CI — Lean](https://github.com/tytolabs/umst-ucrs/actions/workflows/lean.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/lean.yml)
-[![CI — Haskell](https://github.com/tytolabs/umst-ucrs/actions/workflows/haskell.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/haskell.yml)
-[![CI — Python](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
+[![Figure 1: CI Rust](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/rust.yml)
+[![Figure 2: CI Lean](https://github.com/tytolabs/umst-ucrs/actions/workflows/lean.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/lean.yml)
+[![Figure 3: CI Haskell](https://github.com/tytolabs/umst-ucrs/actions/workflows/haskell.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/haskell.yml)
+[![Figure 4: CI Python](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml/badge.svg)](https://github.com/tytolabs/umst-ucrs/actions/workflows/python.yml)
+[![Figure 5: License MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 <!-- /readme:status -->
 
 > _This ecosystem is dedicated to the thousands of unnamed contributors who wrote formal proofs, maintained open-source compilers, and built mathematical libraries for years — often without evidence that any of it would be used beyond pure theory. They chose to make their work free, because they understood that knowledge about physical reality cannot be owned. Whatever this system achieves is yours._
@@ -98,8 +98,8 @@ Wire schema for ticks: [`Rust/src/wire.rs`](Rust/src/wire.rs). Logging / HLC pol
   - [9.6 Principles](#96-principles)
 - [§10 Honesty and limits](#10-honesty-and-limits)
 - [§11 Conclusion](#11-conclusion-inferences--forward-path)
-  - [What this repo demonstrates](#what-this-repo-demonstrates)
-  - [What surprised us](#what-surprised-us)
+  - [This repository demonstrates](#this-repository-demonstrates)
+  - [Inferences from the work](#inferences-from-the-work)
   - [Forward path](#forward-path)
 - [Related repositories](#related-repositories)
 - [Authors](#authors)
@@ -507,7 +507,7 @@ See [gate-spine table](#shared-stack-matter--knowing--acting--time). UCRS owns *
 
 UCRS is **infrastructure**, not a tensor hot-arena kernel.
 
-| Path | What | Where | Character |
+| Path | Role | Location | Character |
 |:---|:---|:---|:---|
 | **Hot (library)** | In-process stamp / witness / gate / credit / spine types | `Rust/src/` — default features `[]` | Pure-ish Rust; no libp2p in default consumers |
 | **Warm** | Cartridge `ucrs-provenance` ingest attaches stamps at accept boundary | ``umst-concrete-cartridge`` | Cold-edge MCP; not UCRS-hosted |
