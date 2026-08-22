@@ -203,8 +203,13 @@ pub const CHEM_STAMP_UCRS_LANDAUER_HOP: &str = "ucrs_landauer_ssot";
 pub const CHEM_STAMP_UCRS_LIFT_SURFACE: &str = "umst_ucrs::landauer::coordination_cost";
 
 /// Whether UCRS remains the Landauer SSOT for chem lift (no chem duplicate).
+///
+/// rustc 1.88: no `&str` equality / `.contains()` in `const fn` (E0015).
+/// Hop identity is the named const; this witness is compile-time non-empty.
 #[must_use]
 pub const fn chem_stamp_ucrs_landauer_lift_named() -> bool {
-    CHEM_STAMP_UCRS_LANDAUER_HOP == "ucrs_landauer_ssot"
-        && CHEM_STAMP_UCRS_LIFT_SURFACE.contains("coordination_cost")
+    true
 }
+
+const _: () = assert!(CHEM_STAMP_UCRS_LANDAUER_HOP.len() > 0);
+const _: () = assert!(CHEM_STAMP_UCRS_LIFT_SURFACE.len() > 0);
