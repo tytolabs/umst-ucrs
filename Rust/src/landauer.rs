@@ -188,3 +188,23 @@ mod tests {
         assert!(cost < landauer_cost(4.0, T_ROOM));
     }
 }
+
+// -----------------------------------------------------------------------------
+// CHEM-L0-INFRA-UCRS — umst-chem ChemStamp lift (SSOT; no parallel kernel)
+// -----------------------------------------------------------------------------
+
+/// Chem consumer cell id — INFRA UCRS Landauer lift.
+pub const CHEM_L0_INFRA_UCRS_CELL_ID: &str = "CHEM-L0-INFRA-UCRS";
+
+/// Chem lift hop id on UCRS Landauer SSOT.
+pub const CHEM_STAMP_UCRS_LANDAUER_HOP: &str = "ucrs_landauer_ssot";
+
+/// Consumer surface — chem lifts this module only (Unwired in umst-chem).
+pub const CHEM_STAMP_UCRS_LIFT_SURFACE: &str = "umst_ucrs::landauer::coordination_cost";
+
+/// Whether UCRS remains the Landauer SSOT for chem lift (no chem duplicate).
+#[must_use]
+pub const fn chem_stamp_ucrs_landauer_lift_named() -> bool {
+    CHEM_STAMP_UCRS_LANDAUER_HOP == "ucrs_landauer_ssot"
+        && CHEM_STAMP_UCRS_LIFT_SURFACE.contains("coordination_cost")
+}
