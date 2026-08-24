@@ -24,6 +24,12 @@ pub mod frame_spine;
 pub mod gate;
 /// AC82 — UARCS-gossip mesh_wired false census (`mesh_wired` false unless WEB-034 measured).
 pub mod gossip_mesh_census;
+/// AC82 gossip mesh census — root re-exports for quality_gates wire scan C.
+pub use gossip_mesh_census::{
+    H81AbsorbedPosture, HaskellUcrsGossipMeshAdoptPosture, HaskellUcrsGossipMeshPropertySlot,
+    UarcsGossipMeshAc82Probe, UarcsGossipMeshWireHop, UcrsGossipMeshC82Probe,
+    UcrsUrgeGossipComposeProbe, UrgeHistoryMeshConsumer,
+};
 pub mod landauer;
 /// LIB-ADOPT-A-LANDAUER — UCRS pattern SSOT adoption witness (P1542 B4).
 pub mod landauer_adopt;
