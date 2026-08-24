@@ -425,10 +425,9 @@ pub fn ucrs_gossip_prep_wired() -> bool {
     };
     let secret = crate::p2p::ABSORBED_E64_SECRET;
     let tick = outbound_tick_if_admitted(&clock_out, &publisher, secret);
-    if tick.is_none() {
+    let Some(tick) = tick else {
         return false;
-    }
-    let tick = tick.unwrap();
+    };
     if !wire::verify_tick(secret, &tick) {
         return false;
     }
