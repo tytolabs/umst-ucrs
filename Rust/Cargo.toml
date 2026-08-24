@@ -9,6 +9,8 @@ authors = [
     "Santosh Prabhu Shenbagamoorthy <santosh@studiotyto.com>",
 ]
 description = "P2P thermodynamic clock synchronization daemon with Landauer-optimal credit system"
+# UCRS-URGE-GOSSIP-COMPOSE cycle fence: umst-urge path-depends on umst-ucrs;
+# reverse compose is census/citation in gossip_mesh_census.rs — no umst-urge dep here.
 license = "MIT"
 repository = "https://github.com/tytolabs/umst-ucrs"
 

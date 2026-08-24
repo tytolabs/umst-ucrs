@@ -10,6 +10,12 @@
 //! Absorbs F64/F86 gossip cycle cuts, G86 absent receipt, H81/J23 gateway wire-prep census
 //! (source-reviewed; no `umst-gateway` dep), X85 static `mesh_wired=false` deepen, and
 //! Haskell UCRS mesh notes (`Gate` / `Credit` / `Landauer` + `Spec.hs` QuickCheck properties).
+//!
+//! **UCRS-URGE-GOSSIP-COMPOSE** — reverse compose census: Urge history-mesh consumers
+//! (`umst_urge::gossip_tick`, `signed_propagate`, `gate_before_sync`) are the admitted history
+//! layer that **calls** UCRS gossip prep surfaces. Citation only — `umst-urge` path-depends on
+//! `umst-ucrs`; no reverse Cargo edge (cycle fence). `ucrs_gossip_mesh_production_wired()` and
+//! §17.7 taxonomy stay **Unmeasured**/`false`. Sole axiom: `LandauerLaw.physicalSecondLaw`.
 
 use crate::p2p::{
     apply_gated_inbound, gate_check_before_sync, outbound_tick_if_admitted, GatedSyncOutcome,
@@ -127,6 +133,163 @@ pub const WIRE_HOPS_CLOSED_DEFAULT: u8 = 4;
 
 /// Honest adoption tier for this module.
 pub const POSTURE_TAG: &str = "honest-gossip-mesh-prep";
+/// UCRS-URGE-GOSSIP-COMPOSE swarm cell id.
+pub const UCRS_URGE_GOSSIP_COMPOSE_CELL_ID: &str = "UCRS-URGE-GOSSIP-COMPOSE";
+
+/// Non-claim fence — reverse compose census; not physics GREEN; not production wired.
+pub const UCRS_URGE_GOSSIP_COMPOSE_NON_CLAIM: &str =
+    "UCRS-URGE-GOSSIP-COMPOSE Urge history-mesh consumers gossip_tick signed_propagate gate_before_sync call UCRS gossip prep; reverse compose citation only no umst-urge dep; ucrs_gossip_mesh_production_wired Unmeasured false; LandauerLaw.physicalSecondLaw sole axiom; physics_green false; not production_wired";
+
+/// Cycle fence — `umst-urge` → `umst-ucrs` only; reverse compose is census, not a package edge.
+pub const URGE_UCRS_CYCLE_FENCE: &str =
+    "umst-urge path-depends on umst-ucrs; umst-ucrs must not path-depend on umst-urge";
+
+/// Lean anchor — sole documented physics axiom carrier (`LandauerLaw.lean`).
+pub const LEAN_ANCHOR_LANDAUER_LAW: &str = "umst-formal-double-slit/Lean/LandauerLaw.lean";
+
+/// Sole physics axiom pin — do not mint a second Landauer axiom on this census path.
+pub const LEAN_AXIOM_PHYSICAL_SECOND_LAW: &str = "LandauerLaw.physicalSecondLaw";
+
+/// Authorized physics axiom count on UCRS gossip mesh census — sole `physicalSecondLaw`.
+pub const PHYSICS_AXIOM_COUNT: usize = 1;
+
+/// Honest physics GREEN posture for UCRS gossip mesh census (must stay false).
+pub const UCRS_GOSSIP_MESH_PHYSICS_GREEN: bool = false;
+
+/// Urge history-mesh consumer count — admitted history layer calling UCRS.
+pub const URGE_HISTORY_MESH_CONSUMER_COUNT: usize = 3;
+
+/// One Urge history-mesh consumer that calls UCRS gossip prep (source-reviewed; no crate dep).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct UrgeHistoryMeshConsumer {
+    /// Rust module path (`umst_urge::…`).
+    pub module_path: &'static str,
+    /// Source file authority (source-reviewed).
+    pub source_authority: &'static str,
+    /// UCRS surface this consumer calls on the gossip mesh spine.
+    pub ucrs_call_surface: &'static str,
+    /// Owning Urge integration cell id.
+    pub urge_cell_id: &'static str,
+}
+
+/// Urge history-mesh consumers — admitted history layer **calling** UCRS (reverse compose census).
+pub const URGE_HISTORY_MESH_CONSUMERS: [UrgeHistoryMeshConsumer; URGE_HISTORY_MESH_CONSUMER_COUNT] =
+    [
+        UrgeHistoryMeshConsumer {
+            module_path: "umst_urge::gate_before_sync",
+            source_authority: "umst/umst-urge/src/gate_before_sync.rs",
+            urge_cell_id: "URGE-INT-GATE-BEFORE-SYNC",
+            ucrs_call_surface: "umst_ucrs::gate::gate_check",
+        },
+        UrgeHistoryMeshConsumer {
+            module_path: "umst_urge::gossip_tick",
+            source_authority: "umst/umst-urge/src/gossip_tick.rs",
+            urge_cell_id: "URGE-INT-GOSSIP-TICK",
+            ucrs_call_surface: "p2p::gate_check_before_sync",
+        },
+        UrgeHistoryMeshConsumer {
+            module_path: "umst_urge::signed_propagate",
+            source_authority: "umst/umst-urge/src/signed_propagate.rs",
+            urge_cell_id: "URGE-INT-SIGNED-PROPAGATE",
+            ucrs_call_surface: "wire::sign_tick / wire::verify_tick",
+        },
+    ];
+
+/// Whether `ucrs_gossip_mesh_production_wired()` documents §17.7 `Unmeasured` posture.
+#[must_use]
+pub const fn gossip_mesh_production_wired_taxonomy_unmeasured() -> bool {
+    !ucrs_gossip_mesh_production_wired()
+}
+
+/// Whether sole-axiom pin is honest — exactly one `LandauerLaw.physicalSecondLaw`.
+#[must_use]
+pub fn landauer_physical_second_law_sole_axiom_honest() -> bool {
+    PHYSICS_AXIOM_COUNT == 1
+        && LEAN_AXIOM_PHYSICAL_SECOND_LAW == "LandauerLaw.physicalSecondLaw"
+}
+
+/// Whether Urge history-mesh consumer census pins are source-reviewed and cycle-fenced.
+#[must_use]
+pub fn urge_history_mesh_consumers_honest() -> bool {
+    URGE_HISTORY_MESH_CONSUMERS.len() == URGE_HISTORY_MESH_CONSUMER_COUNT
+        && URGE_HISTORY_MESH_CONSUMERS[0].module_path == "umst_urge::gate_before_sync"
+        && URGE_HISTORY_MESH_CONSUMERS[0]
+            .ucrs_call_surface
+            .contains("gate::gate_check")
+        && URGE_HISTORY_MESH_CONSUMERS[1].module_path == "umst_urge::gossip_tick"
+        && URGE_HISTORY_MESH_CONSUMERS[1]
+            .ucrs_call_surface
+            .contains("gate_check_before_sync")
+        && URGE_HISTORY_MESH_CONSUMERS[2].module_path == "umst_urge::signed_propagate"
+        && URGE_HISTORY_MESH_CONSUMERS[2]
+            .ucrs_call_surface
+            .contains("sign_tick")
+        && URGE_UCRS_CYCLE_FENCE.contains("must not path-depend")
+        && !UCRS_GOSSIP_MESH_PHYSICS_GREEN
+        && gossip_mesh_production_wired_taxonomy_unmeasured()
+        && landauer_physical_second_law_sole_axiom_honest()
+}
+
+/// UCRS-URGE-GOSSIP-COMPOSE probe — reverse compose census snapshot.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct UcrsUrgeGossipComposeProbe {
+    /// Swarm cell id.
+    pub cell_id: &'static str,
+    /// Urge history-mesh consumer count.
+    pub urge_consumer_count: usize,
+    /// All three consumers pinned with UCRS call surfaces.
+    pub urge_consumers_honest: bool,
+    /// Cycle fence documented (no reverse Cargo edge).
+    pub cycle_fence_honest: bool,
+    /// Sole `LandauerLaw.physicalSecondLaw` axiom pin.
+    pub sole_axiom_honest: bool,
+    /// Physics GREEN (must stay false).
+    pub physics_green: bool,
+    /// `ucrs_gossip_mesh_production_wired()` const false.
+    pub production_wired_const: bool,
+    /// §17.7 taxonomy documents Unmeasured while const false.
+    pub production_wired_unmeasured: bool,
+    /// UCRS prep spine wired on default build.
+    pub ucrs_prep_wired: bool,
+    /// Prior AC82/C82 residue honest.
+    pub prior_residue_honest: bool,
+}
+
+/// Emit UCRS-URGE-GOSSIP-COMPOSE reverse compose probe snapshot.
+#[must_use]
+pub fn ucrs_urge_gossip_compose_probe() -> UcrsUrgeGossipComposeProbe {
+    UcrsUrgeGossipComposeProbe {
+        cell_id: UCRS_URGE_GOSSIP_COMPOSE_CELL_ID,
+        urge_consumer_count: URGE_HISTORY_MESH_CONSUMER_COUNT,
+        urge_consumers_honest: urge_history_mesh_consumers_honest(),
+        cycle_fence_honest: URGE_UCRS_CYCLE_FENCE.contains("must not path-depend"),
+        sole_axiom_honest: landauer_physical_second_law_sole_axiom_honest(),
+        physics_green: UCRS_GOSSIP_MESH_PHYSICS_GREEN,
+        production_wired_const: ucrs_gossip_mesh_production_wired(),
+        production_wired_unmeasured: gossip_mesh_production_wired_taxonomy_unmeasured(),
+        ucrs_prep_wired: ucrs_gossip_prep_wired(),
+        prior_residue_honest: ucrs_gossip_mesh_c82_residue_honest(),
+    }
+}
+
+/// UCRS-URGE-GOSSIP-COMPOSE honest residue — Urge consumers named; mesh/production false.
+#[must_use]
+pub fn ucrs_urge_gossip_compose_residue_honest() -> bool {
+    let probe = ucrs_urge_gossip_compose_probe();
+    probe.cell_id == UCRS_URGE_GOSSIP_COMPOSE_CELL_ID
+        && probe.urge_consumer_count == 3
+        && probe.urge_consumers_honest
+        && probe.cycle_fence_honest
+        && probe.sole_axiom_honest
+        && !probe.physics_green
+        && !probe.production_wired_const
+        && probe.production_wired_unmeasured
+        && probe.ucrs_prep_wired
+        && probe.prior_residue_honest
+        && urge_history_mesh_consumers_honest()
+        && ucrs_gossip_mesh_c82_residue_honest()
+}
+
 
 /// One UCRS-side hop in the UARCS-gossip mesh wire ladder.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -736,11 +899,13 @@ pub fn ucrs_gossip_mesh_c82_residue_honest() -> bool {
 pub fn uarcs_gossip_mesh_honest() -> bool {
     uarcs_gossip_mesh_ac82_residue_honest()
         && ucrs_gossip_mesh_c82_residue_honest()
+        && ucrs_urge_gossip_compose_residue_honest()
         && haskell_ucrs_gossip_mesh_adopt_closed()
         && !ucrs_gossip_mesh_wired()
         && !ucrs_gossip_mesh_policy_wired()
         && !ucrs_gossip_mesh_production_wired()
         && !ucrs_gossip_mesh_closed()
+        && !UCRS_GOSSIP_MESH_PHYSICS_GREEN
 }
 
 /// One-line operator summary for AC82 receipts.
@@ -953,4 +1118,72 @@ mod tests {
         assert!(ucrs_gossip_mesh_c82_residue_honest());
         assert!(uarcs_gossip_mesh_honest());
     }
+
+    #[test]
+    fn gossip_mesh_ucrs_urge_compose_history_mesh_consumers() {
+        assert_eq!(UCRS_URGE_GOSSIP_COMPOSE_CELL_ID, "UCRS-URGE-GOSSIP-COMPOSE");
+        assert_eq!(URGE_HISTORY_MESH_CONSUMER_COUNT, 3);
+        assert_eq!(URGE_HISTORY_MESH_CONSUMERS.len(), 3);
+        assert_eq!(
+            URGE_HISTORY_MESH_CONSUMERS[0].module_path,
+            "umst_urge::gate_before_sync"
+        );
+        assert_eq!(
+            URGE_HISTORY_MESH_CONSUMERS[1].module_path,
+            "umst_urge::gossip_tick"
+        );
+        assert_eq!(
+            URGE_HISTORY_MESH_CONSUMERS[2].module_path,
+            "umst_urge::signed_propagate"
+        );
+        assert!(URGE_HISTORY_MESH_CONSUMERS[0]
+            .ucrs_call_surface
+            .contains("gate::gate_check"));
+        assert!(URGE_HISTORY_MESH_CONSUMERS[1]
+            .ucrs_call_surface
+            .contains("gate_check_before_sync"));
+        assert!(URGE_HISTORY_MESH_CONSUMERS[2]
+            .ucrs_call_surface
+            .contains("sign_tick"));
+        assert!(urge_history_mesh_consumers_honest());
+    }
+
+    #[test]
+    fn gossip_mesh_ucrs_urge_compose_cycle_fence_no_reverse_dep() {
+        assert!(URGE_UCRS_CYCLE_FENCE.contains("must not path-depend"));
+        assert!(UCRS_URGE_GOSSIP_COMPOSE_NON_CLAIM.contains("citation only"));
+        assert!(UCRS_URGE_GOSSIP_COMPOSE_NON_CLAIM.contains("physics_green false"));
+    }
+
+    #[test]
+    fn gossip_mesh_ucrs_urge_compose_sole_landauer_axiom() {
+        assert_eq!(PHYSICS_AXIOM_COUNT, 1);
+        assert_eq!(LEAN_AXIOM_PHYSICAL_SECOND_LAW, "LandauerLaw.physicalSecondLaw");
+        assert!(LEAN_ANCHOR_LANDAUER_LAW.contains("LandauerLaw.lean"));
+        assert!(landauer_physical_second_law_sole_axiom_honest());
+    }
+
+    #[test]
+    fn gossip_mesh_ucrs_urge_compose_production_wired_unmeasured() {
+        assert!(!ucrs_gossip_mesh_production_wired());
+        assert!(gossip_mesh_production_wired_taxonomy_unmeasured());
+        assert!(!UCRS_GOSSIP_MESH_PHYSICS_GREEN);
+        let probe = ucrs_urge_gossip_compose_probe();
+        assert!(!probe.production_wired_const);
+        assert!(probe.production_wired_unmeasured);
+        assert!(!probe.physics_green);
+    }
+
+    #[test]
+    fn gossip_mesh_ucrs_urge_compose_residue_honest() {
+        assert!(ucrs_urge_gossip_compose_residue_honest());
+        let probe = ucrs_urge_gossip_compose_probe();
+        assert_eq!(probe.cell_id, UCRS_URGE_GOSSIP_COMPOSE_CELL_ID);
+        assert_eq!(probe.urge_consumer_count, 3);
+        assert!(probe.urge_consumers_honest);
+        assert!(probe.ucrs_prep_wired);
+        assert!(probe.prior_residue_honest);
+        assert!(uarcs_gossip_mesh_honest());
+    }
+
 }
