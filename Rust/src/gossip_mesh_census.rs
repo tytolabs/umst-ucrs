@@ -1186,3 +1186,34 @@ mod tests {
     }
 
 }
+
+
+/// Swarm cell id — URGE-II mesh Unmeasured|Measured taxonomy (no false flip).
+pub const URGE_II_MESH_UNMEASURED_TAXONOMY_CELL_ID: &str = "URGE-II-MESH-UNMEASURED-TAXONOMY";
+
+/// Marker for Urge-II mesh taxonomy deepen.
+pub const URGE_II_MESH_UNMEASURED_MARKER: &str = "urge_ii_mesh_unmeasured_taxonomy_v1";
+
+/// Non-claim — taxonomy documents Unmeasured; does not flip production_wired.
+pub const URGE_II_MESH_UNMEASURED_NON_CLAIM: &str =
+    "URGE-II-MESH-UNMEASURED-TAXONOMY Unmeasured|Measured for ucrs_gossip_mesh_production_wired — no false flip; not physics GREEN";
+
+/// Urge-II honesty: mesh production_wired stays false / Unmeasured (no false GREEN flip).
+#[must_use]
+pub fn urge_ii_mesh_unmeasured_taxonomy_honest() -> bool {
+    !ucrs_gossip_mesh_production_wired()
+        && !ucrs_gossip_mesh_closed()
+        && URGE_II_MESH_UNMEASURED_TAXONOMY_CELL_ID == "URGE-II-MESH-UNMEASURED-TAXONOMY"
+        && URGE_II_MESH_UNMEASURED_MARKER == "urge_ii_mesh_unmeasured_taxonomy_v1"
+}
+
+#[cfg(test)]
+mod urge_ii_mesh_taxonomy_tests {
+    use super::*;
+
+    #[test]
+    fn urge_ii_mesh_unmeasured_taxonomy_holds() {
+        assert!(urge_ii_mesh_unmeasured_taxonomy_honest());
+        assert!(!ucrs_gossip_mesh_production_wired());
+    }
+}
