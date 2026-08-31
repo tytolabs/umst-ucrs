@@ -52,6 +52,8 @@ pub mod uarcs_a7_4_policy_wire;
 pub mod ucrs_keep;
 /// Gossip wire format + signature glue (no libp2p — safe for default library-only builds).
 pub mod wire;
+/// Root re-export — quality_gates wire scan C (overlay compose).
+pub use wire::{ClockTick, ClockTickMldsa, MergeOutcome};
 
 // --- Wave 2 compat shims (deprecated root re-exports) ---
 
