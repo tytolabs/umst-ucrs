@@ -38,7 +38,7 @@ pub enum MergeOutcome {
 fn signing_payload(t: &ClockTick) -> Vec<u8> {
     let mut t2 = t.clone();
     t2.sig = [0; 32];
-    serde_json::to_vec(&t2).expect("ClockTick serializes")
+    match serde_json::to_vec(&t2) { Ok(v) => v, Err(_) => Vec::new() }
 }
 
 /// Std-only keyed 32-byte digest (development / lab use — replace with HMAC in hardened deploys).
@@ -82,25 +82,110 @@ pub fn apply_inbound_clock_tick(
     if !verify_tick(secret, tick) {
         return MergeOutcome::RejectedBadSig;
     }
+    apply_inbound_after_auth(
+        clock,
+        ledger,
+        config,
+        tick.agent_id,
+        tick.phase_entropy_bits,
+        tick.accuracy_score,
+    )
+}
+
+/// Honest: ML-DSA wire morphism exists; not fleet-live; lab [`sign_tick`] retained.
+pub const PQC_WIRE_LIVE_CLAIMED: bool = false;
+
+/// Cipher-suite id for [`sign_tick_mldsa`] (S-Q2 default; not a live overlay claim).
+pub const TICK_SIGNING_SUITE: &str = "nist-pqc-balanced-3";
+
+/// Clock tick with ML-DSA-65 detached signature (variable length — cannot fit [`ClockTick::sig`]).
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct ClockTickMldsa {
+    pub agent_id: PeerId,
+    pub phase_entropy_bits: f64,
+    pub landauer_cost_j: f64,
+    pub accuracy_score: f64,
+    /// Detached Dilithium3 signature bytes.
+    pub sig: Vec<u8>,
+}
+
+fn signing_payload_mldsa(t: &ClockTickMldsa) -> Vec<u8> {
+    let mut t2 = t.clone();
+    t2.sig.clear();
+    match serde_json::to_vec(&t2) { Ok(v) => v, Err(_) => Vec::new() }
+}
+
+/// Sign a tick with ML-DSA-65 (`umst_ucrs::crypto::sig::ml_dsa_65`). Pair-wise pk/sk required.
+pub fn sign_tick_mldsa(
+    sk: &[u8],
+    pk: &[u8],
+    tick: &mut ClockTickMldsa,
+) -> Result<(), crate::crypto::sig::ml_dsa_65::SigError> {
+    let msg = signing_payload_mldsa(tick);
+    tick.sig = crate::crypto::sig::ml_dsa_65::sign(&msg, sk, pk)?;
+    Ok(())
+}
+
+/// Verify ML-DSA-65 signature on a tick.
+#[must_use]
+pub fn verify_tick_mldsa(pk: &[u8], tick: &ClockTickMldsa) -> bool {
+    crate::crypto::sig::ml_dsa_65::verify(&tick.sig, &signing_payload_mldsa(tick), pk).is_ok()
+}
+
+fn apply_inbound_after_auth(
+    clock: &mut LocalClock,
+    ledger: &mut CreditLedger,
+    config: &AgentConfig,
+    agent_id: PeerId,
+    phase_entropy_bits: f64,
+    accuracy_score: f64,
+) -> MergeOutcome {
+    if agent_id == config.peer_id {
+        return MergeOutcome::RejectedSelf;
+    }
     let therm = ClockThermState {
         desync_energy_j: clock.desync_energy_joules(),
         budget_j: landauer::landauer_cost(config.budget_bits, config.temperature_k),
         temperature_k: config.temperature_k,
         total_sync_cost_j: 0.0,
     };
-    let bits = tick
-        .phase_entropy_bits
-        .clamp(0.1_f64, config.budget_bits.max(0.1));
+    let bits = phase_entropy_bits.clamp(0.1_f64, config.budget_bits.max(0.1));
     if gate::gate_check(&therm, bits) == GateVerdict::Reject {
         return MergeOutcome::RejectedGate;
     }
-    if !ledger.peers.contains_key(&tick.agent_id) {
-        ledger.add_peer(tick.agent_id, 10.0);
+    if !ledger.peers.contains_key(&agent_id) {
+        ledger.add_peer(agent_id, 10.0);
     }
-    let improved = tick.accuracy_score >= 0.5;
-    ledger.record_sync(tick.agent_id, bits, improved);
+    let improved = accuracy_score >= 0.5;
+    ledger.record_sync(agent_id, bits, improved);
     MergeOutcome::Accepted
 }
+
+/// Same gate+credit path as [`apply_inbound_clock_tick`], ML-DSA-65 instead of lab [`mix_digest`].
+/// Does **not** flip [`PQC_WIRE_LIVE_CLAIMED`].
+pub fn apply_inbound_clock_tick_mldsa(
+    clock: &mut LocalClock,
+    ledger: &mut CreditLedger,
+    config: &AgentConfig,
+    tick: &ClockTickMldsa,
+    pk: &[u8],
+) -> MergeOutcome {
+    if tick.agent_id == config.peer_id {
+        return MergeOutcome::RejectedSelf;
+    }
+    if !verify_tick_mldsa(pk, tick) {
+        return MergeOutcome::RejectedBadSig;
+    }
+    apply_inbound_after_auth(
+        clock,
+        ledger,
+        config,
+        tick.agent_id,
+        tick.phase_entropy_bits,
+        tick.accuracy_score,
+    )
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -201,4 +286,37 @@ mod tests {
         let o = apply_inbound_clock_tick(&mut clock, &mut ledger, &config, &tick, b"k");
         assert_eq!(o, MergeOutcome::RejectedBadSig);
     }
+
+    #[test]
+    fn sign_tick_mldsa_roundtrip_and_gate() {
+        assert!(!PQC_WIRE_LIVE_CLAIMED);
+        let (pk, sk) = crate::crypto::sig::ml_dsa_65::keypair_bytes();
+        let mut tick = ClockTickMldsa {
+            agent_id: 2,
+            phase_entropy_bits: 2.0,
+            landauer_cost_j: 1e-15,
+            accuracy_score: 0.9,
+            sig: Vec::new(),
+        };
+        sign_tick_mldsa(&sk, &pk, &mut tick).expect("sign");
+        assert!(verify_tick_mldsa(&pk, &tick));
+        let mut clock = LocalClock::new(10.0, 300.0);
+        clock.phase_uncertainty_sec = 1e-6;
+        let mut ledger = CreditLedger::new(1, 300.0);
+        let cfg = AgentConfig {
+            peer_id: 1,
+            budget_bits: 20.0,
+            ..AgentConfig::default()
+        };
+        assert_eq!(
+            apply_inbound_clock_tick_mldsa(&mut clock, &mut ledger, &cfg, &tick, &pk),
+            MergeOutcome::Accepted
+        );
+        tick.sig[0] ^= 0xff;
+        assert_eq!(
+            apply_inbound_clock_tick_mldsa(&mut clock, &mut ledger, &cfg, &tick, &pk),
+            MergeOutcome::RejectedBadSig
+        );
+    }
 }
+
