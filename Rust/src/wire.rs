@@ -52,7 +52,8 @@ pub fn verify_tick(secret: &[u8], tick: &ClockTick) -> bool {
     mix_digest(secret, &signing_payload(tick)) == tick.sig
 }
 
-fn mix_digest(secret: &[u8], msg: &[u8]) -> [u8; 32] {
+/// Lab keyed FNV-style mix digest — SSOT for urge `crypto_compose` surrogate signing.
+pub fn mix_digest(secret: &[u8], msg: &[u8]) -> [u8; 32] {
     let mut out = [0u8; 32];
     let mut acc: u64 = 0xcbf29ce484222325;
     for &b in secret {
@@ -192,6 +193,27 @@ mod tests {
     use super::*;
     use crate::clock::LocalClock;
     use crate::credit::CreditLedger;
+
+    /// INV-05-UCRS-MIX-DIGEST-DEDUP — pinned corpus; do not change bytes without cause.
+    #[test]
+    fn mix_digest_pinned_corpus_inv05() {
+        const PINNED: [u8; 32] = [
+            0x4d, 0xfe, 0x07, 0x23, 0x54, 0x54, 0xfb, 0x17, 0x04, 0x9a, 0x7f, 0x21, 0xa5, 0x7e,
+            0xf1, 0x36, 0x81, 0xe6, 0xd0, 0x26, 0xee, 0xe4, 0x35, 0x2d, 0x70, 0x69, 0x6e, 0x69,
+            0x6e, 0x76, 0x30, 0x35,
+        ];
+        assert_eq!(
+            mix_digest(b"inv05-pin", b"ucrs-mix-digest-corpus"),
+            PINNED
+        );
+    }
+
+    /// Empty secret indexes `secret[0]` via `len().max(1)` — panics; not a silent diverge.
+    #[test]
+    #[should_panic(expected = "index out of bounds")]
+    fn mix_digest_empty_secret_panics() {
+        let _ = mix_digest(b"", b"");
+    }
 
     #[test]
     fn clock_tick_json_roundtrip() {
