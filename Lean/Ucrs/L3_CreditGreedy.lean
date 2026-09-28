@@ -7,9 +7,9 @@ import Ucrs.L2_TensorLandauer
 
 namespace Ucrs
 
-/-- Partial: Landauer spend at 300 K is nonneg when target bits ≥ 0.
-    Full greedy optimality pending ledger model. -/
-theorem credit_greedy_optimal (targetBits : ℝ) (hnb : 0 ≤ targetBits) (hT : 0 < (300 : ℝ)) :
+/-- Partial spend bound at 300 K (nonneg Landauer × bits).
+    Full greedy optimality lives in formal `CreditGreedyOptimal.credit_greedy_optimal`. -/
+theorem credit_spend_nonneg (targetBits : ℝ) (hnb : 0 ≤ targetBits) (hT : 0 < (300 : ℝ)) :
     0 ≤ landauerBitEnergy 300 * targetBits := by
   nlinarith [landauer_nonneg hT, hnb]
 

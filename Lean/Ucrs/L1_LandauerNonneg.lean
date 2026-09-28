@@ -7,10 +7,10 @@ import LandauerEinsteinBridge
 
 namespace Ucrs
 
-noncomputable def landauerBitEnergy (T : ℝ) : ℝ :=
-  LandauerEinsteinBridge.landauerBitEnergy T
+/-- Re-export formal root `landauerBitEnergy` (LandauerEinsteinBridge). -/
+export LandauerEinsteinBridge (landauerBitEnergy, landauerBitEnergy_pos)
 
 theorem landauer_nonneg {T : ℝ} (hT : 0 < T) : 0 ≤ landauerBitEnergy T :=
-  (LandauerEinsteinBridge.landauerBitEnergy_pos hT).le
+  (landauerBitEnergy_pos hT).le
 
 end Ucrs
