@@ -55,7 +55,6 @@ jobs:
       - name: Clone umst-foundations for path dependencies (private)
         working-directory: ${{ github.workspace }}
         env:
-          UMST_PRIVATE_CHECKOUT: ${{ secrets.UMST_PRIVATE_CHECKOUT }}
           FOUNDATIONS_SHA: ${{ steps.foundations_pin.outputs.sha }}
         run: |
           set -euo pipefail
