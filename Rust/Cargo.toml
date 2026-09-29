@@ -61,6 +61,7 @@ prometheus = "0.13"
 # U1 — Clausius–Duhem SSOT (`clausius_duhem_admissible`); path pinned via `.umst-pins.toml` in CI.
 umst-math = { version = "0.1.0", path = "../../umst-manifold/umst-math" }
 # S-Q4 — Trust ADT wire projection SSOT (`umst_algebra::crypto::trust` via thin crate).
+# typed_absence W-63 — path dep on private umst-foundations; public Rust CI stops at checkout (no secrets).
 umst-trust = { version = "0.1.0", path = "../../umst-foundations/crates/umst-trust" }
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
