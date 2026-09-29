@@ -10,9 +10,9 @@ package «umst-ucrs» where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git" @ "v4.14.0"
 
-require «umst-formal» from "../../umst-formal/Lean"
--- P0-6 rev pin `0bc419c1550a4c40d3e1b8fd218ba41eb852b2f8` (monorepo path; standalone CI uses git URL below).
--- require «umst-formal» from git "https://github.com/tytolabs/umst-formal.git" @ "0bc419c1550a4c40d3e1b8fd218ba41eb852b2f8" / "Lean"
+-- W-62: pinned public sibling for standalone GitHub CI (matches ecosystem pin @ root).
+require «umst-formal» from git
+  "https://github.com/tytolabs/umst-formal.git" @ "49e75238bfd1ee3b3b44c1297d80ed916b96a100" / "Lean"
 
 /-!
   UCRS Lean mirror — Mathlib + pinned `umst-formal` Landauer bridge (U4).
