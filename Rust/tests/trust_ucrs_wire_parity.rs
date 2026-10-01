@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Santosh Prabhu Shenbagamoorthy and Santhosh Shyamsundar
 // SPDX-License-Identifier: MIT
+#![cfg(feature = "foundations-ssot")]
 //! §14bis.f-S-1 — `Trust` ADT ↔ UCRS wire parity (SEC-TRUST-EXTRACT).
 //!
 //! Relocated from `umst-algebra/tests/` (OP5A-PARITY-RELOC; SSOT: `docs/OP5_EXCEPTION_UMST_ALGEBRA.md` §3.2.1).

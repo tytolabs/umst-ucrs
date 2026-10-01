@@ -10,6 +10,8 @@
 
 /// Durable accept stamps — `TrustAttested` warrant + `UcrsObservedAt` (S-Q4; no TrustLedger).
 pub mod accept;
+#[cfg(not(feature = "foundations-ssot"))]
+mod trust_wire_public;
 pub mod clock;
 pub mod credit;
 /// S-0 crypto parity — PQC reference (`umst_math::crypto` mirror).

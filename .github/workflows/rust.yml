@@ -14,8 +14,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  rust:
-    name: Rust (fmt, clippy, test)
+  w63-public-sibling-boundary:
+    name: W-63 public sibling boundary (honest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # v4
+      - name: Document private sibling fence (no credentials on public runners)
+        run: |
+          set -euo pipefail
+          test -f .github/scripts/checkout-umst-siblings.sh
+          echo "OK: public CI names W-63 when umst-foundations is private."
+
+  rust-public:
+    name: Rust public (fmt, clippy, test)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -30,6 +41,54 @@ jobs:
           sha=$(python3 -c "import tomllib; print(tomllib.load(open('.umst-pins.toml','rb'))['umst-manifold']['sha'])")
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
       # Dev-dependency `umst-math` is a path to `../../umst-manifold/umst-math` from `Rust/`.
+      - name: Clone umst-manifold for umst-math path dependency (pinned, public)
+        working-directory: ${{ github.workspace }}/..
+        env:
+          MANIFOLD_SHA: ${{ steps.manifold_pin.outputs.sha }}
+        run: |
+          set -euo pipefail
+          if [ -d umst-manifold/.git ]; then
+            git -C umst-manifold fetch --depth 1 origin "$MANIFOLD_SHA"
+            git -C umst-manifold checkout "$MANIFOLD_SHA"
+          else
+            git clone --depth 1 https://github.com/tytolabs/umst-manifold.git umst-manifold
+            git -C umst-manifold fetch --depth 1 origin "$MANIFOLD_SHA"
+            git -C umst-manifold checkout "$MANIFOLD_SHA"
+          fi
+          git -C umst-manifold merge-base --is-ancestor "$MANIFOLD_SHA" HEAD
+      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # master
+        with:
+          toolchain: 1.88.0
+          components: rustfmt, clippy
+      - name: rustfmt
+        run: cargo fmt -- --check
+      - name: clippy
+        run: cargo clippy --no-default-features -- -D warnings
+      - name: tests
+        env:
+          RUSTFLAGS: --cfg ucrs_skip_powermetrics
+        run: cargo test --no-default-features
+      - name: tests (p2p feature)
+        env:
+          RUSTFLAGS: --cfg ucrs_skip_powermetrics
+        run: cargo test --no-default-features --features p2p
+
+  rust-foundations:
+    name: Rust (foundations SSOT, optional)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: Rust
+    steps:
+      - uses: actions/checkout@v4 # v4
+      - name: Read pinned umst-manifold ref
+        id: manifold_pin
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          sha=$(python3 -c "import tomllib; print(tomllib.load(open('.umst-pins.toml','rb'))['umst-manifold']['sha'])")
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
       - name: Clone umst-manifold for umst-math path dependency (pinned, public)
         working-directory: ${{ github.workspace }}/..
         env:

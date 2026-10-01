@@ -8,7 +8,11 @@
 //! projection from [`umst_trust`] (SEC-TRUST-EXTRACT; no duplicate cipher identifiers).
 
 use serde::{Deserialize, Serialize};
+
+#[cfg(feature = "foundations-ssot")]
 use umst_trust::{CipherSuite, CipherSuiteWire, Trust, TrustWarrantWire};
+#[cfg(not(feature = "foundations-ssot"))]
+use crate::trust_wire_public::{CipherSuite, CipherSuiteWire, Trust, TrustWarrantWire};
 
 use crate::observation::{ObservedAtV2Wire, TemporalWitness, UcrsObservedAt};
 
@@ -278,13 +282,14 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "foundations-ssot")]
     fn from_core_trust_matches_manual_warrant() {
         let trust = Trust::bootstrap_unknown();
         let from_core = TrustAttestedWarrant::from_core_trust(&trust);
         let manual = TrustAttestedWarrant::from_trust_attested(
             "bootstrap",
             "Ephemeral",
-            trust.chain.chain_root_hex,
+            trust.chain.chain_root_hex.clone(),
             None,
             TrustCipherSuite::nist_pqc_balanced_3(),
         );
