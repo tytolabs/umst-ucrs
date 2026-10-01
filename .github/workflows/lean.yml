@@ -16,15 +16,13 @@ jobs:
         working-directory: Lean
     steps:
       - uses: actions/checkout@v4
-      - name: Clone umst-formal (Lake path dep)
-        working-directory: ${{ github.workspace }}
-        run: |
-          set -euo pipefail
-          dest="${GITHUB_WORKSPACE}/../umst-formal"
-          if [ ! -d "$dest/.git" ]; then
-            git clone --depth 1 https://github.com/tytolabs/umst-formal.git "$dest"
-          fi
       - uses: leanprover/lean-action@v1
         with:
           lake-package-directory: Lean
-      - run: lake build
+          build: false
+      - name: Build the runtime contract at the pinned umst-formal commit (no error, warning or sorry)
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee /tmp/lake.log
+          if grep -E "^(warning|error)" /tmp/lake.log | grep -v "\.lake/packages/"; then exit 1; fi
+          if grep -q "declaration uses 'sorry'" /tmp/lake.log; then exit 1; fi

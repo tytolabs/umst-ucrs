@@ -3,28 +3,35 @@ SPDX-License-Identifier: MIT
 # UCRS proof status (generated)
 
 **Repo:** [`umst-ucrs`](https://github.com/tytolabs/umst-ucrs)  
-**Updated:** 2026-08-15  
+**Updated:** 2026-10-01  
 **Lean toolchain:** Mathlib4 v4.14.0 (see `Lean/lakefile.lean`)
 
 ## Summary
 
-| Track | Location | Status | `sorry` count |
-|-------|----------|--------|---------------|
-| L1 Landauer nonneg | `Lean/Ucrs/L1_LandauerNonneg.lean` | **Proved** (from `umst-formal` `LandauerEinsteinBridge`) | 0 |
-| L2 Tensor additivity | `Lean/Ucrs/L2_TensorLandauer.lean` | **Proved** (`ring`) | 0 |
-| L3 Credit greedy | `Lean/Ucrs/L3_CreditGreedy.lean` | **Partial theorem** (Landauer bound; full greedy pending) | 0 |
-| L4 Gate admit | `Lean/Ucrs/L4_GateAdmit.lean` | **Proved** (`gate_admit_within_budget` + Landauer cost nonneg; former Tier-2 axiom discharged) | 0 |
-| L5 Clock coalgebra | `Lean/Ucrs/L5_ClockCoalgebra.lean` | **Proved** (contentful; no `: True`, no `sorry`) | 0 |
-| L6 Byzantine isolation | `Lean/Ucrs/L6_ByzantineIsolation.lean` | **Proved** (contentful) | 0 |
-| L7 Sync overhead | `Lean/Ucrs/L7_SyncOverhead.lean` | **Proved** (contentful) | 0 |
-| L8 Wire monotone | `Lean/Ucrs/L8_WireMonotone.lean` | **Proved** (contentful) | 0 |
-| Legacy scaffold | `Lean/TensorLandauer.lean` | Axioms | 0 |
-| Haskell QuickCheck | `Haskell/test/Spec.hs` | 5 properties | — |
-| Rust unit tests | `Rust/src/`, `Rust/tests/` | Active | — |
+The runtime's laws are proved once, in [`umst-formal`](https://github.com/tytolabs/umst-formal) `CoordinationContract`,
+in Lean, Coq and Agda, and run there as Haskell properties. This repository holds the runtime and binds it to them:
 
-## Formal import status (U4)
+| Binding | Location | What it checks |
+|---------|----------|----------------|
+| Contract interface | `Lean/RuntimeContract.lean` | each law the runtime relies on, restated and closed by the umst-formal theorem at the pinned commit |
+| Refinement tests | `Rust/tests/coordination_contract.rs` | the same laws as properties of the runtime's functions; `gate_check` admits exactly the states the contract admits |
+| Rust unit tests | `Rust/src/`, `Rust/tests/` | the runtime |
 
-UCRS Lean `lakefile.lean` requires **`umst-formal`** (`LandauerEinsteinBridge`) + Mathlib4 v4.14.0.
+| Law | umst-formal (Lean · Coq · Agda · Haskell) |
+|-----|-------------------------------------------|
+| Landauer cost nonnegative and additive | `landauerCostJoules_nonneg`, `landauerCostJoules_add` |
+| Admission bounds the cost by budget and desync (Clausius–Duhem) | `admitted_cost_bounded` |
+| An admitted sync never raises desync nor lowers total cost | `gatedSync_second_law` |
+| Clock drift monotone along any nonnegative trace | `clockRun_monotone` |
+| A faulty cohort leaves honest credit unchanged | `honestCredits_append_faulty` |
+| Wire sequence advances by exactly the step count | `wireNext_iterate` |
+
+The former local modules (Lean `Ucrs/L1`–`L8`, Haskell properties) are preserved at tag
+`archive/formal-move-2026-10-01`; their content is subsumed by the laws above.
+
+## Formal import status
+
+`Lean/lakefile.lean` requires `umst-formal` at a pinned commit and Mathlib4 v4.14.0.
 
 ## Manifold catalog (Track F)
 
@@ -35,7 +42,6 @@ UCRS Lean roots are listed in [`umst-manifold/artifacts/ucrs-catalog.json`](http
 | Workflow | Path |
 |----------|------|
 | Rust | `.github/workflows/rust.yml` |
-| Haskell | `.github/workflows/haskell.yml` |
 | Lean | `.github/workflows/lean.yml` |
 
 ## Regenerate

@@ -10,26 +10,16 @@ package «umst-ucrs» where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git" @ "v4.14.0"
 
--- W-62: pinned public sibling for standalone GitHub CI (matches ecosystem pin @ root).
+-- Pinned public sibling: the commit whose CoordinationContract the runtime refines.
 require «umst-formal» from git
-  "https://github.com/tytolabs/umst-formal.git" @ "cadc18bd6c2ae3b488f3a5f78206a74ca783c46e" / "Lean"
+  "https://github.com/tytolabs/umst-formal.git" @ "8f08d4a7cd4520da8a6acab6a66af4c34374c020" / "Lean"
 
 /-!
-  UCRS Lean mirror — Mathlib + pinned `umst-formal` Landauer bridge (U4).
-  L1–L4: derive Landauer nonneg from formal; L3 partial bound (no `: True` axiom).
-  L5–L8: proved (U1 wave) — zero `sorry`, zero `: True`, no new axioms.
+  The runtime's laws are proved once, in umst-formal `CoordinationContract` (Lean, Coq, Agda, Haskell).
+  `RuntimeContract` restates each law the runtime relies on and closes it with that theorem at the pinned commit,
+  so a change upstream to one of those statements fails this build. A default target: `lake build` builds it.
 -/
-
-lean_lib Ucrs where
-  roots := #[
-    `Ucrs.L1_LandauerNonneg,
-    `Ucrs.L2_TensorLandauer,
-    `Ucrs.L3_CreditGreedy,
-    `Ucrs.L4_GateAdmit,
-    `Ucrs.L5_ClockCoalgebra,
-    `Ucrs.L6_ByzantineIsolation,
-    `Ucrs.L7_SyncOverhead,
-    `Ucrs.L8_WireMonotone,
-    `TensorLandauer
-  ]
+@[default_target]
+lean_lib RuntimeContract where
+  roots := #[`RuntimeContract]
   srcDir := "."
