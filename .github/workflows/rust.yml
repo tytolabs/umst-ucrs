@@ -63,15 +63,15 @@ jobs:
       - name: rustfmt
         run: cargo fmt -- --check
       - name: clippy
-        run: cargo clippy --no-default-features -- -D warnings
+        run: cargo clippy --locked --no-default-features -- -D warnings
       - name: tests
         env:
           RUSTFLAGS: --cfg ucrs_skip_powermetrics
-        run: cargo test --no-default-features
+        run: cargo test --locked --no-default-features
       - name: tests (p2p feature)
         env:
           RUSTFLAGS: --cfg ucrs_skip_powermetrics
-        run: cargo test --no-default-features --features p2p
+        run: cargo test --locked --no-default-features --features p2p
 
   rust-foundations:
     name: Rust (foundations SSOT, optional)
