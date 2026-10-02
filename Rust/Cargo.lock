@@ -3465,9 +3465,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
- "umst-algebra",
  "umst-math",
- "umst-trust",
 ]
 
 [[package]]

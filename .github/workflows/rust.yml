@@ -125,12 +125,12 @@ jobs:
       - name: rustfmt
         run: cargo fmt -- --check
       - name: clippy
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --features foundations-ssot -- -D warnings
       - name: tests
         env:
           RUSTFLAGS: --cfg ucrs_skip_powermetrics
-        run: cargo test
+        run: cargo test --features foundations-ssot
       - name: tests (p2p feature)
         env:
           RUSTFLAGS: --cfg ucrs_skip_powermetrics
-        run: cargo test --features p2p
+        run: cargo test --features foundations-ssot,p2p

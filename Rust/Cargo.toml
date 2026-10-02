@@ -31,8 +31,9 @@ path = "src/bin/p2p.rs"
 required-features = ["p2p"]
 
 [features]
-# Default keeps compile-time small so downstream consumers don't pull libp2p.
-default = ["foundations-ssot"]
+# Default is public-ladder safe (W-63): no private umst-foundations path deps.
+# Local / foundations CI job: `--features foundations-ssot`.
+default = []
 # W-63 — private umst-foundations path deps (off on public GitHub runners).
 foundations-ssot = ["dep:umst-trust", "dep:umst-algebra"]
 # A7-4 multi-information global coordination cost (`landauer_global`).
