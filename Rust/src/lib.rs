@@ -24,7 +24,6 @@ pub mod frame_spine;
 pub mod gate;
 /// AC82 — UARCS-gossip mesh_wired false census (`mesh_wired` false unless WEB-034 measured).
 pub mod gossip_mesh_census;
-#[cfg(not(feature = "foundations-ssot"))]
 mod trust_wire_public;
 /// AC82 gossip mesh census — root re-exports for quality_gates wire scan C.
 pub use gossip_mesh_census::{

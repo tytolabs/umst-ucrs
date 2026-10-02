@@ -38,10 +38,7 @@ pub enum MergeOutcome {
 fn signing_payload(t: &ClockTick) -> Vec<u8> {
     let mut t2 = t.clone();
     t2.sig = [0; 32];
-    match serde_json::to_vec(&t2) {
-        Ok(v) => v,
-        Err(_) => Vec::new(),
-    }
+    serde_json::to_vec(&t2).unwrap_or_default()
 }
 
 /// Std-only keyed 32-byte digest (development / lab use — replace with HMAC in hardened deploys).
@@ -116,10 +113,7 @@ pub struct ClockTickMldsa {
 fn signing_payload_mldsa(t: &ClockTickMldsa) -> Vec<u8> {
     let mut t2 = t.clone();
     t2.sig.clear();
-    match serde_json::to_vec(&t2) {
-        Ok(v) => v,
-        Err(_) => Vec::new(),
-    }
+    serde_json::to_vec(&t2).unwrap_or_default()
 }
 
 /// Sign a tick with ML-DSA-65 (`umst_ucrs::crypto::sig::ml_dsa_65`). Pair-wise pk/sk required.

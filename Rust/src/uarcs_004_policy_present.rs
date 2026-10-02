@@ -107,7 +107,7 @@ pub const UARCS_004_POLICY_PRESENT_WIRE_HOPS: [Uarcs004PolicyPresentWireHop; WIR
 ];
 
 /// Open hop surfaces blocking full UARCS-004 present master retick.
-pub const UARCS_004_POLICY_PRESENT_OPEN_HOP_SURFACES: [&'static str; 2] = [
+pub const UARCS_004_POLICY_PRESENT_OPEN_HOP_SURFACES: [&str; 2] = [
     "uarcs_004_policy_present::uarcs_004_present_policy_wired",
     "umst-web/src/informational_present.rs::informational_present_wired",
 ];

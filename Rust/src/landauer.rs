@@ -211,5 +211,5 @@ pub const fn chem_stamp_ucrs_landauer_lift_named() -> bool {
     true
 }
 
-const _: () = assert!(CHEM_STAMP_UCRS_LANDAUER_HOP.len() > 0);
-const _: () = assert!(CHEM_STAMP_UCRS_LIFT_SURFACE.len() > 0);
+const _: () = assert!(!CHEM_STAMP_UCRS_LANDAUER_HOP.is_empty());
+const _: () = assert!(!CHEM_STAMP_UCRS_LIFT_SURFACE.is_empty());

@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: MIT
 //! W-63 public CI trust wire facade — not SSOT.
 //!
-//! Enable feature `foundations-ssot` for [`umst_trust`] wire projection from
-//! `umst_algebra::crypto::trust`.
+//! Foundations parity vs `umst-trust` runs in tyto-workspace, not on public CI.
 
 /// NIST PQC cipher-suite identifiers (public-ladder subset for durable accept).
 #[derive(Clone, Debug, PartialEq, Eq)]

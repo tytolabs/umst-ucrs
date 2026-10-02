@@ -34,8 +34,8 @@ required-features = ["p2p"]
 # Default is public-ladder safe (W-63): no private umst-foundations path deps.
 # Local / foundations CI job: `--features foundations-ssot`.
 default = []
-# W-63 — private umst-foundations path deps (off on public GitHub runners).
-foundations-ssot = ["dep:umst-trust", "dep:umst-algebra"]
+# W-63 — parity vs umst-foundations runs in tyto-workspace (no private path deps here).
+foundations-ssot = []
 # A7-4 multi-information global coordination cost (`landauer_global`).
 a7-4 = []
 # Enable libp2p-backed P2P swarm (daemon only).
@@ -63,11 +63,6 @@ tracing-subscriber = "0.3"
 prometheus = "0.13"
 # U1 — Clausius–Duhem SSOT (`clausius_duhem_admissible`); path pinned via `.umst-pins.toml` in CI.
 umst-math = { version = "0.1.0", path = "../../umst-manifold/umst-math" }
-# S-Q4 — Trust ADT wire projection SSOT (`umst_algebra::crypto::trust` via thin crate).
-# typed_absence W-63 — path dep on private umst-foundations; public Rust CI uses `trust_wire_public`.
-umst-trust = { version = "0.1.0", path = "../../umst-foundations/crates/umst-trust", optional = true }
-# S-0 — deepen ucrs↔algebra reference parity (SEC-UCRS-PARITY; feature-gated with foundations-ssot).
-umst-algebra = { version = "0.1.0", path = "../../umst-foundations/crates/umst-algebra", default-features = false, optional = true }
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
 proptest = "1"

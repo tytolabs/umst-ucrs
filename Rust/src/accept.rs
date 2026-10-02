@@ -9,10 +9,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[cfg(not(feature = "foundations-ssot"))]
 use crate::trust_wire_public::{CipherSuite, CipherSuiteWire, Trust, TrustWarrantWire};
-#[cfg(feature = "foundations-ssot")]
-use umst_trust::{CipherSuite, CipherSuiteWire, Trust, TrustWarrantWire};
 
 use crate::observation::{ObservedAtV2Wire, TemporalWitness, UcrsObservedAt};
 
@@ -113,7 +110,6 @@ impl TrustAttestedWarrant {
     }
 
     /// Structural validation — does not consult trust ledger (consumer responsibility).
-    #[must_use]
     pub fn validate(&self) -> Result<(), TrustStampReject> {
         if self.authority_id.trim().is_empty() {
             return Err(TrustStampReject::EmptyAuthority);
@@ -282,7 +278,6 @@ mod tests {
     }
 
     #[test]
-    #[cfg(feature = "foundations-ssot")]
     fn from_core_trust_matches_manual_warrant() {
         let trust = Trust::bootstrap_unknown();
         let from_core = TrustAttestedWarrant::from_core_trust(&trust);

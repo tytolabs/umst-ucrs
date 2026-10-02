@@ -119,7 +119,7 @@ pub const UARCS_A7_4_POLICY_WIRE_HOPS: [UarcsA74PolicyWireHop; WIRE_HOP_COUNT] =
 ];
 
 /// Open hop surfaces blocking full UARCS-A7-4 policy master retick.
-pub const UARCS_A7_4_POLICY_WIRE_OPEN_HOP_SURFACES: [&'static str; 3] = [
+pub const UARCS_A7_4_POLICY_WIRE_OPEN_HOP_SURFACES: [&str; 3] = [
     "uarcs_a7_4_policy_wire::uarcs_a7_4_policy_wired",
     "umst-arcs::coordination_cost_p6::p6_semantic_bind_wired",
     "umst-arcs::informational_channel::informational_channel_wired",

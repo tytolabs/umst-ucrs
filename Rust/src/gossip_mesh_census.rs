@@ -96,7 +96,7 @@ pub const HASKELL_SPEC_AUTHORITY: &str = "umst-ucrs/Haskell/test/Spec.hs";
 pub const HASKELL_PROPERTY_COUNT: usize = 5;
 
 /// QuickCheck property labels from `HASKELL_SPEC_AUTHORITY` (`testProperty` names).
-pub const HASKELL_SPEC_PROPERTY_LABELS: [&'static str; HASKELL_PROPERTY_COUNT] = [
+pub const HASKELL_SPEC_PROPERTY_LABELS: [&str; HASKELL_PROPERTY_COUNT] = [
     "greedy selects highest credit",
     "byzantine credit drops",
     "gate rejects over budget",
@@ -350,7 +350,7 @@ pub const UARCS_GOSSIP_MESH_WIRE_HOPS: [UarcsGossipMeshWireHop; WIRE_HOP_COUNT] 
 ];
 
 /// Open hop surfaces blocking full UARCS-gossip mesh master retick.
-pub const UARCS_GOSSIP_MESH_OPEN_HOP_SURFACES: [&'static str; 2] = [
+pub const UARCS_GOSSIP_MESH_OPEN_HOP_SURFACES: [&str; 2] = [
     "gossip_mesh_census::ucrs_gossip_mesh_policy_wired",
     "umst-web/src/gossip.rs::web_gossip_mesh_wired",
 ];

@@ -254,7 +254,7 @@ pub fn landauer_ucrs_a7_4_mi_wired() -> bool {
 }
 
 /// Open hop surfaces blocking full master LIB-ADOPT-A-LANDAUER retick (cross-lane).
-pub const LANDAUER_UCRS_OPEN_HOP_SURFACES: [&'static str; 2] = [
+pub const LANDAUER_UCRS_OPEN_HOP_SURFACES: [&str; 2] = [
     "landauer_global::multi_information_bits",
     "umst-arcs::coordination_cost_p6::p6_semantic_bind_wired",
 ];
