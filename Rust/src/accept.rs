@@ -9,10 +9,10 @@
 
 use serde::{Deserialize, Serialize};
 
-#[cfg(feature = "foundations-ssot")]
-use umst_trust::{CipherSuite, CipherSuiteWire, Trust, TrustWarrantWire};
 #[cfg(not(feature = "foundations-ssot"))]
 use crate::trust_wire_public::{CipherSuite, CipherSuiteWire, Trust, TrustWarrantWire};
+#[cfg(feature = "foundations-ssot")]
+use umst_trust::{CipherSuite, CipherSuiteWire, Trust, TrustWarrantWire};
 
 use crate::observation::{ObservedAtV2Wire, TemporalWitness, UcrsObservedAt};
 

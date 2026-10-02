@@ -38,7 +38,10 @@ pub enum MergeOutcome {
 fn signing_payload(t: &ClockTick) -> Vec<u8> {
     let mut t2 = t.clone();
     t2.sig = [0; 32];
-    match serde_json::to_vec(&t2) { Ok(v) => v, Err(_) => Vec::new() }
+    match serde_json::to_vec(&t2) {
+        Ok(v) => v,
+        Err(_) => Vec::new(),
+    }
 }
 
 /// Std-only keyed 32-byte digest (development / lab use — replace with HMAC in hardened deploys).
@@ -113,7 +116,10 @@ pub struct ClockTickMldsa {
 fn signing_payload_mldsa(t: &ClockTickMldsa) -> Vec<u8> {
     let mut t2 = t.clone();
     t2.sig.clear();
-    match serde_json::to_vec(&t2) { Ok(v) => v, Err(_) => Vec::new() }
+    match serde_json::to_vec(&t2) {
+        Ok(v) => v,
+        Err(_) => Vec::new(),
+    }
 }
 
 /// Sign a tick with ML-DSA-65 (`umst_ucrs::crypto::sig::ml_dsa_65`). Pair-wise pk/sk required.
@@ -187,7 +193,6 @@ pub fn apply_inbound_clock_tick_mldsa(
     )
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -202,10 +207,7 @@ mod tests {
             0xf1, 0x36, 0x81, 0xe6, 0xd0, 0x26, 0xee, 0xe4, 0x35, 0x2d, 0x70, 0x69, 0x6e, 0x69,
             0x6e, 0x76, 0x30, 0x35,
         ];
-        assert_eq!(
-            mix_digest(b"inv05-pin", b"ucrs-mix-digest-corpus"),
-            PINNED
-        );
+        assert_eq!(mix_digest(b"inv05-pin", b"ucrs-mix-digest-corpus"), PINNED);
     }
 
     /// Empty secret indexes `secret[0]` via `len().max(1)` — panics; not a silent diverge.
@@ -341,4 +343,3 @@ mod tests {
         );
     }
 }
-

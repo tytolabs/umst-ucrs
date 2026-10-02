@@ -173,27 +173,26 @@ pub struct UrgeHistoryMeshConsumer {
 }
 
 /// Urge history-mesh consumers — admitted history layer **calling** UCRS (reverse compose census).
-pub const URGE_HISTORY_MESH_CONSUMERS: [UrgeHistoryMeshConsumer; URGE_HISTORY_MESH_CONSUMER_COUNT] =
-    [
-        UrgeHistoryMeshConsumer {
-            module_path: "umst_urge::gate_before_sync",
-            source_authority: "umst/umst-urge/src/gate_before_sync.rs",
-            urge_cell_id: "URGE-INT-GATE-BEFORE-SYNC",
-            ucrs_call_surface: "umst_ucrs::gate::gate_check",
-        },
-        UrgeHistoryMeshConsumer {
-            module_path: "umst_urge::gossip_tick",
-            source_authority: "umst/umst-urge/src/gossip_tick.rs",
-            urge_cell_id: "URGE-INT-GOSSIP-TICK",
-            ucrs_call_surface: "p2p::gate_check_before_sync",
-        },
-        UrgeHistoryMeshConsumer {
-            module_path: "umst_urge::signed_propagate",
-            source_authority: "umst/umst-urge/src/signed_propagate.rs",
-            urge_cell_id: "URGE-INT-SIGNED-PROPAGATE",
-            ucrs_call_surface: "wire::sign_tick / wire::verify_tick",
-        },
-    ];
+pub const URGE_HISTORY_MESH_CONSUMERS: [UrgeHistoryMeshConsumer; URGE_HISTORY_MESH_CONSUMER_COUNT] = [
+    UrgeHistoryMeshConsumer {
+        module_path: "umst_urge::gate_before_sync",
+        source_authority: "umst/umst-urge/src/gate_before_sync.rs",
+        urge_cell_id: "URGE-INT-GATE-BEFORE-SYNC",
+        ucrs_call_surface: "umst_ucrs::gate::gate_check",
+    },
+    UrgeHistoryMeshConsumer {
+        module_path: "umst_urge::gossip_tick",
+        source_authority: "umst/umst-urge/src/gossip_tick.rs",
+        urge_cell_id: "URGE-INT-GOSSIP-TICK",
+        ucrs_call_surface: "p2p::gate_check_before_sync",
+    },
+    UrgeHistoryMeshConsumer {
+        module_path: "umst_urge::signed_propagate",
+        source_authority: "umst/umst-urge/src/signed_propagate.rs",
+        urge_cell_id: "URGE-INT-SIGNED-PROPAGATE",
+        ucrs_call_surface: "wire::sign_tick / wire::verify_tick",
+    },
+];
 
 /// Whether `ucrs_gossip_mesh_production_wired()` documents §17.7 `Unmeasured` posture.
 #[must_use]
@@ -204,8 +203,7 @@ pub const fn gossip_mesh_production_wired_taxonomy_unmeasured() -> bool {
 /// Whether sole-axiom pin is honest — exactly one `LandauerLaw.physicalSecondLaw`.
 #[must_use]
 pub fn landauer_physical_second_law_sole_axiom_honest() -> bool {
-    PHYSICS_AXIOM_COUNT == 1
-        && LEAN_AXIOM_PHYSICAL_SECOND_LAW == "LandauerLaw.physicalSecondLaw"
+    PHYSICS_AXIOM_COUNT == 1 && LEAN_AXIOM_PHYSICAL_SECOND_LAW == "LandauerLaw.physicalSecondLaw"
 }
 
 /// Whether Urge history-mesh consumer census pins are source-reviewed and cycle-fenced.
@@ -289,7 +287,6 @@ pub fn ucrs_urge_gossip_compose_residue_honest() -> bool {
         && urge_history_mesh_consumers_honest()
         && ucrs_gossip_mesh_c82_residue_honest()
 }
-
 
 /// One UCRS-side hop in the UARCS-gossip mesh wire ladder.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -1157,7 +1154,10 @@ mod tests {
     #[test]
     fn gossip_mesh_ucrs_urge_compose_sole_landauer_axiom() {
         assert_eq!(PHYSICS_AXIOM_COUNT, 1);
-        assert_eq!(LEAN_AXIOM_PHYSICAL_SECOND_LAW, "LandauerLaw.physicalSecondLaw");
+        assert_eq!(
+            LEAN_AXIOM_PHYSICAL_SECOND_LAW,
+            "LandauerLaw.physicalSecondLaw"
+        );
         assert!(LEAN_ANCHOR_LANDAUER_LAW.contains("LandauerLaw.lean"));
         assert!(landauer_physical_second_law_sole_axiom_honest());
     }
@@ -1184,9 +1184,7 @@ mod tests {
         assert!(probe.prior_residue_honest);
         assert!(uarcs_gossip_mesh_honest());
     }
-
 }
-
 
 /// Swarm cell id — URGE-II mesh Unmeasured|Measured taxonomy (no false flip).
 pub const URGE_II_MESH_UNMEASURED_TAXONOMY_CELL_ID: &str = "URGE-II-MESH-UNMEASURED-TAXONOMY";
