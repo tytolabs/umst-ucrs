@@ -153,7 +153,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_morph_load_offset_on_frac() {
+    fn morph_load_offset_on_frac() {
         let knobs = SteerKnobs {
             thickness_m: 0.15,
             live_x_offset_frac: 0.25,

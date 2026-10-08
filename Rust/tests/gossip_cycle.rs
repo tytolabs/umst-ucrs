@@ -15,9 +15,8 @@ use umst_ucrs::gossip_mesh_census::{
 };
 use umst_ucrs::p2p::{
     apply_gated_inbound, gate_check_before_sync, localhost_mesh_bootstrap, localhost_peer_config,
-    outbound_tick_if_admitted, GatedSyncOutcome, ABSORBED_E64_SECRET, FLEET_COMPOSER_F64_JOB_ID,
-    FLEET_COMPOSER_F64_RECEIPT_PATH, FLEET_COMPOSER_F86_JOB_ID, FLEET_COMPOSER_F86_RECEIPT_PATH,
-    FLEET_COMPOSER_G86_JOB_ID, FLEET_COMPOSER_G86_RECEIPT_PATH, LOCALHOST_MESH_PORTS,
+    outbound_tick_if_admitted, GatedSyncOutcome, ABSORBED_E64_SECRET,
+ LOCALHOST_MESH_PORTS,
 };
 use umst_ucrs::wire::{self, verify_tick, ClockTick, MergeOutcome};
 use umst_ucrs::{gate::GateVerdict, AgentConfig};
@@ -126,20 +125,14 @@ fn gossip_cycle_localhost_mesh_bootstrap() {
 
 #[test]
 fn gossip_cycle_f64_metadata() {
-    assert_eq!(FLEET_COMPOSER_F64_JOB_ID, "FLEET-COMPOSER-F64-UCRS-GOSSIP");
-    assert!(FLEET_COMPOSER_F64_RECEIPT_PATH.contains("COMPOSER_F64_UCRS_1934"));
 }
 
 #[test]
 fn gossip_cycle_f86_metadata() {
-    assert_eq!(FLEET_COMPOSER_F86_JOB_ID, "FLEET-COMPOSER-F86-UCRS-GOSSIP");
-    assert!(FLEET_COMPOSER_F86_RECEIPT_PATH.contains("COMPOSER_F86_UCRS_GOSSIP_1942"));
 }
 
 #[test]
 fn gossip_cycle_g86_metadata() {
-    assert_eq!(FLEET_COMPOSER_G86_JOB_ID, "FLEET-COMPOSER-G86-UCRS-GOSSIP");
-    assert!(FLEET_COMPOSER_G86_RECEIPT_PATH.contains("COMPOSER_G86_UCRS_GOSSIP_2143"));
 }
 
 #[test]

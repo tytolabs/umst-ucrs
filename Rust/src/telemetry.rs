@@ -184,7 +184,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_gather_text_nonempty() {
+    fn gather_text_nonempty() {
         let text = gather_text();
         assert!(!text.is_empty());
         assert!(text.contains("# HELP"));

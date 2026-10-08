@@ -149,7 +149,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_local_clock_reexport_usable() {
+    fn local_clock_reexport_usable() {
         let clock = LocalClock::new(10.0, 300.0);
         assert_eq!(clock.phase_entropy_bits(), 0.0);
     }

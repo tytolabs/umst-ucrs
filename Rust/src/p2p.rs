@@ -6,24 +6,6 @@
 //! This module is always available so integration tests can exercise gossip logic
 //! without pulling libp2p into default library builds.
 
-/// FLEET-COMPOSER-F F64 job id — gossip cycle integration test.
-pub const FLEET_COMPOSER_F64_JOB_ID: &str = "FLEET-COMPOSER-F64-UCRS-GOSSIP";
-
-/// FLEET-COMPOSER-F F64 receipt path (parent workspace relative).
-pub const FLEET_COMPOSER_F64_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F64_UCRS_1934.md";
-
-/// FLEET-COMPOSER-F F86 job id — gossip cycle integration test.
-pub const FLEET_COMPOSER_F86_JOB_ID: &str = "FLEET-COMPOSER-F86-UCRS-GOSSIP";
-
-/// FLEET-COMPOSER-F F86 receipt path (parent workspace relative).
-pub const FLEET_COMPOSER_F86_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F86_UCRS_GOSSIP_1942.md";
-
-/// FLEET-COMPOSER-G G86 job id — gossip mesh wire probe (honest mesh-open).
-pub const FLEET_COMPOSER_G86_JOB_ID: &str = "FLEET-COMPOSER-G86-UCRS-GOSSIP";
-
-/// FLEET-COMPOSER-G G86 receipt path (parent workspace relative).
-pub const FLEET_COMPOSER_G86_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_G86_UCRS_GOSSIP_2143.md";
-
 /// Prior E64 gossip cycle cut absorbed by F86.
 pub const ABSORBED_E64_SECRET: &[u8] = b"e64-gossip-cycle";
 
@@ -216,7 +198,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_outbound_tick_none_when_low_entropy() {
+    fn outbound_tick_none_when_low_entropy() {
         let clock = LocalClock::new(10.0, 300.0);
         let config = localhost_peer_config(0, 20.0);
         assert!(outbound_tick_if_admitted(&clock, &config, b"low-entropy").is_none());

@@ -56,7 +56,7 @@ fn long_kat_preimage() -> Vec<u8> {
 }
 
 #[test]
-fn r394_algebra_ucrs_kem_byte_width_parity() {
+fn algebra_ucrs_kem_byte_width_parity() {
     assert_eq!(ML_KEM_768_PUBLIC_KEY_BYTES, U_PK);
     assert_eq!(ML_KEM_768_SECRET_KEY_BYTES, U_SK);
     assert_eq!(ML_KEM_768_CIPHERTEXT_BYTES, U_CT);
@@ -65,7 +65,7 @@ fn r394_algebra_ucrs_kem_byte_width_parity() {
 }
 
 #[test]
-fn r395_hash_empty_and_abc_kat_algebra_ucrs() -> TestResult {
+fn hash_empty_and_abc_kat_algebra_ucrs() -> TestResult {
     assert_eq!(algebra_digest(&[])?, ucrs_digest(&[])?);
     assert_eq!(algebra_digest(&[])?, EMPTY_SHA3_256);
     let abc = b"abc";
@@ -75,7 +75,7 @@ fn r395_hash_empty_and_abc_kat_algebra_ucrs() -> TestResult {
 }
 
 #[test]
-fn r396_kem_algebra_encap_ucrs_decap() -> TestResult {
+fn kem_algebra_encap_ucrs_decap() -> TestResult {
     let (pk, sk) = umst_algebra::crypto::kem::ml_kem_768::keypair_bytes()?;
     let (ss_a, ct) = a_encap(&pk, &[])?;
     let ss_u = u_decap(&sk, &ct)?;
@@ -84,7 +84,7 @@ fn r396_kem_algebra_encap_ucrs_decap() -> TestResult {
 }
 
 #[test]
-fn r397_kem_ucrs_encap_algebra_decap() -> TestResult {
+fn kem_ucrs_encap_algebra_decap() -> TestResult {
     let (pk, sk) = umst_ucrs::crypto::kem::ml_kem_768::keypair_bytes()?;
     let (ss_u, ct) = u_encap(&pk, &[])?;
     let ss_a = a_decap(&sk, &ct)?;
@@ -93,7 +93,7 @@ fn r397_kem_ucrs_encap_algebra_decap() -> TestResult {
 }
 
 #[test]
-fn r398_ml_dsa_algebra_sign_ucrs_verify() -> TestResult {
+fn ml_dsa_algebra_sign_ucrs_verify() -> TestResult {
     let msg = b"algebra->ucrs ML-DSA cross-verify";
     let (pk, sk) = umst_algebra::crypto::sig::ml_dsa_65::keypair_bytes();
     let sig = a_sign(msg, &sk, &pk)?;
@@ -102,7 +102,7 @@ fn r398_ml_dsa_algebra_sign_ucrs_verify() -> TestResult {
 }
 
 #[test]
-fn r399_ml_dsa_ucrs_sign_algebra_verify() -> TestResult {
+fn ml_dsa_ucrs_sign_algebra_verify() -> TestResult {
     let msg = b"ucrs->algebra ML-DSA cross-verify";
     let (pk, sk) = umst_ucrs::crypto::sig::ml_dsa_65::keypair_bytes();
     let sig = u_sign(msg, &sk, &pk)?;

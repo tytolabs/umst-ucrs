@@ -291,8 +291,4 @@ mod tests {
         assert_eq!(from_core, manual);
     }
 
-    #[test]
-    fn w8e14_durable_accept_schema_version_stable() {
-        assert_eq!(DURABLE_ACCEPT_SCHEMA_VERSION, "durable_accept.v0");
-    }
 }

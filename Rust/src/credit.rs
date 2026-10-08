@@ -246,7 +246,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_best_peer_none_when_empty() {
+    fn best_peer_none_when_empty() {
         let ledger = CreditLedger::new(0, 300.0);
         assert!(ledger.best_peer().is_none());
     }

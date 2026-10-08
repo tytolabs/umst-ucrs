@@ -154,7 +154,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_zero_desync_rejects_cd_violation() {
+    fn zero_desync_rejects_cd_violation() {
         let state = ClockThermState {
             desync_energy_j: 0.0,
             budget_j: landauer::landauer_cost(10.0, 300.0),

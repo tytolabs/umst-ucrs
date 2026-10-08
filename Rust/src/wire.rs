@@ -289,7 +289,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_invalid_sig_rejects() {
+    fn invalid_sig_rejects() {
         let mut clock = LocalClock::new(10.0, 300.0);
         clock.phase_uncertainty_sec = 1e-6;
         let mut ledger = CreditLedger::new(1, 300.0);

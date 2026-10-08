@@ -258,7 +258,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_stamp_tier_wire_str_roundtrip() {
+    fn stamp_tier_wire_str_roundtrip() {
         assert_eq!(StampTier::WallOnly.as_wire_str(), "WallOnly");
         assert_eq!(StampTier::UcrsTier2.as_wire_str(), "UcrsTier2");
     }

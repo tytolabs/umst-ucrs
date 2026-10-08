@@ -174,7 +174,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_global_coordination_cost_nonneg() {
+    fn global_coordination_cost_nonneg() {
         let cost = coordination_cost_global(1.5, T_ROOM);
         assert!(cost >= 0.0);
         assert!(cost > coordination_cost_global(0.0, T_ROOM));

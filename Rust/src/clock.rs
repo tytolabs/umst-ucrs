@@ -150,7 +150,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_predicted_error_scales_with_drift() {
+    fn predicted_error_scales_with_drift() {
         let clock = LocalClock::new(20.0, 300.0);
         let near = clock.predicted_error_at(1.0);
         let far = clock.predicted_error_at(100.0);

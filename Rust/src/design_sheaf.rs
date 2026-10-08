@@ -282,7 +282,7 @@ mod gluing_tests {
     }
 
     #[test]
-    fn w8e14_spine_admissible_under_gluing_honest() {
+    fn spine_admissible_under_gluing_honest() {
         let spine = Spine {
             frame: Frame::default_negative_y(),
             vertebrae: vec![stub_vertebra(true)],

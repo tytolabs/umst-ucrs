@@ -31,19 +31,19 @@ fn long_kat_preimage() -> Vec<u8> {
 }
 
 #[test]
-fn r391_ucrs_kem_surface() {
+fn ucrs_kem_surface() {
     let _ = u_encap;
     let _ = u_decap;
 }
 
 #[test]
-fn r392_ucrs_sig_surface() {
+fn ucrs_sig_surface() {
     let _ = u_sign;
     let _ = u_verify;
 }
 
 #[test]
-fn r393_ucrs_hash_surface() {
+fn ucrs_hash_surface() {
     let _ = ucrs_digest(&[]);
 }
 

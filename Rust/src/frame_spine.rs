@@ -250,7 +250,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_empty_spine_has_no_cast_rho() {
+    fn empty_spine_has_no_cast_rho() {
         let spine = Spine {
             frame: Frame::default_negative_y(),
             vertebrae: vec![],

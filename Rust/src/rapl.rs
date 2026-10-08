@@ -202,7 +202,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_energy_reading_delta_zero_same() {
+    fn energy_reading_delta_zero_same() {
         let a = EnergyReading { microjoules: 1000 };
         assert!((a.delta(&a)).abs() < f64::EPSILON);
     }

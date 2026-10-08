@@ -182,7 +182,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_landauer_cost_positive_for_positive_bits() {
+    fn landauer_cost_positive_for_positive_bits() {
         let cost = landauer_cost(2.0, T_ROOM);
         assert!(cost > 0.0);
         assert!(cost < landauer_cost(4.0, T_ROOM));

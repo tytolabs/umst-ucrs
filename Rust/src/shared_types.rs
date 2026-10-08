@@ -33,7 +33,7 @@ mod consumer_fence_tests {
     use super::observation::StampTier;
 
     #[test]
-    fn w8e14_shared_types_stamp_lane_reexports() {
+    fn shared_types_stamp_lane_reexports() {
         assert_eq!(StampTier::UcrsTier2.as_wire_str(), "UcrsTier2");
         // Fence: module docs forbid daemon/p2p/rapl — stamp-only consumer surface.
     }

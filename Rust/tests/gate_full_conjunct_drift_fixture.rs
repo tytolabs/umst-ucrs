@@ -20,7 +20,7 @@ struct ThermoStateWire {
 struct GateVector {
     old: ThermoStateWire,
     new: ThermoStateWire,
-    dt: f64,
+    // The fixture also records `dt`; gate_sdf is step-free, so it is not read.
     expect_admissible: bool,
 }
 

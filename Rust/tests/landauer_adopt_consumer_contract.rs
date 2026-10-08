@@ -32,7 +32,6 @@ fn landauer_adopt_probe_snapshots_honest() {
 
     let k3 = lib_adopt_a_landauer_p1938_k3_probe();
     assert!(k3.pairwise_adopt_closed);
-    assert!(k3.b4_receipt_honest);
 
     let ac36 = lib_adopt_a_landauer_accel_ac36_probe();
     assert!(ac36.pairwise_mi_entropy_bridge_wired);

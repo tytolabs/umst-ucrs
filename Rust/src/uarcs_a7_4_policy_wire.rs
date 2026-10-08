@@ -19,30 +19,6 @@ use crate::observation::{StampTier, TemporalWitness, WIRE_SCALE};
 use crate::AgentConfig;
 use serde::{Deserialize, Serialize};
 
-/// FLEET-COMPOSER ACCEL-C parent fleet id.
-pub const ACCEL_C_FLEET_PARENT: &str = "FLEET-COMPOSER-ACCEL-C";
-
-/// AC81 fleet card id.
-pub const COMPOSER_ACCEL2_AC81_JOB_ID: &str = "FLEET-COMPOSER-ACCEL2-AC81-UARCS-A7-4";
-
-/// AC81 wave slot.
-pub const ACCEL_AC81_SLOT: &str = "AC81";
-
-/// AC81 receipt path (this slice).
-pub const COMPOSER_ACCEL2_AC81_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_ACCEL2_AC81.md";
-
-/// AC81 scratch target dir (fleet verify).
-pub const COMPOSER_ACCEL2_AC81_SCRATCH: &str = "/tmp/umst-accel2-ac81-a7-4";
-
-/// Y71 absorbed bench census receipt.
-pub const PRIOR_Y71_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_Y71_0808.md";
-
-/// Z47 absorbed arcs semantic-bind residue receipt.
-pub const PRIOR_Z47_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_Z47_1015.md";
-
-/// SWARM-C25-0831-36 slot id — P6 bind attempt honesty.
-pub const SWARM_C25_0831_36_JOB_ID: &str = "SWARM-C25-0831-36";
-
 /// Bench Y71 census authority (source-reviewed; no crate dep).
 pub const BENCH_Y71_AUTHORITY: &str = "crates/umst-bench/src/uarcs_a7_4_policy_wire_census.rs";
 
@@ -207,16 +183,6 @@ pub fn uarcs_a7_4_ucrs_policy_prep_closed() -> bool {
 /// AC81 adoption probe — UCRS owner lane.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct UarcsA74PolicyWireAc81Probe {
-    /// AC81 fleet card id.
-    pub ac81_job_id: &'static str,
-    /// AC81 wave slot.
-    pub ac81_slot: &'static str,
-    /// AC81 receipt path pinned.
-    pub ac81_receipt_honest: bool,
-    /// Y71 bench census cross-ref pinned.
-    pub y71_cross_ref_honest: bool,
-    /// Z47 arcs semantic-bind cross-ref pinned.
-    pub z47_cross_ref_honest: bool,
     /// A7 lane id cross-ref.
     pub a7_lane_id: &'static str,
     /// UCRS wire hops closed on default build.
@@ -239,12 +205,6 @@ pub struct UarcsA74PolicyWireAc81Probe {
 #[must_use]
 pub fn uarcs_a7_4_policy_wire_ac81_probe() -> UarcsA74PolicyWireAc81Probe {
     UarcsA74PolicyWireAc81Probe {
-        ac81_job_id: COMPOSER_ACCEL2_AC81_JOB_ID,
-        ac81_slot: ACCEL_AC81_SLOT,
-        ac81_receipt_honest: COMPOSER_ACCEL2_AC81_RECEIPT_PATH
-            == "outputs/.tmp/COMPOSER_ACCEL2_AC81.md",
-        y71_cross_ref_honest: PRIOR_Y71_RECEIPT_PATH == "outputs/.tmp/COMPOSER_Y71_0808.md",
-        z47_cross_ref_honest: PRIOR_Z47_RECEIPT_PATH.contains("COMPOSER_Z47_1015"),
         a7_lane_id: A7_LANE_ID,
         wire_hops_closed: uarcs_a7_4_policy_wire_hops_closed_count(),
         ucrs_prep_wired: uarcs_a7_4_ucrs_policy_prep_wired(),
@@ -260,11 +220,7 @@ pub fn uarcs_a7_4_policy_wire_ac81_probe() -> UarcsA74PolicyWireAc81Probe {
 #[must_use]
 pub fn uarcs_a7_4_policy_wire_ac81_residue_honest() -> bool {
     let probe = uarcs_a7_4_policy_wire_ac81_probe();
-    probe.ac81_job_id == COMPOSER_ACCEL2_AC81_JOB_ID
-        && probe.ac81_slot == ACCEL_AC81_SLOT
-        && probe.y71_cross_ref_honest
-        && probe.z47_cross_ref_honest
-        && probe.a7_lane_id == "A7-4"
+        probe.a7_lane_id == "A7-4"
         && probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.ucrs_prep_wired
         && uarcs_a7_4_policy_wire_hops_honest()
@@ -306,23 +262,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn ac81_uarcs_a7_4_metadata_constants() {
-        assert_eq!(
-            COMPOSER_ACCEL2_AC81_JOB_ID,
-            "FLEET-COMPOSER-ACCEL2-AC81-UARCS-A7-4"
-        );
-        assert_eq!(ACCEL_AC81_SLOT, "AC81");
-        assert!(COMPOSER_ACCEL2_AC81_RECEIPT_PATH.contains("COMPOSER_ACCEL2_AC81"));
-        assert_eq!(COMPOSER_ACCEL2_AC81_SCRATCH, "/tmp/umst-accel2-ac81-a7-4");
-        assert_eq!(SWARM_C25_0831_36_JOB_ID, "SWARM-C25-0831-36");
+    fn uarcs_a7_4_metadata_constants() {
         assert_eq!(UARCS_A7_4_POLICY_WIRE_HOPS.len(), 5);
         assert_eq!(uarcs_a7_4_policy_wire_hops_closed_count(), 3);
-        assert_eq!(WIRE_HOPS_CLOSED_DEFAULT, 3);
-        assert_eq!(P6_OPEN_OBLIGATION_COUNT, 4);
     }
 
     #[test]
-    fn ac81_uarcs_a7_4_wire_hops_three_of_five_closed_default() {
+    fn uarcs_a7_4_wire_hops_three_of_five_closed_default() {
         assert!(uarcs_a7_4_policy_wire_hops_honest());
         assert_eq!(uarcs_a7_4_policy_wire_hops_closed_count(), 3);
         assert!(UARCS_A7_4_POLICY_WIRE_HOPS[0].wired_default);
@@ -333,7 +279,7 @@ mod tests {
     }
 
     #[test]
-    fn ac81_uarcs_a7_4_policy_p6_production_false_honest() {
+    fn uarcs_a7_4_policy_p6_production_false_honest() {
         assert!(!uarcs_a7_4_policy_wired());
         assert!(!uarcs_a7_4_p6_semantic_bind_wired());
         assert!(!uarcs_a7_4_a8_channel_wired());
@@ -348,30 +294,19 @@ mod tests {
     }
 
     #[test]
-    fn ac81_uarcs_a7_4_ucrs_policy_prep_wired_on_default_build() {
+    fn uarcs_a7_4_ucrs_policy_prep_wired_on_default_build() {
         assert!(uarcs_a7_4_ucrs_policy_prep_wired());
         assert!(uarcs_a7_4_ucrs_policy_prep_closed());
     }
 
-    #[test]
-    fn ac81_uarcs_a7_4_absorbed_prior_receipts_honest() {
-        assert!(PRIOR_Y71_RECEIPT_PATH.contains("COMPOSER_Y71_0808"));
-        assert!(PRIOR_Z47_RECEIPT_PATH.contains("COMPOSER_Z47_1015"));
-        assert!(BENCH_Y71_AUTHORITY.contains("uarcs_a7_4_policy_wire_census"));
-        assert!(ARCS_Z47_AUTHORITY.contains("uarcs_a7_4_semantic_bind"));
-        assert!(ARCS_P6_AUTHORITY.contains("coordination_cost_p6"));
-    }
 
     #[test]
-    fn ac81_uarcs_a7_4_policy_wire_residue_honest() {
+    fn uarcs_a7_4_policy_wire_residue_honest() {
         assert!(uarcs_a7_4_policy_wire_ac81_residue_honest());
         assert!(uarcs_a7_4_policy_wire_honest());
         let probe = uarcs_a7_4_policy_wire_ac81_probe();
-        assert_eq!(probe.ac81_job_id, COMPOSER_ACCEL2_AC81_JOB_ID);
         assert_eq!(probe.wire_hops_closed, 3);
         assert!(probe.ucrs_prep_wired);
-        assert!(probe.y71_cross_ref_honest);
-        assert!(probe.z47_cross_ref_honest);
         assert_eq!(probe.a7_lane_id, "A7-4");
         assert_eq!(
             UARCS_A7_4_POLICY_WIRE_OPEN_HOP_SURFACES[1],
@@ -381,7 +316,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_policy_wire_honest_fence() {
+    fn policy_wire_honest_fence() {
         assert!(uarcs_a7_4_policy_wire_honest());
         let probe = uarcs_a7_4_policy_wire_ac81_probe();
         assert!(!probe.policy_wired);

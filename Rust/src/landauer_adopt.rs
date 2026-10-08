@@ -47,46 +47,6 @@ pub const WORKSTREAM_ID: &str = "LIB-ADOPT-A-LANDAUER";
 /// A7 lane cross-ref — multi-information thermodynamic floor.
 pub const A7_LANE_ID: &str = "A7-4";
 
-/// FLEET-COMPOSER P1542 B4 card id.
-pub const COMPOSER_P1542_B4_JOB_ID: &str = "FLEET-COMPOSER-P1542-B4-LANDAUER";
-
-/// P1542 wave slot.
-pub const COMPOSER_P1542_B4_SLOT: &str = "B4";
-
-/// P1542 receipt path (this slice).
-pub const COMPOSER_P1542_B4_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_P1542_B4.md";
-
-/// FLEET-COMPOSER P1938 K3 card id.
-pub const COMPOSER_P1938_K3_JOB_ID: &str = "FLEET-COMPOSER-P1938-K3-LANDAUER";
-
-/// P1938 wave slot.
-pub const COMPOSER_P1938_K3_SLOT: &str = "K3";
-
-/// P1938 K3 receipt path (this slice).
-pub const COMPOSER_P1938_K3_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_P1938_K3.md";
-
-/// FLEET-COMPOSER ACCEL-B AC36 card id.
-pub const COMPOSER_ACCEL2_AC36_JOB_ID: &str = "FLEET-COMPOSER-ACCEL2-AC36-LANDAUER";
-
-/// ACCEL-B wave slot.
-pub const COMPOSER_ACCEL2_AC36_SLOT: &str = "AC36";
-
-/// AC36 MI feature deepen receipt path (this slice).
-pub const COMPOSER_ACCEL2_AC36_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_ACCEL2_AC36.md";
-
-/// AC36 scratch target dir (fleet verify).
-pub const COMPOSER_ACCEL2_AC36_SCRATCH: &str = "/tmp/umst-accel2-ac36-land";
-
-/// Prior B4 UCRS residue receipt (absorbed, not re-censused).
-pub const PRIOR_P1542_B4_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_P1542_B4.md";
-
-/// Prior Z95 ARCS residue receipt (cross-lane, not UCRS owner).
-pub const PRIOR_Z95_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_Z95_1232.md";
-
-/// Prior AGAP night deepen receipt.
-pub const PRIOR_AGAP_RECEIPT_PATH: &str =
-    "old/residuals/residuals/misc-outputs-tmp/COMPLETION_AGAP_AGENT_LIB-LANDAUER_2350.md";
-
 /// UCRS wire hop count (pairwise + A7-4 global + ARCS parity cross-ref).
 pub const WIRE_HOP_COUNT: usize = 4;
 
@@ -262,14 +222,6 @@ pub const LANDAUER_UCRS_OPEN_HOP_SURFACES: [&str; 2] = [
 /// P1542 B4 adoption probe — UCRS owner lane.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LibAdoptALandauerP1542B4Probe {
-    /// P1542 B4 fleet card id.
-    pub p1542_job_id: &'static str,
-    /// P1542 wave slot.
-    pub p1542_slot: &'static str,
-    /// P1542 receipt path pinned.
-    pub p1542_receipt_honest: bool,
-    /// Z95 ARCS cross-ref pinned (not owner).
-    pub z95_cross_ref_honest: bool,
     /// UCRS wire hops closed on default build.
     pub wire_hops_closed: u8,
     /// Pairwise symbols wired.
@@ -286,10 +238,6 @@ pub struct LibAdoptALandauerP1542B4Probe {
 #[must_use]
 pub fn lib_adopt_a_landauer_p1542_b4_probe() -> LibAdoptALandauerP1542B4Probe {
     LibAdoptALandauerP1542B4Probe {
-        p1542_job_id: COMPOSER_P1542_B4_JOB_ID,
-        p1542_slot: COMPOSER_P1542_B4_SLOT,
-        p1542_receipt_honest: COMPOSER_P1542_B4_RECEIPT_PATH == "outputs/.tmp/COMPOSER_P1542_B4.md",
-        z95_cross_ref_honest: PRIOR_Z95_RECEIPT_PATH == "outputs/.tmp/COMPOSER_Z95_1232.md",
         wire_hops_closed: landauer_ucrs_wire_hops_closed_count(),
         pairwise_symbols_wired: landauer_ucrs_pairwise_symbols_wired(),
         a7_4_mi_wired: landauer_ucrs_a7_4_mi_wired_on_build(),
@@ -302,10 +250,7 @@ pub fn lib_adopt_a_landauer_p1542_b4_probe() -> LibAdoptALandauerP1542B4Probe {
 #[must_use]
 pub fn landauer_ucrs_p1542_b4_residue_honest() -> bool {
     let probe = lib_adopt_a_landauer_p1542_b4_probe();
-    probe.p1542_job_id == COMPOSER_P1542_B4_JOB_ID
-        && probe.p1542_slot == COMPOSER_P1542_B4_SLOT
-        && probe.z95_cross_ref_honest
-        && probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
+        probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.pairwise_symbols_wired
         && landauer_ucrs_wire_hops_honest()
         && probe.is_thermodynamic_floor
@@ -315,16 +260,6 @@ pub fn landauer_ucrs_p1542_b4_residue_honest() -> bool {
 /// P1938 K3 adoption probe — UCRS owner pairwise close lane.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LibAdoptALandauerP1938K3Probe {
-    /// P1938 K3 fleet card id.
-    pub p1938_job_id: &'static str,
-    /// P1938 wave slot.
-    pub p1938_slot: &'static str,
-    /// P1938 K3 receipt path pinned.
-    pub p1938_receipt_honest: bool,
-    /// B4 prior receipt cross-ref pinned.
-    pub b4_receipt_honest: bool,
-    /// Z95 ARCS cross-ref pinned (not owner).
-    pub z95_cross_ref_honest: bool,
     /// UCRS wire hops closed on default build.
     pub wire_hops_closed: u8,
     /// Pairwise adopt path closed.
@@ -341,11 +276,6 @@ pub struct LibAdoptALandauerP1938K3Probe {
 #[must_use]
 pub fn lib_adopt_a_landauer_p1938_k3_probe() -> LibAdoptALandauerP1938K3Probe {
     LibAdoptALandauerP1938K3Probe {
-        p1938_job_id: COMPOSER_P1938_K3_JOB_ID,
-        p1938_slot: COMPOSER_P1938_K3_SLOT,
-        p1938_receipt_honest: COMPOSER_P1938_K3_RECEIPT_PATH == "outputs/.tmp/COMPOSER_P1938_K3.md",
-        b4_receipt_honest: PRIOR_P1542_B4_RECEIPT_PATH == COMPOSER_P1542_B4_RECEIPT_PATH,
-        z95_cross_ref_honest: PRIOR_Z95_RECEIPT_PATH == "outputs/.tmp/COMPOSER_Z95_1232.md",
         wire_hops_closed: landauer_ucrs_wire_hops_closed_count(),
         pairwise_adopt_closed: landauer_ucrs_pairwise_adopt_closed(),
         a7_4_mi_wired: landauer_ucrs_a7_4_mi_wired_on_build(),
@@ -358,11 +288,7 @@ pub fn lib_adopt_a_landauer_p1938_k3_probe() -> LibAdoptALandauerP1938K3Probe {
 #[must_use]
 pub fn landauer_ucrs_p1938_k3_pairwise_close_honest() -> bool {
     let probe = lib_adopt_a_landauer_p1938_k3_probe();
-    probe.p1938_job_id == COMPOSER_P1938_K3_JOB_ID
-        && probe.p1938_slot == COMPOSER_P1938_K3_SLOT
-        && probe.b4_receipt_honest
-        && probe.z95_cross_ref_honest
-        && probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
+        probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.pairwise_adopt_closed
         && landauer_ucrs_wire_hops_honest()
         && probe.is_thermodynamic_floor
@@ -387,14 +313,6 @@ pub fn landauer_ucrs_p1938_k3_close_summary() -> String {
 /// AC36 MI feature deepen probe — UCRS Shannon entropy bridge + A7-4 compile witness.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LibAdoptALandauerAccelAc36Probe {
-    /// AC36 fleet card id.
-    pub accel_job_id: &'static str,
-    /// ACCEL-B slot.
-    pub accel_slot: &'static str,
-    /// AC36 receipt path pinned.
-    pub accel_receipt_honest: bool,
-    /// P1938 K3 prior receipt cross-ref pinned.
-    pub k3_receipt_honest: bool,
     /// Pairwise Shannon MI entropy bridge wired.
     pub pairwise_mi_entropy_bridge_wired: bool,
     /// Pairwise adopt path closed.
@@ -411,11 +329,6 @@ pub struct LibAdoptALandauerAccelAc36Probe {
 #[must_use]
 pub fn lib_adopt_a_landauer_accel_ac36_probe() -> LibAdoptALandauerAccelAc36Probe {
     LibAdoptALandauerAccelAc36Probe {
-        accel_job_id: COMPOSER_ACCEL2_AC36_JOB_ID,
-        accel_slot: COMPOSER_ACCEL2_AC36_SLOT,
-        accel_receipt_honest: COMPOSER_ACCEL2_AC36_RECEIPT_PATH
-            == "outputs/.tmp/COMPOSER_ACCEL2_AC36.md",
-        k3_receipt_honest: COMPOSER_P1938_K3_RECEIPT_PATH == "outputs/.tmp/COMPOSER_P1938_K3.md",
         pairwise_mi_entropy_bridge_wired: landauer_ucrs_pairwise_mi_entropy_bridge_wired(),
         pairwise_adopt_closed: landauer_ucrs_pairwise_adopt_closed(),
         a7_4_mi_wired: landauer_ucrs_a7_4_mi_wired_on_build(),
@@ -428,10 +341,7 @@ pub fn lib_adopt_a_landauer_accel_ac36_probe() -> LibAdoptALandauerAccelAc36Prob
 #[must_use]
 pub fn landauer_ucrs_accel_ac36_mi_deepen_honest() -> bool {
     let probe = lib_adopt_a_landauer_accel_ac36_probe();
-    probe.accel_job_id == COMPOSER_ACCEL2_AC36_JOB_ID
-        && probe.accel_slot == COMPOSER_ACCEL2_AC36_SLOT
-        && probe.accel_receipt_honest
-        && probe.pairwise_mi_entropy_bridge_wired
+        probe.pairwise_mi_entropy_bridge_wired
         && probe.pairwise_adopt_closed
         && landauer_ucrs_wire_hops_honest()
         && probe.is_thermodynamic_floor
@@ -496,11 +406,10 @@ mod tests {
     }
 
     #[test]
-    fn fleet_composer_p1542_b4_a_landauer_residue_honest() {
+    fn lib_adopt_landauer_residue_honest() {
         assert!(landauer_ucrs_p1542_b4_residue_honest());
         assert!(landauer_ucrs_adopt_honest());
         let probe = lib_adopt_a_landauer_p1542_b4_probe();
-        assert_eq!(probe.p1542_job_id, COMPOSER_P1542_B4_JOB_ID);
         assert_eq!(probe.wire_hops_closed, 3);
         assert!(probe.pairwise_symbols_wired);
         #[cfg(not(feature = "a7-4"))]
@@ -510,7 +419,7 @@ mod tests {
 
     #[cfg(feature = "a7-4")]
     #[test]
-    fn fleet_composer_p1542_b4_a7_4_mi_wired_when_feature_on() {
+    fn lib_adopt_a7_4_mi_wired_when_feature_on() {
         assert!(landauer_ucrs_a7_4_mi_wired());
         let probe = lib_adopt_a_landauer_p1542_b4_probe();
         assert!(probe.a7_4_mi_wired);
@@ -528,14 +437,10 @@ mod tests {
     }
 
     #[test]
-    fn fleet_composer_p1938_k3_a_landauer_pairwise_close_honest() {
+    fn lib_adopt_landauer_pairwise_close_honest() {
         assert!(landauer_ucrs_p1938_k3_pairwise_close_honest());
         assert!(landauer_ucrs_adopt_honest());
         let probe = lib_adopt_a_landauer_p1938_k3_probe();
-        assert_eq!(probe.p1938_job_id, COMPOSER_P1938_K3_JOB_ID);
-        assert_eq!(probe.p1938_slot, COMPOSER_P1938_K3_SLOT);
-        assert!(probe.b4_receipt_honest);
-        assert!(probe.z95_cross_ref_honest);
         assert_eq!(probe.wire_hops_closed, 3);
         assert!(probe.pairwise_adopt_closed);
         #[cfg(not(feature = "a7-4"))]
@@ -552,9 +457,6 @@ mod tests {
         assert!(landauer_ucrs_accel_ac36_mi_deepen_honest());
         assert!(landauer_ucrs_pairwise_mi_entropy_bridge_wired());
         let probe = lib_adopt_a_landauer_accel_ac36_probe();
-        assert_eq!(probe.accel_job_id, COMPOSER_ACCEL2_AC36_JOB_ID);
-        assert_eq!(probe.accel_slot, COMPOSER_ACCEL2_AC36_SLOT);
-        assert!(probe.k3_receipt_honest);
         assert!(probe.pairwise_mi_entropy_bridge_wired);
         assert!(probe.pairwise_adopt_closed);
         #[cfg(not(feature = "a7-4"))]
@@ -571,7 +473,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_landauer_wire_hops_honest() {
+    fn landauer_wire_hops_honest() {
         assert!(landauer_ucrs_wire_hops_honest());
         assert!(landauer_ucrs_pairwise_adopt_closed());
         assert_eq!(landauer_ucrs_wire_hops_closed_count(), 3);

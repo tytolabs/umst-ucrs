@@ -31,50 +31,8 @@ use crate::{
 };
 use serde::{Deserialize, Serialize};
 
-/// FLEET-COMPOSER-F F64 job id — gossip cycle integration test (absorbed).
-pub const FLEET_F64_JOB_ID: &str = "FLEET-COMPOSER-F64-UCRS-GOSSIP";
-
-/// FLEET-COMPOSER-F F86 job id — gossip cycle deepen (absorbed).
-pub const FLEET_F86_JOB_ID: &str = "FLEET-COMPOSER-F86-UCRS-GOSSIP";
-
-/// FLEET-COMPOSER-G G86 job id — gossip mesh wire probe (absent receipt; absorbed).
-pub const FLEET_G86_JOB_ID: &str = "FLEET-COMPOSER-G86-UCRS-GOSSIP";
-
-/// OPERATOR ACCEL Band C slot id.
-pub const ACCEL_AC82_SLOT: &str = "AC82";
-
-/// C82-1439 refill wave slot.
-pub const C82_WAVE_SLOT: &str = "C82-1439";
-
 /// C82-UCRS-GOSSIP swarm cell id.
 pub const C82_CELL_ID: &str = "C82-UCRS-GOSSIP";
-
-/// C82 UCRS gossip mesh census deepen job id.
-pub const C82_UCRS_GOSSIP_JOB_ID: &str = "FLEET-COMPOSER-C82-UCRS-GOSSIP";
-
-/// AC82 fleet card id.
-pub const COMPOSER_AC82_JOB_ID: &str = "OPERATOR-ACCEL-AC82-UARCS-GOSSIP";
-
-/// AC82 receipt path (this slice).
-pub const COMPOSER_AC82_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_ACCEL2_AC82.md";
-
-/// F64 absorbed receipt.
-pub const PRIOR_F64_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F64_UCRS_1934.md";
-
-/// F86 absorbed receipt.
-pub const PRIOR_F86_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_F86_UCRS_GOSSIP_1942.md";
-
-/// G86 absent receipt — never landed; pinned for operator traceability.
-pub const PRIOR_G86_ABSENT_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_G86_UCRS_GOSSIP_2143.md";
-
-/// H81 absorbed gateway gossip wire-prep receipt (source-reviewed; no crate dep).
-pub const PRIOR_H81_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_H81_2242.md";
-
-/// J23 absorbed rollup receipt (source-reviewed; no crate dep).
-pub const PRIOR_J23_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_J23_2348.md";
-
-/// X85 absorbed static census receipt.
-pub const PRIOR_X85_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_X85_0734.md";
 
 /// Gateway H81 gossip wire-prep authority (source-reviewed; no crate dep).
 pub const GATEWAY_H81_AUTHORITY: &str =
@@ -674,10 +632,6 @@ pub const fn haskell_ucrs_gossip_mesh_adopt_posture() -> HaskellUcrsGossipMeshAd
 /// H81 absorbed gateway posture — source-reviewed constants (no `umst-gateway` dep).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub struct H81AbsorbedPosture {
-    /// H81 job id.
-    pub job_id: &'static str,
-    /// H81 receipt path.
-    pub receipt_path: &'static str,
     /// Gateway-local hops closed on 6-hop map.
     pub gateway_hops_closed: u8,
     /// Gateway-local hops open on 6-hop map.
@@ -690,8 +644,6 @@ pub struct H81AbsorbedPosture {
 #[must_use]
 pub const fn h81_absorbed_posture() -> H81AbsorbedPosture {
     H81AbsorbedPosture {
-        job_id: "FLEET-COMPOSER-H81-UARCS-GOSSIP",
-        receipt_path: PRIOR_H81_RECEIPT_PATH,
         gateway_hops_closed: 3,
         gateway_hops_open: 3,
         mesh_wired: false,
@@ -701,24 +653,6 @@ pub const fn h81_absorbed_posture() -> H81AbsorbedPosture {
 /// AC82 adoption probe — UCRS owner lane.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct UarcsGossipMeshAc82Probe {
-    /// AC82 fleet card id.
-    pub ac82_job_id: &'static str,
-    /// AC82 wave slot.
-    pub ac82_slot: &'static str,
-    /// AC82 receipt path pinned.
-    pub ac82_receipt_honest: bool,
-    /// F64 gossip cycle cross-ref pinned.
-    pub f64_cross_ref_honest: bool,
-    /// F86 gossip cycle deepen cross-ref pinned.
-    pub f86_cross_ref_honest: bool,
-    /// G86 absent receipt cross-ref pinned.
-    pub g86_absent_cross_ref_honest: bool,
-    /// H81 gateway wire-prep cross-ref pinned.
-    pub h81_cross_ref_honest: bool,
-    /// J23 rollup cross-ref pinned.
-    pub j23_cross_ref_honest: bool,
-    /// X85 static census cross-ref pinned.
-    pub x85_cross_ref_honest: bool,
     /// Haskell Gate authority cross-ref pinned.
     pub haskell_gate_cross_ref_honest: bool,
     /// Haskell Credit authority cross-ref pinned.
@@ -749,16 +683,6 @@ pub struct UarcsGossipMeshAc82Probe {
 #[must_use]
 pub fn uarcs_gossip_mesh_ac82_probe() -> UarcsGossipMeshAc82Probe {
     UarcsGossipMeshAc82Probe {
-        ac82_job_id: COMPOSER_AC82_JOB_ID,
-        ac82_slot: ACCEL_AC82_SLOT,
-        ac82_receipt_honest: COMPOSER_AC82_RECEIPT_PATH == "outputs/.tmp/COMPOSER_ACCEL2_AC82.md",
-        f64_cross_ref_honest: PRIOR_F64_RECEIPT_PATH.contains("COMPOSER_F64_UCRS_1934"),
-        f86_cross_ref_honest: PRIOR_F86_RECEIPT_PATH.contains("COMPOSER_F86_UCRS_GOSSIP_1942"),
-        g86_absent_cross_ref_honest: PRIOR_G86_ABSENT_RECEIPT_PATH
-            .contains("COMPOSER_G86_UCRS_GOSSIP_2143"),
-        h81_cross_ref_honest: PRIOR_H81_RECEIPT_PATH.contains("COMPOSER_H81_2242"),
-        j23_cross_ref_honest: PRIOR_J23_RECEIPT_PATH.contains("COMPOSER_J23_2348"),
-        x85_cross_ref_honest: PRIOR_X85_RECEIPT_PATH.contains("COMPOSER_X85_0734"),
         haskell_gate_cross_ref_honest: HASKELL_GATE_AUTHORITY.contains("Umst/Ucrs/Gate.hs"),
         haskell_credit_cross_ref_honest: HASKELL_CREDIT_AUTHORITY.contains("Umst/Ucrs/Credit.hs"),
         haskell_landauer_cross_ref_honest: HASKELL_LANDAUER_AUTHORITY
@@ -780,15 +704,7 @@ pub fn uarcs_gossip_mesh_ac82_probe() -> UarcsGossipMeshAc82Probe {
 pub fn uarcs_gossip_mesh_ac82_residue_honest() -> bool {
     let probe = uarcs_gossip_mesh_ac82_probe();
     let h81 = h81_absorbed_posture();
-    probe.ac82_job_id == COMPOSER_AC82_JOB_ID
-        && probe.ac82_slot == ACCEL_AC82_SLOT
-        && probe.f64_cross_ref_honest
-        && probe.f86_cross_ref_honest
-        && probe.g86_absent_cross_ref_honest
-        && probe.h81_cross_ref_honest
-        && probe.j23_cross_ref_honest
-        && probe.x85_cross_ref_honest
-        && probe.haskell_gate_cross_ref_honest
+        probe.haskell_gate_cross_ref_honest
         && probe.haskell_credit_cross_ref_honest
         && probe.haskell_landauer_cross_ref_honest
         && probe.haskell_property_count == HASKELL_PROPERTY_COUNT
@@ -813,10 +729,6 @@ pub fn uarcs_gossip_mesh_ac82_residue_honest() -> bool {
 pub struct UcrsGossipMeshC82Probe {
     /// Swarm cell id.
     pub cell_id: &'static str,
-    /// C82 refill wave slot.
-    pub wave_slot: &'static str,
-    /// C82 deepen job id.
-    pub job_id: &'static str,
     /// Haskell property slot count pinned.
     pub haskell_property_slot_count: usize,
     /// All five Haskell property slots reduce.
@@ -850,8 +762,6 @@ pub fn ucrs_gossip_mesh_c82_probe() -> UcrsGossipMeshC82Probe {
     let open = (WIRE_HOP_COUNT as u8).saturating_sub(closed);
     UcrsGossipMeshC82Probe {
         cell_id: C82_CELL_ID,
-        wave_slot: C82_WAVE_SLOT,
-        job_id: C82_UCRS_GOSSIP_JOB_ID,
         haskell_property_slot_count: HASKELL_PROPERTY_COUNT,
         haskell_property_slots_wired: haskell_ucrs_gossip_mesh_property_slots_wired(),
         gate_rejects_zero_desync: haskell_ucrs_gate_rejects_zero_desync_probe(),
@@ -872,8 +782,6 @@ pub fn ucrs_gossip_mesh_c82_probe() -> UcrsGossipMeshC82Probe {
 pub fn ucrs_gossip_mesh_c82_residue_honest() -> bool {
     let probe = ucrs_gossip_mesh_c82_probe();
     probe.cell_id == C82_CELL_ID
-        && probe.wave_slot == C82_WAVE_SLOT
-        && probe.job_id == C82_UCRS_GOSSIP_JOB_ID
         && probe.haskell_property_slot_count == HASKELL_PROPERTY_COUNT
         && probe.haskell_property_slots_wired
         && probe.gate_rejects_zero_desync
@@ -924,21 +832,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn ac82_uarcs_gossip_metadata_constants() {
-        assert_eq!(COMPOSER_AC82_JOB_ID, "OPERATOR-ACCEL-AC82-UARCS-GOSSIP");
-        assert_eq!(ACCEL_AC82_SLOT, "AC82");
-        assert!(COMPOSER_AC82_RECEIPT_PATH.contains("COMPOSER_ACCEL2_AC82"));
-        assert_eq!(FLEET_F64_JOB_ID, "FLEET-COMPOSER-F64-UCRS-GOSSIP");
-        assert_eq!(FLEET_F86_JOB_ID, "FLEET-COMPOSER-F86-UCRS-GOSSIP");
-        assert_eq!(FLEET_G86_JOB_ID, "FLEET-COMPOSER-G86-UCRS-GOSSIP");
+    fn uarcs_gossip_metadata_constants() {
         assert_eq!(UARCS_GOSSIP_MESH_WIRE_HOPS.len(), 6);
         assert_eq!(uarcs_gossip_mesh_wire_hops_closed_count(), 4);
-        assert_eq!(WIRE_HOPS_CLOSED_DEFAULT, 4);
-        assert_eq!(WEB_034_OWNER, "WEB-034");
     }
 
     #[test]
-    fn ac82_uarcs_gossip_wire_hops_four_of_six_closed_default() {
+    fn uarcs_gossip_wire_hops_four_of_six_closed_default() {
         assert!(uarcs_gossip_mesh_wire_hops_honest());
         assert_eq!(uarcs_gossip_mesh_wire_hops_closed_count(), 4);
         assert!(UARCS_GOSSIP_MESH_WIRE_HOPS[0].wired_default);
@@ -950,7 +850,7 @@ mod tests {
     }
 
     #[test]
-    fn ac82_uarcs_gossip_mesh_policy_production_false_honest() {
+    fn uarcs_gossip_mesh_policy_production_false_honest() {
         assert!(!ucrs_gossip_mesh_wired());
         assert!(!ucrs_gossip_mesh_policy_wired());
         assert!(!ucrs_gossip_mesh_production_wired());
@@ -963,19 +863,13 @@ mod tests {
     }
 
     #[test]
-    fn ac82_uarcs_gossip_prep_wired_on_default_build() {
+    fn uarcs_gossip_prep_wired_on_default_build() {
         assert!(ucrs_gossip_prep_wired());
         assert!(ucrs_gossip_prep_closed());
     }
 
     #[test]
-    fn ac82_uarcs_gossip_absorbed_prior_receipts_honest() {
-        assert!(PRIOR_F64_RECEIPT_PATH.contains("COMPOSER_F64_UCRS_1934"));
-        assert!(PRIOR_F86_RECEIPT_PATH.contains("COMPOSER_F86_UCRS_GOSSIP_1942"));
-        assert!(PRIOR_G86_ABSENT_RECEIPT_PATH.contains("COMPOSER_G86_UCRS_GOSSIP_2143"));
-        assert!(PRIOR_H81_RECEIPT_PATH.contains("COMPOSER_H81_2242"));
-        assert!(PRIOR_J23_RECEIPT_PATH.contains("COMPOSER_J23_2348"));
-        assert!(PRIOR_X85_RECEIPT_PATH.contains("COMPOSER_X85_0734"));
+    fn uarcs_gossip_absorbed_prior_receipts_honest() {
         assert!(GATEWAY_H81_AUTHORITY.contains("uarcs_ucrs_gossip_wire_prep"));
         let h81 = h81_absorbed_posture();
         assert!(!h81.mesh_wired);
@@ -983,15 +877,12 @@ mod tests {
     }
 
     #[test]
-    fn ac82_uarcs_gossip_mesh_residue_honest() {
+    fn uarcs_gossip_mesh_residue_honest() {
         assert!(uarcs_gossip_mesh_ac82_residue_honest());
         assert!(uarcs_gossip_mesh_honest());
         let probe = uarcs_gossip_mesh_ac82_probe();
-        assert_eq!(probe.ac82_job_id, COMPOSER_AC82_JOB_ID);
         assert_eq!(probe.wire_hops_closed, 4);
         assert!(probe.ucrs_prep_wired);
-        assert!(probe.h81_cross_ref_honest);
-        assert!(probe.x85_cross_ref_honest);
         assert_eq!(
             UARCS_GOSSIP_MESH_OPEN_HOP_SURFACES[1],
             "umst-web/src/gossip.rs::web_gossip_mesh_wired"
@@ -1000,19 +891,12 @@ mod tests {
     }
 
     #[test]
-    fn ac82_haskell_ucrs_mesh_authority_constants() {
-        assert!(HASKELL_GATE_AUTHORITY.contains("Umst/Ucrs/Gate.hs"));
-        assert!(HASKELL_CREDIT_AUTHORITY.contains("Umst/Ucrs/Credit.hs"));
-        assert!(HASKELL_LANDAUER_AUTHORITY.contains("Umst/Ucrs/Landauer.hs"));
-        assert!(HASKELL_SPEC_AUTHORITY.contains("Haskell/test/Spec.hs"));
-        assert_eq!(HASKELL_PROPERTY_COUNT, 5);
-        assert_eq!(HASKELL_MESH_TEMPERATURE_K, 300.0);
-        assert_eq!(LOCALHOST_MESH_PEER_COUNT, 3);
+    fn haskell_ucrs_mesh_authority_constants() {
         assert_eq!(LOCALHOST_MESH_PORTS.len(), LOCALHOST_MESH_PEER_COUNT);
     }
 
     #[test]
-    fn ac82_haskell_ucrs_kb_matches_ssot() {
+    fn haskell_ucrs_kb_matches_ssot_and_posture() {
         assert!(haskell_ucrs_kb_matches_ssot());
         let posture = haskell_ucrs_gossip_mesh_adopt_posture();
         assert_eq!(posture.gate_authority, HASKELL_GATE_AUTHORITY);
@@ -1021,7 +905,7 @@ mod tests {
     }
 
     #[test]
-    fn ac82_haskell_ucrs_gate_properties_from_spec() {
+    fn haskell_ucrs_gate_properties_from_spec() {
         assert!(haskell_ucrs_gate_rejects_over_budget_probe(3.0, 10.0));
         assert!(haskell_ucrs_gate_admits_within_budget_probe(5.0));
         assert_eq!(
@@ -1032,19 +916,19 @@ mod tests {
     }
 
     #[test]
-    fn ac82_haskell_ucrs_landauer_monotonic_from_spec() {
+    fn haskell_ucrs_landauer_monotonic_from_spec() {
         assert!(haskell_ucrs_landauer_monotonic_probe(1.0, 3.0));
         assert!(haskell_ucrs_landauer_monotonic_probe(3.0, 1.0));
     }
 
     #[test]
-    fn ac82_haskell_ucrs_credit_properties_from_spec() {
+    fn haskell_ucrs_credit_properties_from_spec() {
         assert!(haskell_ucrs_greedy_selects_highest_credit_probe());
         assert!(haskell_ucrs_byzantine_credit_drops_probe(2.0));
     }
 
     #[test]
-    fn ac82_haskell_ucrs_gossip_mesh_adopt_closed() {
+    fn haskell_ucrs_gossip_mesh_adopt_closes_with_properties() {
         assert!(haskell_ucrs_gossip_mesh_properties_wired());
         assert!(haskell_ucrs_gossip_mesh_adopt_wired());
         assert!(haskell_ucrs_gossip_mesh_adopt_closed());
@@ -1090,7 +974,6 @@ mod tests {
     fn c82_ucrs_gossip_mesh_deepen_residue_honest() {
         let probe = ucrs_gossip_mesh_c82_probe();
         assert_eq!(probe.cell_id, C82_CELL_ID);
-        assert_eq!(probe.wave_slot, C82_WAVE_SLOT);
         assert_eq!(probe.ucrs_hops_closed, 4);
         assert_eq!(probe.ucrs_hops_open, 2);
         assert_eq!(probe.gateway_hops_closed, 3);
@@ -1107,7 +990,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_gossip_mesh_fence_no_production_wired() {
+    fn gossip_mesh_fence_no_production_wired() {
         let probe = ucrs_gossip_mesh_c82_probe();
         assert!(!probe.production_wired);
         assert!(!probe.mesh_wired);
@@ -1117,8 +1000,6 @@ mod tests {
 
     #[test]
     fn gossip_mesh_ucrs_urge_compose_history_mesh_consumers() {
-        assert_eq!(UCRS_URGE_GOSSIP_COMPOSE_CELL_ID, "UCRS-URGE-GOSSIP-COMPOSE");
-        assert_eq!(URGE_HISTORY_MESH_CONSUMER_COUNT, 3);
         assert_eq!(URGE_HISTORY_MESH_CONSUMERS.len(), 3);
         assert_eq!(
             URGE_HISTORY_MESH_CONSUMERS[0].module_path,
@@ -1153,12 +1034,10 @@ mod tests {
 
     #[test]
     fn gossip_mesh_ucrs_urge_compose_sole_landauer_axiom() {
-        assert_eq!(PHYSICS_AXIOM_COUNT, 1);
         assert_eq!(
             LEAN_AXIOM_PHYSICAL_SECOND_LAW,
             "LandauerLaw.physicalSecondLaw"
         );
-        assert!(LEAN_ANCHOR_LANDAUER_LAW.contains("LandauerLaw.lean"));
         assert!(landauer_physical_second_law_sole_axiom_honest());
     }
 

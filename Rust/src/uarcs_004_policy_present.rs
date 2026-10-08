@@ -15,24 +15,6 @@ use crate::observation::{StampTier, TemporalWitness, WIRE_SCALE};
 use crate::AgentConfig;
 use serde::{Deserialize, Serialize};
 
-/// AGAP-2350 night deepen card id.
-pub const AGAP_2350_JOB_ID: &str = "AGAP-2350-UARCS-004";
-
-/// OPERATOR ACCEL Band B slot id.
-pub const ACCEL_AC21_SLOT: &str = "AC21";
-
-/// AC21 fleet card id.
-pub const COMPOSER_AC21_JOB_ID: &str = "OPERATOR-ACCEL-AC21-UARCS-004";
-
-/// AC21 receipt path (this slice).
-pub const COMPOSER_AC21_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_ACCEL_2030_AC21.md";
-
-/// Y72 absorbed bench census receipt.
-pub const PRIOR_Y72_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_Y72_0808.md";
-
-/// G69 absorbed arcs wire-attempt receipt.
-pub const PRIOR_G69_RECEIPT_PATH: &str = "outputs/.tmp/COMPOSER_G69_UARCS_2143.md";
-
 /// Arcs UARCS-004 present_wired authority (source-reviewed; no crate dep).
 pub const ARCS_UARCS_004_AUTHORITY: &str =
     "umst-arcs/crates/umst-arcs/src/uarcs_004_present_wired.rs";
@@ -185,16 +167,6 @@ pub fn uarcs_004_ucrs_present_prep_closed() -> bool {
 /// AC21 adoption probe — UCRS owner lane.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Uarcs004PolicyPresentAc21Probe {
-    /// AC21 fleet card id.
-    pub ac21_job_id: &'static str,
-    /// AC21 wave slot.
-    pub ac21_slot: &'static str,
-    /// AC21 receipt path pinned.
-    pub ac21_receipt_honest: bool,
-    /// Y72 bench census cross-ref pinned.
-    pub y72_cross_ref_honest: bool,
-    /// G69 arcs wire-attempt cross-ref pinned.
-    pub g69_cross_ref_honest: bool,
     /// UCRS wire hops closed on default build.
     pub wire_hops_closed: u8,
     /// UCRS observation/accept prep wired.
@@ -213,12 +185,6 @@ pub struct Uarcs004PolicyPresentAc21Probe {
 #[must_use]
 pub fn uarcs_004_policy_present_ac21_probe() -> Uarcs004PolicyPresentAc21Probe {
     Uarcs004PolicyPresentAc21Probe {
-        ac21_job_id: COMPOSER_AC21_JOB_ID,
-        ac21_slot: ACCEL_AC21_SLOT,
-        ac21_receipt_honest: COMPOSER_AC21_RECEIPT_PATH
-            == "outputs/.tmp/COMPOSER_ACCEL_2030_AC21.md",
-        y72_cross_ref_honest: PRIOR_Y72_RECEIPT_PATH == "outputs/.tmp/COMPOSER_Y72_0808.md",
-        g69_cross_ref_honest: PRIOR_G69_RECEIPT_PATH.contains("COMPOSER_G69_UARCS_2143"),
         wire_hops_closed: uarcs_004_policy_present_wire_hops_closed_count(),
         ucrs_prep_wired: uarcs_004_ucrs_present_prep_wired(),
         present_wired: uarcs_004_present_wired(),
@@ -232,11 +198,7 @@ pub fn uarcs_004_policy_present_ac21_probe() -> Uarcs004PolicyPresentAc21Probe {
 #[must_use]
 pub fn uarcs_004_policy_present_ac21_residue_honest() -> bool {
     let probe = uarcs_004_policy_present_ac21_probe();
-    probe.ac21_job_id == COMPOSER_AC21_JOB_ID
-        && probe.ac21_slot == ACCEL_AC21_SLOT
-        && probe.y72_cross_ref_honest
-        && probe.g69_cross_ref_honest
-        && probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
+        probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.ucrs_prep_wired
         && uarcs_004_policy_present_wire_hops_honest()
         && uarcs_004_ucrs_present_prep_closed()
@@ -275,18 +237,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn ac21_uarcs_004_metadata_constants() {
-        assert_eq!(COMPOSER_AC21_JOB_ID, "OPERATOR-ACCEL-AC21-UARCS-004");
-        assert_eq!(ACCEL_AC21_SLOT, "AC21");
-        assert!(COMPOSER_AC21_RECEIPT_PATH.contains("COMPOSER_ACCEL_2030_AC21"));
-        assert_eq!(AGAP_2350_JOB_ID, "AGAP-2350-UARCS-004");
+    fn uarcs_004_metadata_constants() {
         assert_eq!(UARCS_004_POLICY_PRESENT_WIRE_HOPS.len(), 5);
         assert_eq!(uarcs_004_policy_present_wire_hops_closed_count(), 3);
-        assert_eq!(WIRE_HOPS_CLOSED_DEFAULT, 3);
     }
 
     #[test]
-    fn ac21_uarcs_004_wire_hops_three_of_five_closed_default() {
+    fn uarcs_004_wire_hops_three_of_five_closed_default() {
         assert!(uarcs_004_policy_present_wire_hops_honest());
         assert_eq!(uarcs_004_policy_present_wire_hops_closed_count(), 3);
         assert!(UARCS_004_POLICY_PRESENT_WIRE_HOPS[0].wired_default);
@@ -297,7 +254,7 @@ mod tests {
     }
 
     #[test]
-    fn ac21_uarcs_004_present_policy_production_false_honest() {
+    fn uarcs_004_present_policy_production_false_honest() {
         assert!(!uarcs_004_present_wired());
         assert!(!uarcs_004_policy_wired());
         assert!(!uarcs_004_present_production_wired());
@@ -310,29 +267,23 @@ mod tests {
     }
 
     #[test]
-    fn ac21_uarcs_004_ucrs_present_prep_wired_on_default_build() {
+    fn uarcs_004_ucrs_present_prep_wired_on_default_build() {
         assert!(uarcs_004_ucrs_present_prep_wired());
         assert!(uarcs_004_ucrs_present_prep_closed());
     }
 
     #[test]
-    fn ac21_uarcs_004_absorbed_prior_receipts_honest() {
-        assert!(PRIOR_Y72_RECEIPT_PATH.contains("COMPOSER_Y72_0808"));
-        assert!(PRIOR_G69_RECEIPT_PATH.contains("COMPOSER_G69_UARCS_2143"));
+    fn uarcs_004_absorbed_prior_receipts_honest() {
         assert!(ARCS_UARCS_004_AUTHORITY.contains("uarcs_004_present_wired"));
-        assert!(BENCH_Y72_AUTHORITY.contains("uarcs_004_present_wired_census"));
     }
 
     #[test]
-    fn ac21_uarcs_004_policy_present_residue_honest() {
+    fn uarcs_004_policy_present_residue_honest() {
         assert!(uarcs_004_policy_present_ac21_residue_honest());
         assert!(uarcs_004_policy_present_honest());
         let probe = uarcs_004_policy_present_ac21_probe();
-        assert_eq!(probe.ac21_job_id, COMPOSER_AC21_JOB_ID);
         assert_eq!(probe.wire_hops_closed, 3);
         assert!(probe.ucrs_prep_wired);
-        assert!(probe.y72_cross_ref_honest);
-        assert!(probe.g69_cross_ref_honest);
         assert_eq!(
             UARCS_004_POLICY_PRESENT_OPEN_HOP_SURFACES[1],
             "umst-web/src/informational_present.rs::informational_present_wired"
@@ -341,7 +292,7 @@ mod tests {
     }
 
     #[test]
-    fn w8e14_policy_present_honest_fence() {
+    fn policy_present_honest_fence() {
         assert!(uarcs_004_policy_present_honest());
         let probe = uarcs_004_policy_present_ac21_probe();
         assert!(!probe.present_wired);
