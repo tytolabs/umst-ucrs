@@ -219,9 +219,9 @@ pub const LANDAUER_UCRS_OPEN_HOP_SURFACES: [&str; 2] = [
     "umst-arcs::coordination_cost_p6::p6_semantic_bind_wired",
 ];
 
-/// P1542 B4 adoption probe — UCRS owner lane.
+/// Landauer adoption probe — pairwise symbols and A7-4 MI wiring on this build.
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct LibAdoptALandauerP1542B4Probe {
+pub struct LandauerAdoptSymbolsProbe {
     /// UCRS wire hops closed on default build.
     pub wire_hops_closed: u8,
     /// Pairwise symbols wired.
@@ -236,8 +236,8 @@ pub struct LibAdoptALandauerP1542B4Probe {
 
 /// Emit P1542 B4 A-LANDAUER adoption probe snapshot.
 #[must_use]
-pub fn lib_adopt_a_landauer_p1542_b4_probe() -> LibAdoptALandauerP1542B4Probe {
-    LibAdoptALandauerP1542B4Probe {
+pub fn lib_adopt_a_landauer_p1542_b4_probe() -> LandauerAdoptSymbolsProbe {
+    LandauerAdoptSymbolsProbe {
         wire_hops_closed: landauer_ucrs_wire_hops_closed_count(),
         pairwise_symbols_wired: landauer_ucrs_pairwise_symbols_wired(),
         a7_4_mi_wired: landauer_ucrs_a7_4_mi_wired_on_build(),
@@ -250,16 +250,16 @@ pub fn lib_adopt_a_landauer_p1542_b4_probe() -> LibAdoptALandauerP1542B4Probe {
 #[must_use]
 pub fn landauer_ucrs_p1542_b4_residue_honest() -> bool {
     let probe = lib_adopt_a_landauer_p1542_b4_probe();
-        probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
+    probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.pairwise_symbols_wired
         && landauer_ucrs_wire_hops_honest()
         && probe.is_thermodynamic_floor
         && !probe.is_wall_clock
 }
 
-/// P1938 K3 adoption probe — UCRS owner pairwise close lane.
+/// Landauer adoption probe — pairwise adopt path close.
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct LibAdoptALandauerP1938K3Probe {
+pub struct LandauerPairwiseCloseProbe {
     /// UCRS wire hops closed on default build.
     pub wire_hops_closed: u8,
     /// Pairwise adopt path closed.
@@ -274,8 +274,8 @@ pub struct LibAdoptALandauerP1938K3Probe {
 
 /// Emit P1938 K3 A-LANDAUER adoption probe snapshot.
 #[must_use]
-pub fn lib_adopt_a_landauer_p1938_k3_probe() -> LibAdoptALandauerP1938K3Probe {
-    LibAdoptALandauerP1938K3Probe {
+pub fn lib_adopt_a_landauer_p1938_k3_probe() -> LandauerPairwiseCloseProbe {
+    LandauerPairwiseCloseProbe {
         wire_hops_closed: landauer_ucrs_wire_hops_closed_count(),
         pairwise_adopt_closed: landauer_ucrs_pairwise_adopt_closed(),
         a7_4_mi_wired: landauer_ucrs_a7_4_mi_wired_on_build(),
@@ -288,7 +288,7 @@ pub fn lib_adopt_a_landauer_p1938_k3_probe() -> LibAdoptALandauerP1938K3Probe {
 #[must_use]
 pub fn landauer_ucrs_p1938_k3_pairwise_close_honest() -> bool {
     let probe = lib_adopt_a_landauer_p1938_k3_probe();
-        probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
+    probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.pairwise_adopt_closed
         && landauer_ucrs_wire_hops_honest()
         && probe.is_thermodynamic_floor
@@ -310,9 +310,9 @@ pub fn landauer_ucrs_p1938_k3_close_summary() -> String {
     )
 }
 
-/// AC36 MI feature deepen probe — UCRS Shannon entropy bridge + A7-4 compile witness.
+/// Landauer MI probe — UCRS Shannon entropy bridge + A7-4 compile witness.
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct LibAdoptALandauerAccelAc36Probe {
+pub struct LandauerMiEntropyBridgeProbe {
     /// Pairwise Shannon MI entropy bridge wired.
     pub pairwise_mi_entropy_bridge_wired: bool,
     /// Pairwise adopt path closed.
@@ -327,8 +327,8 @@ pub struct LibAdoptALandauerAccelAc36Probe {
 
 /// Emit AC36 A-LANDAUER MI feature deepen probe snapshot.
 #[must_use]
-pub fn lib_adopt_a_landauer_accel_ac36_probe() -> LibAdoptALandauerAccelAc36Probe {
-    LibAdoptALandauerAccelAc36Probe {
+pub fn lib_adopt_a_landauer_accel_ac36_probe() -> LandauerMiEntropyBridgeProbe {
+    LandauerMiEntropyBridgeProbe {
         pairwise_mi_entropy_bridge_wired: landauer_ucrs_pairwise_mi_entropy_bridge_wired(),
         pairwise_adopt_closed: landauer_ucrs_pairwise_adopt_closed(),
         a7_4_mi_wired: landauer_ucrs_a7_4_mi_wired_on_build(),
@@ -341,7 +341,7 @@ pub fn lib_adopt_a_landauer_accel_ac36_probe() -> LibAdoptALandauerAccelAc36Prob
 #[must_use]
 pub fn landauer_ucrs_accel_ac36_mi_deepen_honest() -> bool {
     let probe = lib_adopt_a_landauer_accel_ac36_probe();
-        probe.pairwise_mi_entropy_bridge_wired
+    probe.pairwise_mi_entropy_bridge_wired
         && probe.pairwise_adopt_closed
         && landauer_ucrs_wire_hops_honest()
         && probe.is_thermodynamic_floor

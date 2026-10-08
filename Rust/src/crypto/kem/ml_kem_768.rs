@@ -36,7 +36,7 @@ fn map_parse<T>(r: Result<T, PqError>) -> Result<T, KemError> {
 
 /// Encapsulate to a peer ML-KEM-768 public key using PQClean RNG (`randombytes`).
 ///
-/// `entropy` is reserved for harness-visible deterministic modes; production callers pass `&[]`.
+/// `entropy` is reserved for test-visible deterministic modes; production callers pass `&[]`.
 /// Returns `(shared_secret, ciphertext)` — matching PQClean `(ss, ct)` ordering.
 pub fn encapsulate(pk: &[u8], _entropy: &[u8]) -> Result<(Vec<u8>, Vec<u8>), KemError> {
     let pk = map_parse(KemPk::from_bytes(pk))?;

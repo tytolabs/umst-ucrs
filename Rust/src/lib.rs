@@ -28,7 +28,7 @@ mod trust_wire_public;
 /// AC82 gossip mesh census — root re-exports for quality_gates wire scan C.
 pub use gossip_mesh_census::{
     H81AbsorbedPosture, HaskellUcrsGossipMeshAdoptPosture, HaskellUcrsGossipMeshPropertySlot,
-    UarcsGossipMeshAc82Probe, UarcsGossipMeshWireHop, UcrsGossipMeshC82Probe,
+    UarcsGossipMeshProbe, UarcsGossipMeshWireHop, UcrsGossipMeshC82Probe,
     UcrsUrgeGossipComposeProbe, UrgeHistoryMeshConsumer,
 };
 pub mod landauer;
@@ -53,6 +53,22 @@ pub mod uarcs_a7_4_policy_wire;
 pub mod ucrs_keep;
 /// Gossip wire format + signature glue (no libp2p — safe for default library-only builds).
 pub mod wire;
+/// Root re-exports of module types (clock, credit, crypto errors, energy, gossip, probes).
+pub use clock::LocalClock;
+pub use credit::{CreditLedger, PeerCredit, SyncDecision};
+pub use crypto::hash::sha3_256::HashError;
+pub use crypto::kem::ml_kem_768::KemError;
+pub use crypto::sig::ml_dsa_65::SigError as MlDsa65SigError;
+pub use crypto::sig::slh_dsa_128s::SigError as SlhDsa128sSigError;
+pub use crypto::CryptoError;
+pub use landauer_adopt::{
+    LandauerAdoptSymbolsProbe, LandauerMiEntropyBridgeProbe, LandauerPairwiseCloseProbe,
+    LandauerUcrsWireHop,
+};
+pub use p2p::{GatedSyncOutcome, PeerGossip};
+pub use rapl::{EnergyReading, RaplError, SyncEnergyRecord};
+pub use uarcs_004_policy_present::{Uarcs004PolicyPresentProbe, Uarcs004PolicyPresentWireHop};
+pub use uarcs_a7_4_policy_wire::{UarcsA74PolicyWireHop, UarcsA74PolicyWireProbe};
 /// Root re-export — quality_gates wire scan C (overlay compose).
 pub use wire::{ClockTick, ClockTickMldsa, MergeOutcome};
 

@@ -180,9 +180,9 @@ pub fn uarcs_a7_4_ucrs_policy_prep_closed() -> bool {
         && uarcs_a7_4_policy_wire_hops_closed_count() == WIRE_HOPS_CLOSED_DEFAULT
 }
 
-/// AC81 adoption probe — UCRS owner lane.
+/// UARCS A7-4 policy wire adoption probe — UCRS owner lane.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-pub struct UarcsA74PolicyWireAc81Probe {
+pub struct UarcsA74PolicyWireProbe {
     /// A7 lane id cross-ref.
     pub a7_lane_id: &'static str,
     /// UCRS wire hops closed on default build.
@@ -203,8 +203,8 @@ pub struct UarcsA74PolicyWireAc81Probe {
 
 /// Emit AC81 UARCS-A7-4 policy wire probe snapshot.
 #[must_use]
-pub fn uarcs_a7_4_policy_wire_ac81_probe() -> UarcsA74PolicyWireAc81Probe {
-    UarcsA74PolicyWireAc81Probe {
+pub fn uarcs_a7_4_policy_wire_ac81_probe() -> UarcsA74PolicyWireProbe {
+    UarcsA74PolicyWireProbe {
         a7_lane_id: A7_LANE_ID,
         wire_hops_closed: uarcs_a7_4_policy_wire_hops_closed_count(),
         ucrs_prep_wired: uarcs_a7_4_ucrs_policy_prep_wired(),
@@ -220,7 +220,7 @@ pub fn uarcs_a7_4_policy_wire_ac81_probe() -> UarcsA74PolicyWireAc81Probe {
 #[must_use]
 pub fn uarcs_a7_4_policy_wire_ac81_residue_honest() -> bool {
     let probe = uarcs_a7_4_policy_wire_ac81_probe();
-        probe.a7_lane_id == "A7-4"
+    probe.a7_lane_id == "A7-4"
         && probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.ucrs_prep_wired
         && uarcs_a7_4_policy_wire_hops_honest()
@@ -298,7 +298,6 @@ mod tests {
         assert!(uarcs_a7_4_ucrs_policy_prep_wired());
         assert!(uarcs_a7_4_ucrs_policy_prep_closed());
     }
-
 
     #[test]
     fn uarcs_a7_4_policy_wire_residue_honest() {

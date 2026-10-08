@@ -69,7 +69,7 @@ pub fn long_v1_preimage(ref_kat: &LongSha3Kat) -> Vec<u8> {
     msg
 }
 
-/// Resolve fixture path for out-of-crate consumers (algebra parity harness).
+/// Resolve fixture path for out-of-crate consumers (algebra parity tests).
 pub fn s0_kat_fixture_path() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/s0_pqc_kat_reference.json")
 }

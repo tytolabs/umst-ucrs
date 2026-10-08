@@ -168,7 +168,9 @@ impl SyncEnergyRecord {
 /// Called after each sync event when RAPL measurement is available (or simulated).
 pub fn export_sync_overhead(record: &SyncEnergyRecord) {
     if let Some(ratio) = record.overhead_ratio {
-        crate::telemetry::SYNC_COST_RATIO.observe(ratio);
+        if let Some(h) = crate::telemetry::SYNC_COST_RATIO.as_ref() {
+            h.observe(ratio);
+        }
     }
 }
 

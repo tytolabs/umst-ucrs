@@ -290,5 +290,4 @@ mod tests {
         );
         assert_eq!(from_core, manual);
     }
-
 }

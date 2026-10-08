@@ -650,9 +650,9 @@ pub const fn h81_absorbed_posture() -> H81AbsorbedPosture {
     }
 }
 
-/// AC82 adoption probe — UCRS owner lane.
+/// UARCS gossip mesh adoption probe — UCRS owner lane.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-pub struct UarcsGossipMeshAc82Probe {
+pub struct UarcsGossipMeshProbe {
     /// Haskell Gate authority cross-ref pinned.
     pub haskell_gate_cross_ref_honest: bool,
     /// Haskell Credit authority cross-ref pinned.
@@ -681,8 +681,8 @@ pub struct UarcsGossipMeshAc82Probe {
 
 /// Emit AC82 UARCS-gossip mesh census probe snapshot.
 #[must_use]
-pub fn uarcs_gossip_mesh_ac82_probe() -> UarcsGossipMeshAc82Probe {
-    UarcsGossipMeshAc82Probe {
+pub fn uarcs_gossip_mesh_ac82_probe() -> UarcsGossipMeshProbe {
+    UarcsGossipMeshProbe {
         haskell_gate_cross_ref_honest: HASKELL_GATE_AUTHORITY.contains("Umst/Ucrs/Gate.hs"),
         haskell_credit_cross_ref_honest: HASKELL_CREDIT_AUTHORITY.contains("Umst/Ucrs/Credit.hs"),
         haskell_landauer_cross_ref_honest: HASKELL_LANDAUER_AUTHORITY
@@ -704,7 +704,7 @@ pub fn uarcs_gossip_mesh_ac82_probe() -> UarcsGossipMeshAc82Probe {
 pub fn uarcs_gossip_mesh_ac82_residue_honest() -> bool {
     let probe = uarcs_gossip_mesh_ac82_probe();
     let h81 = h81_absorbed_posture();
-        probe.haskell_gate_cross_ref_honest
+    probe.haskell_gate_cross_ref_honest
         && probe.haskell_credit_cross_ref_honest
         && probe.haskell_landauer_cross_ref_honest
         && probe.haskell_property_count == HASKELL_PROPERTY_COUNT

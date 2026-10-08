@@ -15,8 +15,7 @@ use umst_ucrs::gossip_mesh_census::{
 };
 use umst_ucrs::p2p::{
     apply_gated_inbound, gate_check_before_sync, localhost_mesh_bootstrap, localhost_peer_config,
-    outbound_tick_if_admitted, GatedSyncOutcome, ABSORBED_E64_SECRET,
- LOCALHOST_MESH_PORTS,
+    outbound_tick_if_admitted, GatedSyncOutcome, ABSORBED_E64_SECRET, LOCALHOST_MESH_PORTS,
 };
 use umst_ucrs::wire::{self, verify_tick, ClockTick, MergeOutcome};
 use umst_ucrs::{gate::GateVerdict, AgentConfig};
@@ -121,18 +120,6 @@ fn gossip_cycle_localhost_mesh_bootstrap() {
     let b1 = localhost_mesh_bootstrap(1);
     assert_eq!(b1.len(), 2);
     assert!(b1.iter().all(|a| a.contains("4001") || a.contains("4003")));
-}
-
-#[test]
-fn gossip_cycle_f64_metadata() {
-}
-
-#[test]
-fn gossip_cycle_f86_metadata() {
-}
-
-#[test]
-fn gossip_cycle_g86_metadata() {
 }
 
 #[test]

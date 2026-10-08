@@ -164,9 +164,9 @@ pub fn uarcs_004_ucrs_present_prep_closed() -> bool {
         && uarcs_004_policy_present_wire_hops_closed_count() == WIRE_HOPS_CLOSED_DEFAULT
 }
 
-/// AC21 adoption probe — UCRS owner lane.
+/// UARCS-004 policy-present adoption probe — UCRS owner lane.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-pub struct Uarcs004PolicyPresentAc21Probe {
+pub struct Uarcs004PolicyPresentProbe {
     /// UCRS wire hops closed on default build.
     pub wire_hops_closed: u8,
     /// UCRS observation/accept prep wired.
@@ -183,8 +183,8 @@ pub struct Uarcs004PolicyPresentAc21Probe {
 
 /// Emit AC21 UARCS-004 policy-present probe snapshot.
 #[must_use]
-pub fn uarcs_004_policy_present_ac21_probe() -> Uarcs004PolicyPresentAc21Probe {
-    Uarcs004PolicyPresentAc21Probe {
+pub fn uarcs_004_policy_present_ac21_probe() -> Uarcs004PolicyPresentProbe {
+    Uarcs004PolicyPresentProbe {
         wire_hops_closed: uarcs_004_policy_present_wire_hops_closed_count(),
         ucrs_prep_wired: uarcs_004_ucrs_present_prep_wired(),
         present_wired: uarcs_004_present_wired(),
@@ -198,7 +198,7 @@ pub fn uarcs_004_policy_present_ac21_probe() -> Uarcs004PolicyPresentAc21Probe {
 #[must_use]
 pub fn uarcs_004_policy_present_ac21_residue_honest() -> bool {
     let probe = uarcs_004_policy_present_ac21_probe();
-        probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
+    probe.wire_hops_closed == WIRE_HOPS_CLOSED_DEFAULT
         && probe.ucrs_prep_wired
         && uarcs_004_policy_present_wire_hops_honest()
         && uarcs_004_ucrs_present_prep_closed()
