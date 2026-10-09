@@ -60,7 +60,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tracing = "0.1"
 tracing-subscriber = "0.3"
-prometheus = "0.13"
+prometheus = { version = "0.14", default-features = false }  # text exposition only: no protobuf (RUSTSEC-2024-0437)
 # U1 — Clausius–Duhem SSOT (`clausius_duhem_admissible`); path pinned via `.umst-pins.toml` in CI.
 umst-math = { version = "0.1.0", path = "../../umst-manifold/umst-math" }
 [dev-dependencies]
