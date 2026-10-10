@@ -12,7 +12,7 @@ require mathlib from git
 
 -- Pinned public sibling: the commit whose CoordinationContract the runtime refines.
 require «umst-formal» from git
-  "https://github.com/tytolabs/umst-formal.git" @ "7c85e0439bb7f2b67ff79327ad6289e4dd392b8f" / "Lean"
+  "https://github.com/tytolabs/umst-formal.git" @ "be28749225150a71fe9f7c25cc94d6e025d2c3bf" / "Lean"
 
 /-!
   The runtime's laws are proved once, in umst-formal `CoordinationContract` (Lean, Coq, Agda, Haskell).
